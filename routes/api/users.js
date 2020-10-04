@@ -12,6 +12,7 @@ const User = require('../../models/User');
 // @desc    Get multiple (all) users
 // @access  Private
 router.get('/', auth, async (req, res) => {
+  // TODO: Restrict to staff.
   try {
     const users = await User.find().select('-password');
 
@@ -85,6 +86,13 @@ router.post(
 // @desc    Get any user by ID
 // @access  Private
 router.get('/:id', auth, async (req, res) => {
+  // Only allow a user to query themselves.
+  // TODO: Move to auth middleware somehow?
+  // TODO: Allow staff to query anyone.
+  if (req.user.id !== req.params.id) {
+    return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
+  }
+
   try {
     // Find user in database.
     const user = await User.findById(req.params.id).select('-password');
@@ -113,7 +121,7 @@ router.patch(
   ],  
   async (req, res) => {
     // Only allow a user to modify their own info.
-    // TODO: Move to auth middleware somehow.
+    // TODO: Move to auth middleware somehow?
     // TODO: Allow staff to edit anyone.
     if (req.user.id !== req.params.id) {
       return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
@@ -170,6 +178,13 @@ router.patch(
 // @desc    Delete user by ID
 // @access  Private
 router.delete('/:id', auth, async (req, res) => {
+  // Only allow a user to delete themselves.
+  // TODO: Move to auth middleware somehow?
+  // TODO: Allow staff to delete anyone.
+  if (req.user.id !== req.params.id) {
+    return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
+  }
+
   try {
     // Find and remove user.
     const query = await User.findByIdAndDelete(req.params.id);
