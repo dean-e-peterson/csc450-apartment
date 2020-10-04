@@ -104,6 +104,9 @@ router.patch('/:id', auth, async (req, res) => {
     user.lastName = req.body.lastName ? req.body.lastName : user.lastName;
     user.email = req.body.email ? req.body.email : user.email;
 
+    // Always update date.
+    user.date = Date.now();
+
     // Encrypt password if it is changing.
     if (req.body.password) {
       const salt = await bcrypt.genSalt(10);
