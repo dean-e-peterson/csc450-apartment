@@ -37,8 +37,8 @@ router.post(
     }
 
     try {
-      // Make sure user doesn't already exist.
-      let user = await User.findOne( { email: req.body.email });
+      // Make sure user exists.
+      let user = await User.findOne({ email: req.body.email });
       if (!user) {
         return res.status(400).json({ errors: [ { msg: 'Invalid credentials' }] });
       }

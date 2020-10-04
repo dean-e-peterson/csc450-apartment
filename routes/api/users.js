@@ -103,38 +103,68 @@ router.get('/:id', auth, async (req, res) => {
 // @route   PATCH api/users/:id
 // @desc    Modify a user by ID
 // @access  Private
-router.patch('/:id', auth, async (req, res) => {
-  try {
-    // The following simplification might have worked if not for the need to
-    // encrypt the password, but might have allowed modifying other fields.
-    //const query = await User.findByIdAndUpdate(req.params.id, req.body);
-    const user = await User.findById(req.params.id);
-    if (!user) {
-      return res.status(400).json({ errors: [ { msg: 'User not found' }] });
+router.patch(
+  '/:id',
+  auth,
+  [
+    // Optional means the field is optional, but if present, validate it.
+    check('email', 'Please include a valid email').optional().isEmail(),
+    check('password', 'Please enter a password at least 8 characters long').optional().isLength({ min: 8 }),
+  ],  
+  async (req, res) => {
+    // Only allow a user to modify their own info.
+    // TODO: Move to auth middleware somehow.
+    // TODO: Allow staff to edit anyone.
+    if (req.user.id !== req.params.id) {
+      return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
     }
 
-    // Replace only fields included in the request body.
-    user.firstName = req.body.firstName ? req.body.firstName : user.firstName;
-    user.lastName = req.body.lastName ? req.body.lastName : user.lastName;
-    user.email = req.body.email ? req.body.email : user.email;
-
-    // Always update date.
-    user.date = Date.now();
-
-    // Encrypt password if it is changing.
-    if (req.body.password) {
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(req.body.password, salt);
+    // Check validation results.
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
+    
+    try {
+      // Handle duplicate email by rejecting request.
+      if (req.body.email) {
+        const userWithSameEmail = await User.findOne({ email: req.body.email });
+        if (userWithSameEmail) {
+          return res.status(400).json({ errors: [{ msg: 'Another user has that email' }] });
+        }
+      }
 
-    // Save modified user.
-    user.save();
-    res.end();
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server error');
+      // The following simplification might have worked if not for the need to
+      // encrypt the password, but might have allowed modifying other fields.
+      //const query = await User.findByIdAndUpdate(req.params.id, req.body);
+      const user = await User.findById(req.params.id);
+      if (!user) {
+        return res.status(400).json({ errors: [{ msg: 'User not found' }] });
+      }
+
+      // Replace only fields included in the request body.
+      user.firstName = req.body.firstName ? req.body.firstName : user.firstName;
+      user.lastName = req.body.lastName ? req.body.lastName : user.lastName;
+      user.email = req.body.email ? req.body.email : user.email;
+
+      // Always update date.
+      user.date = Date.now();
+
+      // Encrypt password.
+      if (req.body.password) {
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(req.body.password, salt);
+      }
+
+      // Save modified user.
+      user.save();
+      res.end();
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+    }
   }
-})
+);
 
 // @route   DELETE api/users/:id
 // @desc    Delete user by ID
