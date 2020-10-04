@@ -3,6 +3,7 @@ const router = express.Router();
 const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const config = require('config');
+const bcrypt = require('bcryptjs');
 
 const User = require('../../models/User');
 
@@ -29,13 +30,17 @@ router.post(
         return res.status(400).json({ errors: [ { msg: 'User already exists' }] });
       }
     
-      // Save user.
+      // Hash password.
       user = new User({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
         password: req.body.password,
-      })
+      });
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(req.body.password, salt);
+
+      // Save user.
       await user.save();
 
       // Return jsonwebtoken.
