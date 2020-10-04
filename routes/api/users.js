@@ -67,7 +67,7 @@ router.post(
   }
 );
 
-// @route   POST api/users/:id
+// @route   GET api/users/:id
 // @desc    Get any user by ID
 // @access  Private
 router.get('/:id', auth, async (req, res) => {
@@ -89,12 +89,35 @@ router.get('/:id', auth, async (req, res) => {
 // @route   PATCH api/users/:id
 // @desc    Modify a user by ID
 // @access  Private
-/*
 router.patch('/:id', auth, async (req, res) => {
+  try {
+    // The following simplification might have worked if not for the need to
+    // encrypt the password, but might have allowed modifying other fields.
+    //const query = await User.findByIdAndUpdate(req.params.id, req.body);
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(400).json({ errors: [ { msg: 'User not found' }] });
+    }
 
+    // Replace only fields included in the request body.
+    user.firstName = req.body.firstName ? req.body.firstName : user.firstName;
+    user.lastName = req.body.lastName ? req.body.lastName : user.lastName;
+    user.email = req.body.email ? req.body.email : user.email;
+
+    // Encrypt password if it is changing.
+    if (req.body.password) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(req.body.password, salt);
+    }
+
+    // Save modified user.
+    user.save();
+    res.end();
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
 })
-*/
-
 
 // @route   DELETE api/users/:id
 // @desc    Delete user by ID
