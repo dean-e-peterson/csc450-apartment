@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
-const jwt = require('jsonwebtoken');
-const config = require('config');
 const bcrypt = require('bcryptjs');
 const auth = require('../../middleware/auth');
 
@@ -40,11 +38,13 @@ router.post(
     check('isStaff', 'isStaff must be a boolean').optional().isBoolean(),
   ],
   async (req, res) => {
+    // Staff only.
     if (!req.user.isStaff)
     {
       return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
     }
 
+    // Apply validations.
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });      
@@ -70,6 +70,7 @@ router.post(
 
       // Save user.
       await user.save();
+
       res.end();
     } catch (err) {
       console.error(err.message);
@@ -91,7 +92,7 @@ router.get('/:id', auth, async (req, res) => {
     // Find user in database.
     const user = await User.findById(req.params.id).select('-password');
     if (!user) {
-      return res.status(400).json({ errors: [ { msg: 'User not found' }] });
+      return res.status(400).json({ errors: [{ msg: 'User not found' }] });
     }
     
     // Return user.
@@ -189,6 +190,7 @@ router.delete('/:id', auth, async (req, res) => {
     if (!query) {
       return res.status(400).json({ errors: [ { msg: 'User not found' }] });
     }
+    
     res.end();
   } catch (err) {
     console.error(err.message);
