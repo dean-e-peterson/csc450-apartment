@@ -112,6 +112,7 @@ router.patch(
     // Optional means the field is optional, but if present, validate it.
     check('email', 'Please include a valid email').optional().isEmail(),
     check('password', 'Please enter a password at least 8 characters long').optional().isLength({ min: 8 }),
+    check('isStaff', 'isStaff must be a boolean').optional().isBoolean(),    
   ],  
   async (req, res) => {
     // Only allow a user to modify their own info, unless they're staff.
