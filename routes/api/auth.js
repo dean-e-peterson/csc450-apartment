@@ -52,7 +52,8 @@ router.post(
       // Return jsonwebtoken.
       const payload = {
         user: {
-          id: user.id // ID from user in database.
+          id: user.id, // ID from user in database.
+          isStaff: user.isStaff,
         }
       }
 
