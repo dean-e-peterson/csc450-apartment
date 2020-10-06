@@ -160,6 +160,7 @@ router.patch(
       user.firstName = 'firstName' in req.body ? req.body.firstName : user.firstName;
       user.lastName = 'lastName' in req.body ? req.body.lastName : user.lastName;
       user.email = 'email' in req.body ? req.body.email : user.email;
+      user.unit = 'unit' in req.body ? req.body.unit : user.unit;
       user.isStaff = 'isStaff' in req.body ? req.body.isStaff : user.isStaff;
 
       // Always update date.
