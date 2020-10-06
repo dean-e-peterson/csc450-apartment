@@ -152,7 +152,7 @@ router.delete('/:id', auth, async (req, res) => {
     if (!query) {
       return res.status(400).json({ errors: [ { msg: 'Unit not found' }] });
     }
-    
+
     res.end();
   } catch (err) {
     console.error(err.message);
