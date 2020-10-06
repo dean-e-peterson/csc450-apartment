@@ -16,6 +16,8 @@ router.get('/', auth, async (req, res) => {
   }
 
   try {
+    // ### If we need to bring in unit number, this worked...
+    //const users = await User.find().select('-password').populate('unit', ['number']);
     const users = await User.find().select('-password');
 
     res.json(users);
@@ -63,6 +65,7 @@ router.post(
         lastName: req.body.lastName,
         email: req.body.email,
         password: req.body.password,
+        unitId: req.body.unitId,
         isStaff: req.body.isStaff,
       });
       const salt = await bcrypt.genSalt(10);
@@ -120,10 +123,13 @@ router.patch(
     if (! (req.user.isStaff || req.user.id === req.params.id)) {
       return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });      
     }
-    // Also, only staff can modify isStaff.
+    // Also, only staff can modify isStaff and unitId fields.
     if (!req.user.isStaff && 'isStaff' in req.body) {
       return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
     }
+    if (!req.user.isStaff && 'unitId' in req.body) {
+      return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
+    }    
 
     // Check validation results.
     const errors = validationResult(req);
