@@ -4,7 +4,7 @@ const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
 
 const Unit = require('../../models/Unit');
-//### const User = require('../../models/User');
+const User = require('../../models/User');
 
 // @route   GET /api/units
 // @desc    Get all units
@@ -17,7 +17,7 @@ router.get('/', auth, async (req, res) => {
 
   try {
     const units = await Unit.find();
-    
+
     // ### If you want tenants from users to come back as a subobject.
     // // Lean gives you a plain javascript object you can modify.
     // const units = await Unit.find().lean();
@@ -167,6 +167,13 @@ router.delete('/:id', auth, async (req, res) => {
   }
 
   try {
+    // Remove unit from any Users it appears on.
+    const users = await User.find({ unit: req.params.id });
+    for (const user of users) {
+      user.unit = null;
+      await user.save();
+    }
+
     // Find and remove unit.
     const query = await Unit.findByIdAndDelete(req.params.id);
     if (!query) {
