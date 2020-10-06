@@ -16,6 +16,8 @@ router.get('/', auth, async (req, res) => {
   }
 
   try {
+    const units = await Unit.find();
+    
     // ### If you want tenants from users to come back as a subobject.
     // // Lean gives you a plain javascript object you can modify.
     // const units = await Unit.find().lean();
@@ -23,7 +25,18 @@ router.get('/', auth, async (req, res) => {
     //   let users = await User.find({ unit: unit }).select('-password');
     //   unit['tenants'] = users;
     // }
-    const units = await Unit.find();
+    
+    // ### Another way to include tenants with one db trip, including password.
+    // const units = await Unit.aggregate([
+    //   {
+    //     "$lookup": {
+    //       "from": "users",
+    //       "localField": "_id",
+    //       "foreignField": "unit",
+    //       "as": "tenants",
+    //     }
+    //   }
+    // ]);
 
     res.json(units);
   } catch (err) {
