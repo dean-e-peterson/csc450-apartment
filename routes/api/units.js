@@ -4,6 +4,7 @@ const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
 
 const Unit = require('../../models/Unit');
+//### const User = require('../../models/User');
 
 // @route   GET /api/units
 // @desc    Get all units
@@ -15,6 +16,13 @@ router.get('/', auth, async (req, res) => {
   }
 
   try {
+    // ### If you want tenants from users to come back as a subobject.
+    // // Lean gives you a plain javascript object you can modify.
+    // const units = await Unit.find().lean();
+    // for (const unit of units) {
+    //   let users = await User.find({ unit: unit }).select('-password');
+    //   unit['tenants'] = users;
+    // }
     const units = await Unit.find();
 
     res.json(units);
