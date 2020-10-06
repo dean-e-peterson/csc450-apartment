@@ -58,14 +58,14 @@ router.post(
       if (user) {
         return res.status(400).json({ errors: [ { msg: 'User with that email already exists' }] });
       }
-    
+
       // Hash password.
       user = new User({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
         password: req.body.password,
-        unitId: req.body.unitId,
+        unit: req.body.unit,
         isStaff: req.body.isStaff,
       });
       const salt = await bcrypt.genSalt(10);
@@ -123,11 +123,11 @@ router.patch(
     if (! (req.user.isStaff || req.user.id === req.params.id)) {
       return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });      
     }
-    // Also, only staff can modify isStaff and unitId fields.
+    // Also, only staff can modify isStaff and unit fields.
     if (!req.user.isStaff && 'isStaff' in req.body) {
       return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
     }
-    if (!req.user.isStaff && 'unitId' in req.body) {
+    if (!req.user.isStaff && 'unit' in req.body) {
       return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
     }    
 
