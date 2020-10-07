@@ -17,6 +17,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  unit: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'unit'
+  },
   isStaff: {
     type: Boolean,
     default: false
