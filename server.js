@@ -1,5 +1,5 @@
-const express = require('express');
-const connectDB = require('./config/db');
+const express = require("express");
+const connectDB = require("./config/db");
 
 const app = express();
 
@@ -9,7 +9,8 @@ connectDB();
 //Init Middleware
 app.use(express.json({ extended: false }));
 
-app.get('/', (req, res) => res.send('API Running'));
+app.get("/", (req, res) => res.send("API Running"));
+app.use("/api/maintenance", require("./Routes/api/maintenance"));
 
 const PORT = process.env.PORT || 4000;
 
