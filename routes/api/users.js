@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const { check, validationResult } = require('express-validator');
-const jwt = require('jsonwebtoken');
-const config = require('config');
 const bcrypt = require('bcryptjs');
 const auth = require('../../middleware/auth');
 
@@ -18,6 +16,8 @@ router.get('/', auth, async (req, res) => {
   }
 
   try {
+    // ### If we need to bring in unit number, this worked...
+    //const users = await User.find().select('-password').populate('unit', ['number']);
     const users = await User.find().select('-password');
 
     res.json(users);
@@ -40,11 +40,13 @@ router.post(
     check('isStaff', 'isStaff must be a boolean').optional().isBoolean(),
   ],
   async (req, res) => {
+    // Staff only.
     if (!req.user.isStaff)
     {
       return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
     }
 
+    // Apply validations.
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });      
@@ -56,13 +58,14 @@ router.post(
       if (user) {
         return res.status(400).json({ errors: [ { msg: 'User with that email already exists' }] });
       }
-    
+
       // Hash password.
       user = new User({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
         password: req.body.password,
+        unit: req.body.unit,
         isStaff: req.body.isStaff,
       });
       const salt = await bcrypt.genSalt(10);
@@ -70,6 +73,7 @@ router.post(
 
       // Save user.
       await user.save();
+
       res.end();
     } catch (err) {
       console.error(err.message);
@@ -91,7 +95,7 @@ router.get('/:id', auth, async (req, res) => {
     // Find user in database.
     const user = await User.findById(req.params.id).select('-password');
     if (!user) {
-      return res.status(400).json({ errors: [ { msg: 'User not found' }] });
+      return res.status(400).json({ errors: [{ msg: 'User not found' }] });
     }
     
     // Return user.
@@ -119,10 +123,13 @@ router.patch(
     if (! (req.user.isStaff || req.user.id === req.params.id)) {
       return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });      
     }
-    // Also, only staff can modify isStaff.
+    // Also, only staff can modify isStaff and unit fields.
     if (!req.user.isStaff && 'isStaff' in req.body) {
       return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
     }
+    if (!req.user.isStaff && 'unit' in req.body) {
+      return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
+    }    
 
     // Check validation results.
     const errors = validationResult(req);
@@ -153,6 +160,7 @@ router.patch(
       user.firstName = 'firstName' in req.body ? req.body.firstName : user.firstName;
       user.lastName = 'lastName' in req.body ? req.body.lastName : user.lastName;
       user.email = 'email' in req.body ? req.body.email : user.email;
+      user.unit = 'unit' in req.body ? req.body.unit : user.unit;
       user.isStaff = 'isStaff' in req.body ? req.body.isStaff : user.isStaff;
 
       // Always update date.
@@ -189,6 +197,7 @@ router.delete('/:id', auth, async (req, res) => {
     if (!query) {
       return res.status(400).json({ errors: [ { msg: 'User not found' }] });
     }
+    
     res.end();
   } catch (err) {
     console.error(err.message);
