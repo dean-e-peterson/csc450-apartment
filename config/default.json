@@ -1,10 +1,5 @@
 {
-<<<<<<< HEAD
-  "mongoURI": "mongodb+srv://jacksona10@csp.edu:Eugene2197!@csc450-group5.sworz.mongodb.net/<dbname>?retryWrites=true&w=majority",
-  "jwtSecret": "mysecrettoken"
-=======
-  "mongoURI": "mongodb+srv://AJ_Nielsen:Baseball1@csc450-group5.sworz.mongodb.net/Capstone?retryWrites=true&w=majority",
+  "mongoURI": "mongodb+srv://jacksona10@csp.edu:Eugene2197!@csc450-group5.sworz.mongodb.net/Capstone?retryWrites=true&w=majority",
   "jwtSecret": "mysecrettoken",
   "jwtExpires": 604800
->>>>>>> 6602c29035de002e8353bcc418b05872e2174cdd
 }
