@@ -17,16 +17,23 @@ h1 {
   font-size: 2.5rem;
 }
 
-.locked {
+.container {
+  margin: 0 auto;
+  max-width: 1080px;
+}
+
+header {
   position: fixed;
+  max-width: 1080px;
   top: 0;
   width: 100%;
 }
 
-header {
+.banner {
   align-items: center;
   display: flex;
   height: 100px;
+  margin: 0 15px;
   justify-content: space-between;
 }
 
@@ -46,21 +53,16 @@ nav ul {
 nav a {
   color: black;
   font-size: 1.25rem;
-  padding: .5rem .75rem;
+  padding: .5rem .8rem;
   text-decoration: none;
 }
 
-
 main {
-  margin-top: 130px;
+  margin: 140px 15px 0 15px;
+  max-width: 1080px;
 }
 
-/*
-.logo {
-  float: left;
+footer {
+  margin: 15px;
+  max-width: 1080px;
 }
-
-.header-links {
-  float: right;
-}
-*/
