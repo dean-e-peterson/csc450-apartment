@@ -86,13 +86,26 @@ main {
 section {
   background-color: var(--highlight-color);
   box-shadow: .25rem .25rem var(--primary-color);
-  display: flex;
   margin-bottom: 1rem;
   padding: 1rem;
 }
 
-section > img {
+.item {
+  display: flex;
+}
+
+.item > img {
   margin-right: 1rem;
+}
+
+.drop {
+  height: 2rem;
+  overflow: hidden;
+}
+
+.twisty {
+  cursor: pointer;
+  margin: .5rem 0;
 }
 
 footer {
@@ -115,16 +128,20 @@ form > * {
     align-items: flex-start;
     flex-direction: column;
   }
+
   nav li {
     width: 100%;
   }
+
   nav a {
     width: 100%;
   }
+
   main {
     margin-top: 420px;
   }
-  section {
+
+  .item {
     flex-direction: column;
   }
 }

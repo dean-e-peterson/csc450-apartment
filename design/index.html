@@ -7,6 +7,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Raleway&display=swap" rel="stylesheet">
   <link href="style.css" rel="stylesheet" />
   <title>Apartment Company Name</title>
+  <script>
+    function onTwistyClick(e) {
+      if (e.parentNode.style.height !== 'auto') {
+        e.parentNode.style.height = 'auto';
+      } else {
+        e.parentNode.style.height = '2rem';
+      }
+    }
+  </script>
 </head>
 <body>
   <div class="container">
@@ -35,20 +44,42 @@
     </header>
     <main>
       <section>
-        <img src="images/dummy.svg" height="300" width="400" />
-        <div>
-          <h2>Property Name</h2>
-          <p>Property Address</p>
-          <p>Touting the multifaceted wonderfulness of said property.</p>
+        <div class="item">
+          <img src="images/dummy.svg" height="300" width="400" />
+          <div>
+            <h2>Property Name</h2>
+            <p>Property Address</p>
+            <p>Touting the multifaceted wonderfulness of said property.</p>
+          </div>
+        </div>
+        <div class="drop">
+          <div class="twisty" onClick="onTwistyClick(this)">
+            <img src="images/twisty.svg" height="20" width="16" />
+            Click for vacancies
+          </div>
+          <p>2 bedroom 1 bath</p>
+          <p>1 bedroom 1 bath</p>
+          <p>Penthouse</p>
         </div>
       </section>
       <section>
-        <img src="images/dummy.svg" height="300" width="400" />
-        <div>
-          <h2>Property Name</h2>
-          <p>Property Address</p>
-          <p>Touting the multifaceted wonderfulness of said property.</p>
+        <div class="item">
+          <img src="images/dummy.svg" height="300" width="400" />
+          <div>
+            <h2>Property Name</h2>
+            <p>Property Address</p>
+            <p>Touting the multifaceted wonderfulness of said property.</p>
+          </div>
         </div>
+        <div class="drop">
+          <div class="twisty" onClick="onTwistyClick(this)">
+            <img src="images/twisty.svg" height="20" width="16" />
+            Click for vacancies
+          </div>
+          <p>2 bedroom 1 bath</p>
+          <p>1 bedroom 1 bath</p>
+          <p>Penthouse</p>
+        </div>        
       </section>
     </main>
     <footer>
