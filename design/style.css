@@ -1,3 +1,10 @@
+:root {
+  --primary-color: #888;
+  --second-color: #ccc;
+  --text-color: #000;
+  --highlight-color: #fff;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -5,6 +12,7 @@
 }
 
 body {
+  background-color: var(--primary-color);
   font-family: 'Raleway', sans-serif;
 }
 
@@ -18,11 +26,14 @@ h1 {
 }
 
 .container {
+  background-color: var(--second-color);
   margin: 0 auto;
   max-width: 1080px;
+  min-height: 100vh;
 }
 
 header {
+  background-color: var(--second-color);
   position: fixed;
   max-width: 1080px;
   top: 0;
@@ -42,27 +53,58 @@ header {
 }
 
 nav {
-  height: 30px;
+  background-color: var(--primary-color);
 }
 
 nav ul {
+  align-items: center;
   display: flex;
+  height: 2.25rem;  
   list-style: none;
 }
 
 nav a {
-  color: black;
+  color: var(--text-color);
   font-size: 1.25rem;
   padding: .5rem .8rem;
   text-decoration: none;
 }
 
+nav a.current {
+  color: var(--highlight-color);
+}
+
+nav a:hover {
+  background-color: var(--second-color);
+}
+
 main {
-  margin: 140px 15px 0 15px;
+  margin: 135px 15px 0 15px;
   max-width: 1080px;
+  padding-top: 1rem;
+}
+
+section {
+  background-color: var(--highlight-color);
+  box-shadow: .25rem .25rem var(--primary-color);
+  display: flex;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+section > img {
+  margin-right: 1rem;
 }
 
 footer {
   margin: 15px;
   max-width: 1080px;
+  padding-bottom: 1rem;
+}
+
+form > * {
+  display: block;
+  margin: 1rem auto;
+  padding: .5rem;
+  width: 80%;
 }
