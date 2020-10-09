@@ -11,8 +11,10 @@
     function onTwistyClick(e) {
       if (e.parentNode.style.height !== 'auto') {
         e.parentNode.style.height = 'auto';
+        e.querySelector('img').style.transform = 'rotate(90deg)';
       } else {
         e.parentNode.style.height = '2rem';
+        e.querySelector('img').style.transform = 'rotate(0deg)';
       }
     }
   </script>
