@@ -16,7 +16,7 @@ body {
   font-family: 'Raleway', sans-serif;
 }
 
-h1, h2, h2 {
+h1, h2, h3 {
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
 }
@@ -29,7 +29,7 @@ h1 {
   background-color: var(--second-color);
   margin: 0 auto;
   max-width: 1080px;
-  min-height: 100vh;
+  min-height: 100vh; /* Make center column background go to bottom */
 }
 
 header {
@@ -43,8 +43,7 @@ header {
 .banner {
   align-items: center;
   display: flex;
-  height: 100px;
-  margin: 0 15px;
+  margin: 0 1rem;
   justify-content: space-between;
 }
 
@@ -59,14 +58,14 @@ nav {
 nav ul {
   align-items: center;
   display: flex;
-  height: 2.25rem;  
   list-style: none;
 }
 
 nav a {
   color: var(--text-color);
+  display: block;
   font-size: 1.25rem;
-  padding: .5rem .8rem;
+  padding: .5rem .7rem;
   text-decoration: none;
 }
 
@@ -79,7 +78,7 @@ nav a:hover {
 }
 
 main {
-  margin: 135px 15px 0 15px;
+  margin: 124px 15px 0 15px;
   max-width: 1080px;
   padding-top: 1rem;
 }
@@ -108,4 +107,24 @@ form > * {
   margin: 1rem auto;
   padding: .5rem;
   width: 80%;
+}
+
+/* Mobile Styles */
+@media (max-width: 800px) {
+  nav ul {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  nav li {
+    width: 100%;
+  }
+  nav a {
+    width: 100%;
+  }
+  main {
+    margin-top: 420px;
+  }
+  section {
+    flex-direction: column;
+  }
 }
