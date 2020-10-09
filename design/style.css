@@ -1,0 +1,66 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Raleway', sans-serif;
+}
+
+h1, h2, h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+.locked {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+header {
+  align-items: center;
+  display: flex;
+  height: 100px;
+  justify-content: space-between;
+}
+
+.header-links a {
+  display: block;
+}
+
+nav {
+  height: 30px;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+}
+
+nav a {
+  color: black;
+  font-size: 1.25rem;
+  padding: .5rem .75rem;
+  text-decoration: none;
+}
+
+
+main {
+  margin-top: 130px;
+}
+
+/*
+.logo {
+  float: left;
+}
+
+.header-links {
+  float: right;
+}
+*/
