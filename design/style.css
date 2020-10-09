@@ -104,6 +104,7 @@ footer {
 
 form > * {
   display: block;
+  font-family: 'Raleway', sans-serif;
   margin: 1rem auto;
   padding: .5rem;
   width: 80%;
