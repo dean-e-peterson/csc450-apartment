@@ -47,7 +47,17 @@ header {
   justify-content: space-between;
 }
 
+.logo {
+  margin: .25rem 1rem .25rem 0;
+}
+
+.header-links {
+  margin-left: auto; /* right-justify under flex */
+}
+
 .header-links a {
+  font-size: .8rem;
+  line-height: 1.2rem;
   display: block;
 }
 
@@ -59,6 +69,10 @@ nav ul {
   align-items: center;
   display: flex;
   list-style: none;
+}
+
+nav .chat {
+  margin-left: auto; /* right-justify under flex */
 }
 
 nav a {
@@ -78,7 +92,7 @@ nav a:hover {
 }
 
 main {
-  margin: 124px 15px 0 15px;
+  margin: 132px 15px 0 15px;
   max-width: 1080px;
   padding-top: 1rem;
 }
@@ -109,6 +123,7 @@ section {
 }
 
 footer {
+  font-size: .8rem;
   margin: 15px;
   max-width: 1080px;
   padding-bottom: 1rem;
