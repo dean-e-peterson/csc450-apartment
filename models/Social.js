@@ -1,11 +1,10 @@
 const mongoose = require('mongoose');
 
-const ProfileSchema = new mongoose.Schema({
+const SocialSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user',
   },
-
   social: {
     youtube: {
       type: String,
@@ -16,12 +15,6 @@ const ProfileSchema = new mongoose.Schema({
     facebook: {
       type: String,
     },
-    linkedin: {
-      type: String,
-    },
-    instagram: {
-      type: String,
-    },
   },
   date: {
     type: Date,
@@ -29,4 +22,4 @@ const ProfileSchema = new mongoose.Schema({
   },
 });
 
-module.exports = Profile = mongoose.model('profile', ProfileSchema);
+module.exports = Social = mongoose.model('social', SocialSchema);

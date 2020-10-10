@@ -12,7 +12,7 @@ const User = require('../../models/User');
 router.get('/', auth, async (req, res) => {
   // Staff only.
   if (!req.user.isStaff) {
-    return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
+    return res.status(403).json({ errors: [{ msg: 'Not authorized' }] });
   }
 
   try {
@@ -25,7 +25,7 @@ router.get('/', auth, async (req, res) => {
     //   let users = await User.find({ unit: unit }).select('-password');
     //   unit['tenants'] = users;
     // }
-    
+
     // ### Another way to include tenants with one db trip, including password.
     // const units = await Unit.aggregate([
     //   {
@@ -43,7 +43,7 @@ router.get('/', auth, async (req, res) => {
     console.error(err.message);
     res.status(500).send('Server error');
   }
-})
+});
 
 // @route   POST /api/units
 // @desc    Create unit
@@ -52,26 +52,30 @@ router.post(
   '/',
   auth,
   [
+    check('location', 'Apartment complex is required').not().isEmpty(),
     check('number', 'Unit number is required').not().isEmpty(),
     check('bedrooms', 'Bedrooms must be a number').isNumeric(),
+    check('bathrooms', 'Bathrooms must be a number').isNumeric(),
   ],
   async (req, res) => {
     // Staff only.
     if (!req.user.isStaff) {
-      return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
+      return res.status(403).json({ errors: [{ msg: 'Not authorized' }] });
     }
 
     // Apply validations.
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });      
+      return res.status(400).json({ errors: errors.array() });
     }
-    
-    try {  
+
+    try {
       // Make sure unit doesn't already exist.
       const existingUnit = await Unit.findOne({ number: req.body.number });
       if (existingUnit) {
-        return res.status(400).json({ errors: [{ msg: 'Another unit has that number' }] });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Another unit has that number' }] });
       }
 
       // Save unit.
@@ -96,7 +100,7 @@ router.get('/:id', auth, async (req, res) => {
   // TODO: Change to allow tenant to get their own unit?
   // Staff only.
   if (!req.user.isStaff) {
-    return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
+    return res.status(403).json({ errors: [{ msg: 'Not authorized' }] });
   }
 
   try {
@@ -110,7 +114,7 @@ router.get('/:id', auth, async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
-  }  
+  }
 });
 
 // @route   PATCH /api/units/:id
@@ -119,13 +123,11 @@ router.get('/:id', auth, async (req, res) => {
 router.patch(
   '/:id',
   auth,
-  [
-    check('bedrooms', 'Bedrooms must be a number').optional().isNumeric(),
-  ],
+  [check('bedrooms', 'Bedrooms must be a number').optional().isNumeric()],
   async (req, res) => {
     // Staff only.
     if (!req.user.isStaff) {
-      return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
+      return res.status(403).json({ errors: [{ msg: 'Not authorized' }] });
     }
 
     // Check validation results.
@@ -133,13 +135,15 @@ router.patch(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    
+
     try {
       // Check for duplicate unit.
       if (req.body.number) {
         const existingUnit = await Unit.findOne({ number: req.body.number });
         if (existingUnit) {
-          return res.status(400).json({ errors: [{ msg: 'Another unit has that number' }] });
+          return res
+            .status(400)
+            .json({ errors: [{ msg: 'Another unit has that number' }] });
         }
       }
 
@@ -163,7 +167,7 @@ router.patch(
 router.delete('/:id', auth, async (req, res) => {
   // Staff only.
   if (!req.user.isStaff) {
-    return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
+    return res.status(403).json({ errors: [{ msg: 'Not authorized' }] });
   }
 
   try {
@@ -177,7 +181,7 @@ router.delete('/:id', auth, async (req, res) => {
     // Find and remove unit.
     const query = await Unit.findByIdAndDelete(req.params.id);
     if (!query) {
-      return res.status(400).json({ errors: [ { msg: 'Unit not found' }] });
+      return res.status(400).json({ errors: [{ msg: 'Unit not found' }] });
     }
 
     res.end();
@@ -188,4 +192,3 @@ router.delete('/:id', auth, async (req, res) => {
 });
 
 module.exports = router;
-

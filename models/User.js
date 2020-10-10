@@ -3,32 +3,32 @@ const mongoose = require('mongoose');
 const UserSchema = new mongoose.Schema({
   firstName: {
     type: String,
-    required: true
+    required: true,
   },
   lastName: {
-    type: String
+    type: String,
   },
   email: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   unit: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'unit'
+    ref: 'unit',
   },
   isStaff: {
     type: Boolean,
-    default: false
+    default: false,
   },
   date: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 module.exports = User = mongoose.model('user', UserSchema);
