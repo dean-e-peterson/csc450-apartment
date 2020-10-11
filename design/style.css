@@ -1,0 +1,162 @@
+:root {
+  --primary-color: #888;
+  --second-color: #ccc;
+  --text-color: #000;
+  --highlight-color: #fff;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--primary-color);
+  font-family: 'Raleway', sans-serif;
+}
+
+h1, h2, h3 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+.container {
+  background-color: var(--second-color);
+  margin: 0 auto;
+  max-width: 1080px;
+  min-height: 100vh; /* Make center column background go to bottom */
+}
+
+header {
+  background-color: var(--second-color);
+  position: fixed;
+  max-width: 1080px;
+  top: 0;
+  width: 100%;
+}
+
+.banner {
+  align-items: center;
+  display: flex;
+  margin: 0 1rem;
+  justify-content: space-between;
+}
+
+.logo {
+  margin: .25rem 1rem .25rem 0;
+}
+
+.header-links {
+  margin-left: auto; /* right-justify under flex */
+}
+
+.header-links a {
+  font-size: .8rem;
+  line-height: 1.2rem;
+  display: block;
+}
+
+nav {
+  background-color: var(--primary-color);
+}
+
+nav ul {
+  align-items: center;
+  display: flex;
+  list-style: none;
+}
+
+nav .chat {
+  margin-left: auto; /* right-justify under flex */
+}
+
+nav a {
+  color: var(--text-color);
+  display: block;
+  font-size: 1.25rem;
+  padding: .5rem .7rem;
+  text-decoration: none;
+}
+
+nav a.current {
+  color: var(--highlight-color);
+}
+
+nav a:hover {
+  background-color: var(--second-color);
+}
+
+main {
+  margin: 132px 15px 0 15px;
+  max-width: 1080px;
+  padding-top: 1rem;
+}
+
+section {
+  background-color: var(--highlight-color);
+  box-shadow: .25rem .25rem var(--primary-color);
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.item {
+  display: flex;
+}
+
+.item > img {
+  margin-right: 1rem;
+}
+
+.drop {
+  height: 2rem;
+  overflow: hidden;
+}
+
+.twisty {
+  cursor: pointer;
+  margin: .5rem 0;
+}
+
+footer {
+  font-size: .8rem;
+  margin: 15px;
+  max-width: 1080px;
+  padding-bottom: 1rem;
+}
+
+form > * {
+  display: block;
+  font-family: 'Raleway', sans-serif;
+  margin: 1rem auto;
+  padding: .5rem;
+  width: 80%;
+}
+
+/* Mobile Styles */
+@media (max-width: 800px) {
+  nav ul {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  nav li {
+    width: 100%;
+  }
+
+  nav a {
+    width: 100%;
+  }
+
+  main {
+    margin-top: 420px;
+  }
+
+  .item {
+    flex-direction: column;
+  }
+}
