@@ -1,8 +1,8 @@
 :root {
-  --primary-color: #888;
-  --second-color: #ccc;
-  --text-color: #000;
-  --highlight-color: #fff;
+  --primary-color: #9d5c63;
+  --second-color: #e4bb97;
+  --text-color: #584b53;
+  --highlight-color: #fef5ef;
 }
 
 * {
@@ -13,6 +13,7 @@
 
 body {
   background-color: var(--primary-color);
+  color: var(--text-color);
   font-family: 'Raleway', sans-serif;
 }
 
@@ -76,7 +77,7 @@ nav .chat {
 }
 
 nav a {
-  color: var(--text-color);
+  color: var(--highlight-color);
   display: block;
   font-size: 1.25rem;
   padding: .5rem .7rem;
@@ -84,11 +85,13 @@ nav a {
 }
 
 nav a.current {
-  color: var(--highlight-color);
+  background-color: var(--second-color);
+  color: var(--text-color);
 }
 
 nav a:hover {
   background-color: var(--second-color);
+  color: var(--text-color);
 }
 
 main {
