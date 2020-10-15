@@ -1,9 +1,9 @@
 import React from 'react';
-import ButtonAppBar from './homepage';
+import Homepage from './homepage';
 
 const App = () => {
   return (
-    <ButtonAppBar />
+    <Homepage />
   );
 };
 

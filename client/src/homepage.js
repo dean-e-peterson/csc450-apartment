@@ -34,8 +34,8 @@ const useStyles = makeStyles(theme => ({
 export default function ButtonAppBar() {
   const classes = useStyles();
   return (
-    <Grid.Container>
-      <Grid.Item>
+    <Grid container>
+      <Grid item>
         <AppBar position='static'>
           <Toolbar>
             <Button color='inherit'>Logout</Button>
@@ -52,9 +52,8 @@ export default function ButtonAppBar() {
           </Toolbar>
         </AppBar>
         <Paper className={classes.root}></Paper>
-      </Grid.Item>
-
-      <Grid.Item>
+      </Grid>
+      <Grid item>
         <Card className={classes.root}>
           <CardActionArea>
             <CardMedia
@@ -89,7 +88,7 @@ export default function ButtonAppBar() {
             </Button>
           </CardActions>
         </Card>
-      </Grid.Item>
+      </Grid>
       <GridList>
         <Card className={classes.root}>
           <CardActionArea>
@@ -128,15 +127,6 @@ export default function ButtonAppBar() {
           </CardActions>
         </Card>
       </GridList>
-    </Grid.Container>
+    </Grid>
   );
-  {
-    /*<Router>*/
-  }
-  {
-    /*/!*<Route exact path="/" component={ReprocessTrans}  data={state.integrations}></Route>*!/*/
-  }
-  {
-    /*</Router>*/
-  }
 }
