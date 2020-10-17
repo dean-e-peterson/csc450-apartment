@@ -1,28 +1,20 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import {
   AppBar,
+  Button,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Grid,
   Toolbar,
-  Icon,
-  IconButton,
   Typography,
-  Button
 } from "@material-ui/core";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
-import Grid from "@material-ui/core/Grid";
-import GridList from '@material-ui/core/GridList';
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-    minWidth: 1200
-  },
   menuButton: {
     marginRight: theme.spacing(2)
   },
@@ -35,13 +27,14 @@ export default function ButtonAppBar() {
   const classes = useStyles();
   return (
     <Grid container>
-      <Grid item>
+      <Grid item xs={12}>
         <AppBar position='static'>
           <Toolbar>
             <Button color='inherit'>Logout</Button>
             <Typography
               style={{ textAlign: "Center" }}
               variant='h6'
+              component='h1'
               className={classes.title}
             >
               Apartments
@@ -51,10 +44,9 @@ export default function ButtonAppBar() {
             <Button color='inherit'>Chat</Button>
           </Toolbar>
         </AppBar>
-        <Paper className={classes.root}></Paper>
       </Grid>
-      <Grid item>
-        <Card className={classes.root}>
+      <Grid item xs={12}>
+        <Card>
           <CardActionArea>
             <CardMedia
               component='img'
@@ -64,7 +56,6 @@ export default function ButtonAppBar() {
               snippet
               title='Apartment 1'
             />
-
             <CardContent>
               <Typography variant='h5' component='h2'>
                 Apartment 1
@@ -81,16 +72,16 @@ export default function ButtonAppBar() {
             </Button>
             <Button size='small' color='primary'>
               Vacancies
+              <ArrowDropDownIcon />
             </Button>
-            <ArrowDropDownIcon />
             <Button style={{ textAlign: "right" }} size='small' color='primary'>
               Contact Us
             </Button>
           </CardActions>
         </Card>
       </Grid>
-      <GridList>
-        <Card className={classes.root}>
+      <Grid item xs={12}>
+        <Card>
           <CardActionArea>
             <CardMedia
               component='img'
@@ -115,8 +106,8 @@ export default function ButtonAppBar() {
             </Button>
             <Button size='small' color='primary'>
               Vacancies
+              <ArrowDropDownIcon />
             </Button>
-            <ArrowDropDownIcon />
             <Button
               style={{ alignSelf: "flex-end" }}
               size='small'
@@ -126,7 +117,7 @@ export default function ButtonAppBar() {
             </Button>
           </CardActions>
         </Card>
-      </GridList>
+      </Grid>
     </Grid>
   );
 }
