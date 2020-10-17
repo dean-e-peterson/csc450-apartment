@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import {
   AppBar,
   Button,
@@ -23,9 +23,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const theme = createMuiTheme({
+  typography: {
+    fontFamily: [
+      "Raleway",
+      "sans-serif",
+    ].join(","),
+  },
+});
+
 export default function ButtonAppBar() {
   const classes = useStyles();
   return (
+  <ThemeProvider theme={theme}>  
     <Grid container>
       <Grid item xs={12}>
         <AppBar position='static'>
@@ -117,5 +127,6 @@ export default function ButtonAppBar() {
         </Card>
       </Grid>
     </Grid>
+  </ThemeProvider>
   );
 }
