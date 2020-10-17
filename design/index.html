@@ -9,12 +9,18 @@
   <title>Apartment Company Name</title>
   <script>
     function onTwistyClick(e) {
-      if (e.parentNode.style.height !== 'auto') {
-        e.parentNode.style.height = 'auto';
-        e.querySelector('img').style.transform = 'rotate(90deg)';
+      if (e.target.parentNode.style.height !== 'auto') {
+        e.target.parentNode.style.height = 'auto';
+        e.target.querySelector('img').style.transform = 'rotate(90deg)';
       } else {
-        e.parentNode.style.height = '2rem';
-        e.querySelector('img').style.transform = 'rotate(0deg)';
+        e.target.parentNode.style.height = '2rem';
+        e.target.querySelector('img').style.transform = 'rotate(0deg)';
+      }
+    }
+    function onTwistyKey(e) {
+      if (e.keyCode === 13 || e.keyCode === 32) { // Enter or space.
+        onTwistyClick(e);
+        e.preventDefault();
       }
     }
   </script>
@@ -47,7 +53,7 @@
     <main>
       <section>
         <div class="item">
-          <img src="images/dummy.svg" height="300" width="400" />
+          <img src="images/pexels-george-becker-129494.jpg" width="400" />
           <div>
             <h2>Property Name</h2>
             <p>Property Address</p>
@@ -55,7 +61,10 @@
           </div>
         </div>
         <div class="drop">
-          <div class="twisty" onClick="onTwistyClick(this)">
+          <div class="twisty"
+            tabindex="0"
+            onClick="onTwistyClick(event)"
+            onKeydown="onTwistyKey(event)" >
             <img src="images/twisty.svg" height="20" width="16" />
             Click for vacancies
           </div>
