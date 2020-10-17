@@ -52,8 +52,7 @@ export default function ButtonAppBar() {
               component='img'
               alt='Apartment 1'
               height='140'
-              Expand
-              snippet
+              image="/images/pexels-george-becker-129494.jpg"
               title='Apartment 1'
             />
             <CardContent>
@@ -87,8 +86,7 @@ export default function ButtonAppBar() {
               component='img'
               alt='Apartment 2'
               height='140'
-              Link
-              to='https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400&family=Raleway&display=swap'
+              image='/images/pexels-sevenstorm-juhaszimrus-981916.jpg'
               title='Apartment 2'
             />
             <CardContent>
