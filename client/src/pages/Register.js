@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Login({ setAuthUser }) {
+export default function Register({ setAuthUser }) {
   const classes = useStyles();
   const history = useHistory();
 
@@ -32,11 +32,13 @@ export default function Login({ setAuthUser }) {
     e.preventDefault();
     try {
       const body = {
+        firstName: e.target.firstName.value,
+        lastName: e.target.lastName.value,        
         email: e.target.email.value,
         password: e.target.password.value,
       };
       const response = await Axios.post(
-        "/api/auth",
+        "/api/auth/register",
         body,
         { headers: { "Content-type": "application/json" }}
       );
@@ -63,9 +65,23 @@ export default function Login({ setAuthUser }) {
     <Card className={classes.root} variant='outlined'>
       <CardContent>
         <Typography variant='h5' component='h2'>
-          Log In
+          Register
         </Typography>
         <form onSubmit={onSubmit}>
+          <TextField 
+            id='firstName'
+            label='First Name'
+            margin='dense'
+            name='firstName'
+            variant='outlined'
+          />
+          <TextField 
+            id='lastName'
+            label='Last Name'
+            margin='dense'
+            name='lastName'
+            variant='outlined'
+          />
           <TextField 
             id='email'
             label='Email'

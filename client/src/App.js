@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import ButtonAppBar from "./layout/ButtonAppBar";
 import Homepage from './pages/Homepage';
 import Login from "./pages/Login";
+import Register from "./pages/Register";
+import { checkAuthToken } from "./utils/auth";
 
 const theme = createMuiTheme({
   typography: {
@@ -15,17 +17,39 @@ const theme = createMuiTheme({
 });
 
 const App = () => {
+  const [authUser, setAuthUser] = useState(null);
+
+  useEffect(() => {
+    const handleAuth = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          const user = await checkAuthToken(token);
+          setAuthUser(user);
+        } else {
+          setAuthUser(null);
+        }
+      } catch (err) {
+        setAuthUser(null);
+      }
+    };
+    handleAuth();
+  }, []); // [] means don't run on every render.
+
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <ButtonAppBar />
+        <ButtonAppBar authUser={authUser} setAuthUser={setAuthUser} />
         <Switch>
           <Route exact path="/">
             <Homepage />
           </Route>
           <Route exact path="/login">
-            <Login />
+            <Login setAuthUser={setAuthUser} />
           </Route>
+          <Route exact path="/register">
+            <Register setAuthUser={setAuthUser} />
+          </Route>          
         </Switch>
       </Router>
     </ThemeProvider>
