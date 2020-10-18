@@ -65,7 +65,7 @@ export default function Register({ setAuthUser }) {
     <Card className={classes.root} variant='outlined'>
       <CardContent>
         <Typography variant='h5' component='h2'>
-          Log In
+          Register
         </Typography>
         <form onSubmit={onSubmit}>
           <TextField 
