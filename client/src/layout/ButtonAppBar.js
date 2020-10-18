@@ -31,7 +31,7 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
     buttons = (
       <Fragment>
         <Button color='inherit' component={Link} to="/login">Login</Button>
-        <Button color='inherit'>Register</Button>
+        <Button color='inherit' component={Link} to="/register">Register</Button>
         <Button color='inherit'>Chat</Button>
       </Fragment>
     );
@@ -44,7 +44,6 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
       </Fragment>
     );
   } else if (authUser.unit) { // Logged in as tenant.
-    console.log(authUser);
     buttons = (
       <Fragment>
         <Button color='inherit' onClick={onLogout}>Logout</Button>

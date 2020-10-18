@@ -4,6 +4,7 @@ import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import ButtonAppBar from "./layout/ButtonAppBar";
 import Homepage from './pages/Homepage';
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import { checkAuthToken } from "./utils/auth";
 
 const theme = createMuiTheme({
@@ -46,6 +47,9 @@ const App = () => {
           <Route exact path="/login">
             <Login setAuthUser={setAuthUser} />
           </Route>
+          <Route exact path="/register">
+            <Register setAuthUser={setAuthUser} />
+          </Route>          
         </Switch>
       </Router>
     </ThemeProvider>
