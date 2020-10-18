@@ -19,11 +19,6 @@ const useStyles = makeStyles(theme => ({
 
     minWidth: 275
   },
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)"
-  },
   button: {
     marginTop: theme.spacing(1),
   },
@@ -31,7 +26,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function Login({ setAuthUser }) {
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
   const history = useHistory();
 
   const onSubmit = async (e) => {
@@ -68,6 +62,9 @@ export default function Login({ setAuthUser }) {
   return (
     <Card className={classes.root} variant='outlined'>
       <CardContent>
+        <Typography variant='h5' component='h2'>
+          Log In
+        </Typography>
         <form onSubmit={onSubmit}>
           <TextField 
             id='email'

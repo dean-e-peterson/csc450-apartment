@@ -14,10 +14,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-// Choose buttons to display based on permissions of logged on user.
-const Buttons = (authUser, setAuthUser) => {
+const ButtonAppBar = ({ authUser, setAuthUser }) => {
+  const classes = useStyles();
   const history = useHistory();
-
+  
   const onLogout = () => {
     setAuthUser(null);
     localStorage.removeItem("token");
@@ -25,26 +25,42 @@ const Buttons = (authUser, setAuthUser) => {
     history.push("/");
   };
 
+  // Choose buttons to display based on permissions of logged on user.
+  let buttons;
   if (!authUser) { // Not logged in.
-    return (
+    buttons = (
       <Fragment>
         <Button color='inherit' component={Link} to="/login">Login</Button>
         <Button color='inherit'>Register</Button>
         <Button color='inherit'>Chat</Button>
       </Fragment>
     );
-  } else { // Logged in.
-    return (
+  } else if (authUser.isStaff) { // Logged in as staff.
+    buttons = (
+      <Fragment>
+        <Button color='inherit' onClick={onLogout}>Logout</Button>
+        <Button color='inherit'>Chat</Button>
+        <Button color='inherit'>Staff</Button>
+      </Fragment>
+    );
+  } else if (authUser.unit) { // Logged in as tenant.
+    console.log(authUser);
+    buttons = (
+      <Fragment>
+        <Button color='inherit' onClick={onLogout}>Logout</Button>
+        <Button color='inherit'>Chat</Button>
+        <Button color='inherit'>Tenant</Button>        
+      </Fragment>
+    );
+  } else { // Logged in as but not as tenant or staff.
+    buttons = (
       <Fragment>
         <Button color='inherit' onClick={onLogout}>Logout</Button>
         <Button color='inherit'>Chat</Button>
       </Fragment>
     );
   }
-};
 
-const ButtonAppBar = ({ authUser, setAuthUser }) => {
-  const classes = useStyles();  
   return (
     <AppBar position='static'>
       <Toolbar>
@@ -56,7 +72,7 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
         >
           Sunshine Apartments
         </Typography>
-        {Buttons(authUser, setAuthUser)}
+        {buttons}
       </Toolbar>
     </AppBar>
   );
