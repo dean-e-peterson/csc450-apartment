@@ -22,11 +22,11 @@ const ButtonAppBar = () => {
         <Button color='inherit'>Logout</Button>
         <Typography
           style={{ textAlign: "Center" }}
-          variant='h6'
+          variant='h4'
           component='h1'
           className={classes.title}
         >
-          Apartments
+          Sunshine Apartments
         </Typography>
         <Button color='inherit' component={Link} to="/login">Login</Button>
         <Button color='inherit'>Register</Button>

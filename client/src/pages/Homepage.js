@@ -37,7 +37,7 @@ export default function Homepage() {
                 Apartment 1
               </Typography>
               <Typography variant='body2' color='textSecondary' component='p'>
-                Beautiful 1, 2 and 3 bedroom apartments - full of amenties!
+                Beautiful 1, 2 and 3 bedroom apartments - full of amenities!
                 Underground Parking
               </Typography>
             </CardContent>
@@ -71,7 +71,7 @@ export default function Homepage() {
                 Apartment 2
               </Typography>
               <Typography variant='body2' color='textSecondary' component='p'>
-                Beautiful 1, 2 and 3 bedroom apartments - full of amenties!
+                Beautiful 1, 2 and 3 bedroom apartments - full of amenities!
               </Typography>
             </CardContent>
           </CardActionArea>
