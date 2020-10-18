@@ -38,13 +38,13 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <ButtonAppBar authUser={authUser} />
+        <ButtonAppBar authUser={authUser} setAuthUser={setAuthUser} />
         <Switch>
           <Route exact path="/">
             <Homepage />
           </Route>
           <Route exact path="/login">
-            <Login />
+            <Login setAuthUser={setAuthUser} />
           </Route>
         </Switch>
       </Router>

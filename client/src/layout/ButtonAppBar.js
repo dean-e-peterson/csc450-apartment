@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   AppBar,
   Button,
@@ -15,7 +15,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 // Choose buttons to display based on permissions of logged on user.
-const Buttons = (authUser) => {
+const Buttons = (authUser, setAuthUser) => {
+  const history = useHistory();
+
+  const onLogout = () => {
+    setAuthUser(null);
+    localStorage.removeItem("token");
+    // Back to homepage in case user no longer has rights to where they were.
+    history.push("/");
+  };
+
   if (!authUser) { // Not logged in.
     return (
       <Fragment>
@@ -27,14 +36,14 @@ const Buttons = (authUser) => {
   } else { // Logged in.
     return (
       <Fragment>
-        <Button color='inherit'>Logout</Button>
+        <Button color='inherit' onClick={onLogout}>Logout</Button>
         <Button color='inherit'>Chat</Button>
       </Fragment>
     );
   }
 };
 
-const ButtonAppBar = ({ authUser }) => {
+const ButtonAppBar = ({ authUser, setAuthUser }) => {
   const classes = useStyles();  
   return (
     <AppBar position='static'>
@@ -47,7 +56,7 @@ const ButtonAppBar = ({ authUser }) => {
         >
           Sunshine Apartments
         </Typography>
-        {Buttons(authUser)}
+        {Buttons(authUser, setAuthUser)}
       </Toolbar>
     </AppBar>
   );
