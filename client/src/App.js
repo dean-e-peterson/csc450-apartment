@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import ButtonAppBar from "./layout/ButtonAppBar";
-import Homepage from './homepage';
-import Login from "./layout/login";
+import Homepage from './pages/Homepage';
+import Login from "./pages/Login";
 
 const theme = createMuiTheme({
   typography: {
