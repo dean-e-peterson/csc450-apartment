@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+import { Link } from "react-router-dom";
 import {
   AppBar,
   Button,
@@ -27,7 +28,7 @@ const ButtonAppBar = () => {
         >
           Apartments
         </Typography>
-        <Button color='inherit'>Login</Button>
+        <Button color='inherit' component={Link} to="/login">Login</Button>
         <Button color='inherit'>Register</Button>
         <Button color='inherit'>Chat</Button>
       </Toolbar>

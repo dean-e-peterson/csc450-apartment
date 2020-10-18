@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function OutlinedCard() {
+export default function Login() {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
