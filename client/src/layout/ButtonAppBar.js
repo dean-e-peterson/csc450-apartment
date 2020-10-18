@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import {
   AppBar,
@@ -14,12 +14,31 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ButtonAppBar = () => {
+// Choose buttons to display based on permissions of logged on user.
+const Buttons = (authUser) => {
+  if (!authUser) { // Not logged in.
+    return (
+      <Fragment>
+        <Button color='inherit' component={Link} to="/login">Login</Button>
+        <Button color='inherit'>Register</Button>
+        <Button color='inherit'>Chat</Button>
+      </Fragment>
+    );
+  } else { // Logged in.
+    return (
+      <Fragment>
+        <Button color='inherit'>Logout</Button>
+        <Button color='inherit'>Chat</Button>
+      </Fragment>
+    );
+  }
+};
+
+const ButtonAppBar = ({ authUser }) => {
   const classes = useStyles();  
   return (
     <AppBar position='static'>
       <Toolbar>
-        <Button color='inherit'>Logout</Button>
         <Typography
           style={{ textAlign: "Center" }}
           variant='h4'
@@ -28,9 +47,7 @@ const ButtonAppBar = () => {
         >
           Sunshine Apartments
         </Typography>
-        <Button color='inherit' component={Link} to="/login">Login</Button>
-        <Button color='inherit'>Register</Button>
-        <Button color='inherit'>Chat</Button>
+        {Buttons(authUser)}
       </Toolbar>
     </AppBar>
   );
