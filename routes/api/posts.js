@@ -47,6 +47,8 @@ router.post(
 // @access  Private
 router.get('/', auth, async (req, res) => {
   try {
+    // TODO: Restrict to tenants only?
+
     const posts = await Post.find().sort({ date: -1 }); // Date reverse sort.
 
     res.json(posts);

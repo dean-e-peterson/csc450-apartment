@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import ButtonAppBar from "./layout/ButtonAppBar";
-import Homepage from './pages/Homepage';
+import Homepage from "./pages/Homepage";
+import Posts from "./pages/Posts";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { checkAuthToken } from "./utils/auth";
@@ -49,7 +50,10 @@ const App = () => {
           </Route>
           <Route exact path="/register">
             <Register setAuthUser={setAuthUser} />
-          </Route>          
+          </Route>
+          <Route exact path="/posts"> {/* TODO: authenticate route */}
+            <Posts authUser={authUser}/>
+          </Route>
         </Switch>
       </Router>
     </ThemeProvider>

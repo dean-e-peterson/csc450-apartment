@@ -39,16 +39,18 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
     buttons = (
       <Fragment>
         <Button color='inherit' onClick={onLogout}>Logout</Button>
-        <Button color='inherit'>Chat</Button>
+        <Button color="inherit" component={Link} to="/posts">Bulletin Board</Button>
         <Button color='inherit'>Staff</Button>
+        <Button color='inherit'>Chat</Button>
       </Fragment>
     );
   } else if (authUser.unit) { // Logged in as tenant.
     buttons = (
       <Fragment>
         <Button color='inherit' onClick={onLogout}>Logout</Button>
-        <Button color='inherit'>Chat</Button>
+        <Button color="inherit" component={Link} to="/posts">Bulletin Board</Button>
         <Button color='inherit'>Tenant</Button>        
+        <Button color='inherit'>Chat</Button>
       </Fragment>
     );
   } else { // Logged in as but not as tenant or staff.
