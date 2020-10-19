@@ -1,12 +1,23 @@
 import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import {
+  Button,
   Typography,
 } from "@material-ui/core"
 import Post from "../layout/Post";
+import NewPost from "../layout/NewPost";
 
 export default function Posts({ authUser }) {
   const [posts, setPosts] = useState([]);
+
+  const onNewPost = () => {
+    setPosts(prevPosts => {
+      // Add placeholder new post.
+      prevPosts.unshift({ _id: "new" });
+      return [ ...prevPosts ];
+    });
+  };
+
   useEffect(() => {
     const getPosts = async () => {
       try {
@@ -20,7 +31,6 @@ export default function Posts({ authUser }) {
       } catch (err) {
         console.error(err.message);
       }
-
     }
     getPosts();
   }, [authUser]); // [authUser] means only re-run when authUser changes.
@@ -30,8 +40,12 @@ export default function Posts({ authUser }) {
       <Typography variant='h5' component='h2'>
         Bulletin Board
       </Typography>
+      <Button onClick={onNewPost}>New Post</Button>
       {
-        posts.map(post => 
+        posts.map(post =>
+          post._id === "new" ?
+          <NewPost key={post._id} setPosts={setPosts} authUser={authUser} />
+          :
           <Post key={post._id} post={post} authUser={authUser} />
         )
       }

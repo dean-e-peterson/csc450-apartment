@@ -7,7 +7,7 @@ import {
   Collapse,
   Grid,
   Typography,
-} from "@material-ui/core"
+} from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 export default function Post({ post, authUser }) {
@@ -18,7 +18,7 @@ export default function Post({ post, authUser }) {
   };
 
   return (
-    <Card key={post._id}>
+    <Card>
       <CardContent>
         <Typography component="div">
           <Grid container>
@@ -42,11 +42,11 @@ export default function Post({ post, authUser }) {
       </CardActions>
       <Collapse in={expanded} mountOnEnter unmountOnExit>
         <CardContent>
-          <Typography>
+          <Typography component="div">
             <Grid container>
               {
                 post.comments.map(comment =>
-                  <Fragment>
+                  <Fragment key={comment._id}>
                     <Grid item xs={6}>
                       <p><strong>{comment.name}</strong></p>
                     </Grid> 
