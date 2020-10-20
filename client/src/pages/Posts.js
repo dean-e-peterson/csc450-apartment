@@ -14,6 +14,7 @@ export default function Posts({ authUser }) {
     setPosts(prevPosts => {
       // Add placeholder new post.
       prevPosts.unshift({ _id: "new" });
+      // Return a new array object, not just the changed array, to force render.
       return [ ...prevPosts ];
     });
   };
@@ -44,9 +45,9 @@ export default function Posts({ authUser }) {
       {
         posts.map(post =>
           post._id === "new" ?
-          <NewPost key={post._id} setPosts={setPosts} authUser={authUser} />
+            <NewPost key={post._id} setPosts={setPosts} authUser={authUser} />
           :
-          <Post key={post._id} post={post} authUser={authUser} />
+            <Post key={post._id} post={post} setPosts={setPosts} authUser={authUser} />
         )
       }
     </Fragment>
