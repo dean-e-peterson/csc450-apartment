@@ -8,7 +8,10 @@ export const checkAuthToken = async (token) => {
       "api/auth",
       { headers: { "x-auth-token": token }}
     );
-    return response.data;
+    const user = response.data;
+    // Store the token with the user even though it is not in DB.
+    user.token = token;
+    return user;
   } catch (err) {
     return null;
   }
