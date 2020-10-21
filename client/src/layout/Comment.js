@@ -86,24 +86,26 @@ export default function Comment({ comment, isNew, post, setPosts, authUser }) {
   } else {
     // What to show if viewing an existing comment.
     return (
-      <Fragment>
-        <CardContent>
-          <Grid item xs={6}>
-            <p><strong>{comment.name}</strong></p>
-          </Grid> 
-          <Grid item xs={6}>
-            <p>{(new Date(comment.date)).toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" })}</p>
-          </Grid>
+      <Grid container>
+        <Grid item xs={6}>
+          <p><strong>{comment.name}</strong></p>
+        </Grid> 
+        <Grid item xs={6}>
+          <p>{(new Date(comment.date)).toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" })}</p>
+        </Grid>
+        <Grid item xs={12}>
+          <p>{comment.text}</p>
+        </Grid>
+        {authUser._id === comment.user && // Only user who created comment can edit.
           <Grid item xs={12}>
-            <p>{comment.text}</p>
+            <CardActions>
+              <Button onClick={onEdit}>
+                Edit comment
+              </Button>
+            </CardActions>
           </Grid>
-        </CardContent>
-        <CardActions>
-          <Button onClick={onEdit}>
-            Edit comment
-          </Button>
-        </CardActions>
-      </Fragment>      
+        }
+      </Grid>      
     );
   }
 };

@@ -50,16 +50,14 @@ export default function Post({ post, setPosts, authUser }) {
       <Collapse in={expanded} mountOnEnter unmountOnExit>
         <CardContent>
           <Typography component="div">
-            <Grid container>
-              {
-                post.comments.map(comment =>
-                  comment._id === "new" ?
-                    <Comment isNew={true} key={comment._id} post={post} setPosts={setPosts} authUser={authUser} />
-                  :
-                    <Comment key={comment._id} comment={comment} post={post} setPosts={setPosts} authUser={authUser}/>
-                )
-              }
-            </Grid>
+            {
+              post.comments.map(comment =>
+                comment._id === "new" ?
+                  <Comment isNew={true} key={comment._id} post={post} setPosts={setPosts} authUser={authUser} />
+                :
+                  <Comment key={comment._id} comment={comment} post={post} setPosts={setPosts} authUser={authUser}/>
+              )
+            }
           </Typography>
         </CardContent>
       </Collapse>
