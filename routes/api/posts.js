@@ -210,14 +210,62 @@ router.post(
   }
 );
 
+// @route   PATCH api/posts/comment/:id/:comment_id
+// @desc    Modify a comment
+// @access  Private
+router.patch(
+  '/comment/:id/:comment_id',
+  auth,
+  [
+    check('text', 'Text is required').not().isEmpty(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      // Find post.
+      const post = await Post.findById(req.params.id);
+
+      // Pull out comment.
+      const comment = post.comments.find(comment => comment.id === req.params.comment_id);
+
+      // Make sure comment exists.
+      if (!comment) {
+        return res.status(404).json({ msg: 'Comment does not exist' });
+      }
+
+      // Only allow a user to delete their own comment unless they are staff.
+      if (! (req.user.isStaff || comment.user.toString() === req.user.id)) {
+        return res.status(401).json({ msg: 'User not authorized' });
+      }      
+      
+      // Modify comment.
+      comment.text = req.body.text;
+
+      // Save whole post.
+      await post.save();
+
+      // Return all comments.
+      res.json(post.comments);      
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+    }
+  } 
+);
+
 // @route   DELETE api/posts/comment/:id/:comment_id
 // @desc    Delete a comment
 // @access  Private
 router.delete('/comment/:id/:comment_id', auth, async (req, res) => {
   try {
+    // Find post.
     const post = await Post.findById(req.params.id);
 
-    // Pull out comment
+    // Pull out comment.
     const comment = post.comments.find(comment => comment.id === req.params.comment_id);
 
     // Make sure comment exists.

@@ -10,7 +10,6 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Comment from "./Comment";
-import NewComment from "./NewComment";
 
 export default function Post({ post, setPosts, authUser }) {
   const [expanded, setExpanded] = useState(false);
@@ -55,9 +54,9 @@ export default function Post({ post, setPosts, authUser }) {
               {
                 post.comments.map(comment =>
                   comment._id === "new" ?
-                    <NewComment key={comment._id} post={post} setPosts={setPosts} authUser={authUser} />
+                    <Comment isNew={true} key={comment._id} post={post} setPosts={setPosts} authUser={authUser} />
                   :
-                    <Comment key={comment._id} comment={comment}/>
+                    <Comment key={comment._id} comment={comment} post={post} setPosts={setPosts} authUser={authUser}/>
                 )
               }
             </Grid>
