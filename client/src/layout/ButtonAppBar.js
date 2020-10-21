@@ -32,7 +32,7 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
       <Fragment>
         <Button color='inherit' component={Link} to="/login">Login</Button>
         <Button color='inherit' component={Link} to="/register">Register</Button>
-        <Button color='inherit' component={Link} to={"/chat"}>Chat</Button>
+        <Button color='inherit' component={Link} to="/chat">Chat</Button>
       </Fragment>
     );
   } else if (authUser.isStaff) { // Logged in as staff.
