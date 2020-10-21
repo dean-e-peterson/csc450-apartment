@@ -1,13 +1,14 @@
 import React from "react";
+import { Link, useHistory } from "react-router-dom";
+import Axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import { useHistory } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import Axios from "axios";
+
 import { checkAuthToken } from "../utils/auth";
 
 const useStyles = makeStyles(theme => ({
@@ -104,9 +105,13 @@ export default function Register({ setAuthUser }) {
             variant='outlined'
             type='submit'
           >
-            Login
+            Register
           </Button>
         </form>
+        <Typography>
+          Already have an account with us?
+          <Link to="/login">Log in</Link>
+        </Typography>
       </CardContent>
       <CardActions></CardActions>
     </Card>
