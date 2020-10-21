@@ -1,0 +1,50 @@
+h3 {
+  color: #2f72da;
+}
+
+span {
+  color: black;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 30px;
+  min-height: 30rem;
+}
+
+.card h1 {
+  color: purple;
+  font-style: italic;
+}
+
+form {
+  max-width: 350px;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0px 3px 24px -8px rgba(0, 0, 0, 0.75);
+}
+
+.name-field {
+  margin-bottom: 30px;
+}
+
+button {
+  margin-top: 20px;
+  padding: 15px;
+  background: transparent;
+  background-color: wheat;
+  border-radius: 5px;
+}
+
+.render-chat {
+  max-width: 350px;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0px 3px 24px -8px rgba(0, 0, 0, 0.75);
+}
+
+.render-chat h1 {
+  color: purple;
+  font-style: italic;
+}

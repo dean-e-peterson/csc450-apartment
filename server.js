@@ -3,6 +3,21 @@ const connectDB = require('./config/db');
 
 const app = express();
 
+/*
+Error: You are trying to attach socket.io to an express request
+handler function. Please pass a http.Server instance.
+*/
+
+// Create http server instance
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
+
+io.on('connection', socket => {
+    socket.on('message', ({ name, message }) => {
+      io.emit('message', { name, message })
+    })
+  })
+
 // Connect Database
 connectDB();
 
@@ -20,4 +35,4 @@ app.use('/api/posts', require('./routes/api/posts'));
 
 const PORT = process.env.PORT || 4000;
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+http.listen(PORT, () => console.log(`Server started on port ${PORT}`));

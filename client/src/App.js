@@ -5,6 +5,7 @@ import ButtonAppBar from "./layout/ButtonAppBar";
 import Homepage from './pages/Homepage';
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Chat from './pages/Chat';
 import { checkAuthToken } from "./utils/auth";
 
 const theme = createMuiTheme({
@@ -49,7 +50,10 @@ const App = () => {
           </Route>
           <Route exact path="/register">
             <Register setAuthUser={setAuthUser} />
-          </Route>          
+          </Route>        
+          <Route exact path="/chat"> 
+            <Chat />
+          </Route>
         </Switch>
       </Router>
     </ThemeProvider>
