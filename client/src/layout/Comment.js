@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import {
   Button,
@@ -7,12 +7,21 @@ import {
   Grid,
   TextareaAutosize,
 } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles({
+  textarea: {
+    width: "100%",
+  },
+});
 
 export default function Comment({ comment, isNew, post, setPosts, authUser }) {
   if (isNew) {
     comment = { text: "" };
   }
   
+  const classes = useStyles();
+
   // Edit new comments by default.
   const [isEditing, setIsEditing] = useState(isNew);
 
@@ -67,6 +76,7 @@ export default function Comment({ comment, isNew, post, setPosts, authUser }) {
       <form onSubmit={onSubmit}>
         <CardContent>
           <TextareaAutosize
+            className={classes.textarea}
             id="text"
             label="Comment text"
             name="text"
