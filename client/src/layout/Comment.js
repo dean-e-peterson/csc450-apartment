@@ -83,8 +83,8 @@ export default function Comment({ comment, isNew, post, setPosts, authUser }) {
         return [ ...prevPosts ];
       });
 
-      // Return to viewing modes (new comment gets different id on save, so not needed).
       if (!isNew) {
+        // Return to viewing mode (new comment gets different id on save, so not needed).
         setIsEditing(false);
       }
     } catch (err) {
@@ -99,11 +99,11 @@ export default function Comment({ comment, isNew, post, setPosts, authUser }) {
         <CardContent>
           <TextareaAutosize
             className={classes.textarea}
+            defaultValue={comment.text}
             id="text"
             label="Comment text"
             name="text"
             placeholder="Type comment here"
-            defaultValue={comment.text}
           />
         </CardContent>
         <CardActions>

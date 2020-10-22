@@ -5,7 +5,6 @@ import {
   Typography,
 } from "@material-ui/core"
 import Post from "../layout/Post";
-import NewPost from "../layout/NewPost";
 
 export default function Posts({ authUser }) {
   const [posts, setPosts] = useState([]);
@@ -45,7 +44,7 @@ export default function Posts({ authUser }) {
       {
         posts.map(post =>
           post._id === "new" ?
-            <Post isNew={true} key={post._id} setPosts={setPosts} authUser={authUser} />
+            <Post isNew={true} key={post._id} post={post} setPosts={setPosts} authUser={authUser} />
           :
             <Post key={post._id} post={post} setPosts={setPosts} authUser={authUser} />
         )

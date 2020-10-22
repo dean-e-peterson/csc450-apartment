@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
 import axios from "axios";
 import {
   Button,
@@ -25,7 +25,7 @@ export default function Post({ post, isNew, setPosts, authUser }) {
 
   if (isNew) {
     // Define template new post that fills form fields with default values.
-    post = { text: "" };
+    post = { _id: "new", text: "" };
   }  
 
   // New posts should be in edit mode by default, else view mode is default.
@@ -37,16 +37,21 @@ export default function Post({ post, isNew, setPosts, authUser }) {
     setExpanded(!expanded);
   };
 
-  const onNewReply = () => {
-    setPosts(prevPosts => {
-      // Get this post from array of all posts.
-      const thisPost = prevPosts.filter(prevPost => prevPost._id === post._id)[0];
-      // Append a placeholder comment to the end.
-      thisPost.comments.push({ _id: "new" });
-      // Return a new array object, not just the changed array, to force render.
-      return [ ...prevPosts ];
-    });
-    setExpanded(true);
+  const onEdit = () => {
+    setIsEditing(true);
+  }
+
+  const onDelete = async () => {
+    // Delete post from server.
+    await axios.delete(
+      "/api/posts/" + post._id,
+      { headers: { "x-auth-token": authUser.token }}
+    );
+
+    // Remove post from UI state.
+    setPosts(prevPosts => prevPosts.filter(prevPost => 
+      !(prevPost._id === post._id)
+    ));
   }
 
   const onSubmit = async (e) => {
@@ -55,19 +60,48 @@ export default function Post({ post, isNew, setPosts, authUser }) {
       const body = {
         text: e.target.text.value,
       }
-      const response = await axios.post(
-        "/api/posts",
-        body,
-        { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
-      );
+
+      // Save new or edited post to server.
+      let response;
+      if (isNew) {      
+        response = await axios.post(
+          "/api/posts",
+          body,
+          { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
+        );
+      } else {
+        response = await axios.patch(
+          "/api/posts/" + post._id,
+          body,
+          { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
+        );
+      }
+
       // Replace placeholder new post with actual one returned by server with real id.
-      setPosts(prevPosts => prevPosts.map(post =>
-        post._id === "new" ? response.data : post
+      setPosts(prevPosts => prevPosts.map(prevPost =>
+        prevPost._id === post._id ? response.data : prevPost
       ));
+
+      if (!isNew) {
+        // Return to viewing mode (new post gets different id on save, so not needed).
+        setIsEditing(false);
+      }
     } catch (err) {
       console.error(err.message);
     }
   };
+
+  const onNewReply = () => {
+    setPosts(prevPosts => {
+      // Get this post from array of all posts.
+      const thisPost = prevPosts.find(prevPost => prevPost._id === post._id);
+      // Append a placeholder comment to the end.
+      thisPost.comments.push({ _id: "new" });
+      // Return a new array object, not just the changed array, to force render.
+      return [ ...prevPosts ];
+    });
+    setExpanded(true);
+  }
 
   if (isEditing) {
     // What to show if editing a new or existing comment.
@@ -77,6 +111,7 @@ export default function Post({ post, isNew, setPosts, authUser }) {
           <CardContent>
             <TextareaAutosize
               className={classes.textarea}
+              defaultValue={post.text}
               id="text"
               label="Post text"
               name="text"
@@ -127,6 +162,17 @@ export default function Post({ post, isNew, setPosts, authUser }) {
           </CardContent>
         </Collapse>
         <CardActions>
+          { // Only user who created post or staff can edit.
+            (authUser.isStaff || authUser._id === post.user) &&   
+            <Fragment>
+              <Button onClick={onEdit}>
+                Edit post
+              </Button>
+              <Button onClick={onDelete}>
+                Delete post
+              </Button>
+            </Fragment>           
+          }          
           <Button onClick={onNewReply}>
             New Reply
           </Button>
