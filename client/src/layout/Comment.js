@@ -16,13 +16,14 @@ const useStyles = makeStyles({
 });
 
 export default function Comment({ comment, isNew, post, setPosts, authUser }) {
+  const classes = useStyles();
+
   if (isNew) {
+    // Define template new comment that fills form fields with default values.
     comment = { text: "" };
   }
   
-  const classes = useStyles();
-
-  // Edit new comments by default.
+  // New comments should be in edit mode by default, else view mode is default.
   const [isEditing, setIsEditing] = useState(isNew);
 
   const onEdit = () => {
@@ -36,7 +37,7 @@ export default function Comment({ comment, isNew, post, setPosts, authUser }) {
       { headers: { "x-auth-token": authUser.token }}
     );
 
-    // Replace comments with those returned by server with comment deleted.
+    // Replace comments with those returned by server with this comment deleted.
     setPosts(prevPosts => {
       for (let prevPost of prevPosts) {
         if (prevPost._id === post._id) {
@@ -55,6 +56,7 @@ export default function Comment({ comment, isNew, post, setPosts, authUser }) {
         text: e.target.text.value,
       }
 
+      // Save new or edited comment to server.
       let response;
       if (isNew) {
         response = await axios.post(
@@ -81,6 +83,7 @@ export default function Comment({ comment, isNew, post, setPosts, authUser }) {
         return [ ...prevPosts ];
       });
 
+      // Return to viewing modes (new comment gets different id on save, so not needed).
       if (!isNew) {
         setIsEditing(false);
       }
@@ -125,7 +128,8 @@ export default function Comment({ comment, isNew, post, setPosts, authUser }) {
         <Grid item xs={12}>
           <p>{comment.text}</p>
         </Grid>
-        {authUser._id === comment.user && // Only user who created comment can edit.
+        { // Only user who created comment or staff can edit.
+          (authUser.isStaff || authUser._id === comment.user) && 
           <Grid item xs={12}>
             <CardActions>
               <Button onClick={onEdit}>
