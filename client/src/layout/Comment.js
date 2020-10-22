@@ -29,6 +29,25 @@ export default function Comment({ comment, isNew, post, setPosts, authUser }) {
     setIsEditing(true);
   }
 
+  const onDelete = async () => {
+    // Delete comment from server.
+    const response = await axios.delete(
+      "/api/posts/comment/" + post._id + "/" + comment._id,
+      { headers: { "x-auth-token": authUser.token }}
+    );
+
+    // Replace comments with those returned by server with comment deleted.
+    setPosts(prevPosts => {
+      for (let prevPost of prevPosts) {
+        if (prevPost._id === post._id) {
+          prevPost.comments = response.data;
+        }
+      }
+      // Return a new array object, not just the changed array, to force render.
+      return [ ...prevPosts ];
+    });
+  }
+
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -111,6 +130,9 @@ export default function Comment({ comment, isNew, post, setPosts, authUser }) {
             <CardActions>
               <Button onClick={onEdit}>
                 Edit comment
+              </Button>
+              <Button onClick={onDelete}>
+                Delete comment
               </Button>
             </CardActions>
           </Grid>
