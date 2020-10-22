@@ -40,7 +40,7 @@ export default function Posts({ authUser }) {
       <Typography variant='h5' component='h2'>
         Bulletin Board
       </Typography>
-      <Button onClick={onNewPost}>New Post</Button>
+      <Button onClick={onNewPost} variant="outlined">New Post</Button>
       {
         posts.map(post =>
           post._id === "new" ?

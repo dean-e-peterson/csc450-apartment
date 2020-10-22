@@ -164,15 +164,16 @@ export default function Post({ post, isNew, setPosts, authUser }) {
         <CardActions>
           { // Only user who created post or staff can edit.
             (authUser.isStaff || authUser._id === post.user) &&   
-            <Fragment>
-              <Button onClick={onEdit}>
-                Edit post
-              </Button>
-              <Button onClick={onDelete}>
-                Delete post
-              </Button>
-            </Fragment>           
+            <Button onClick={onEdit}>
+              Edit post
+            </Button>
           }          
+          { // Only user who created post or staff can delete, and only if no replies.
+            (authUser.isStaff || authUser._id === post.user) && post.comments.length === 0 && 
+            <Button onClick={onDelete}>
+              Delete post
+            </Button>
+          }
           <Button onClick={onNewReply}>
             New Reply
           </Button>
