@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Button,
@@ -31,7 +31,7 @@ export default function Post({ post, isNew, setPosts, authUser }) {
 
   // New posts should be in edit mode by default, else view mode is default.
   const [isEditing, setIsEditing] = useState(isNew);  
-
+  const [scrollRef, setScrollRef] = useState(null);
   const [expanded, setExpanded] = useState(false);
 
   const onExpandedClick = () => {
@@ -92,6 +92,17 @@ export default function Post({ post, isNew, setPosts, authUser }) {
     }
   };
 
+  const onCancel = () => {
+    if (isNew) {
+      // Remove placeholder post.
+      setPosts(prevPosts => prevPosts.filter(prevPost =>
+        prevPost._id !== "new"
+      ));
+    }
+
+    setIsEditing(false);
+  }
+
   const onNewReply = () => {
     setPosts(prevPosts => {
       // Get this post from array of all posts.
@@ -104,26 +115,40 @@ export default function Post({ post, isNew, setPosts, authUser }) {
     setExpanded(true);
   }
 
+  useEffect(() => {
+    // Scroll form into view if editing an existing or new reply.
+    if (scrollRef && scrollRef.current) {
+      scrollRef.current.scrollIntoView();
+    }
+  }, [scrollRef]);
+
   if (isEditing) {
     // What to show if editing a new or existing comment.
     return (
       <Card>
         <form onSubmit={onSubmit}>
           <CardContent>
-            <TextareaAutosize
-              className={classes.textarea}
-              defaultValue={post.text}
-              id="text"
-              label="Post text"
-              name="text"
-              placeholder="Type post here"
-            />
+            <Typography component="div">
+              <p><strong>{post.name}</strong></p>
+              <TextareaAutosize
+                autoFocus
+                className={classes.textarea}
+                defaultValue={post.text}
+                id="text"
+                label="Post text"
+                name="text"
+                placeholder="Type post here"
+              />
+            </Typography>
           </CardContent>
           <CardActions>
             <Button
               type="submit"
             >
               Save Post
+            </Button>
+            <Button onClick={onCancel}>
+              Cancel
             </Button>
           </CardActions>
         </form>
@@ -182,9 +207,23 @@ export default function Post({ post, isNew, setPosts, authUser }) {
               {
                 post.comments.map(comment =>
                   comment._id === "new" ?
-                    <Comment isNew={true} key={comment._id} post={post} setPosts={setPosts} authUser={authUser} />
+                    <Comment
+                      isNew={true}
+                      key={comment._id}
+                      post={post}
+                      setPosts={setPosts}
+                      authUser={authUser}
+                      setScrollRef={setScrollRef}
+                    />
                   :
-                    <Comment key={comment._id} comment={comment} post={post} setPosts={setPosts} authUser={authUser}/>
+                    <Comment
+                      key={comment._id}
+                      comment={comment}
+                      post={post}
+                      setPosts={setPosts}
+                      authUser={authUser}
+                      setScrollRef={setScrollRef}
+                    />
                 )
               }
             </Typography>

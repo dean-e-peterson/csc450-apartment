@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import {
   Button,
@@ -19,14 +19,17 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Comment({ comment, isNew, post, setPosts, authUser }) {
+export default function Comment({ comment, isNew, post, setPosts, authUser, setScrollRef }) {
   const classes = useStyles();
 
   if (isNew) {
     // Define template new comment that fills form fields with default values.
     comment = { text: "" };
   }
-  
+
+  // For scrolling form into view, especially when clicking New Reply on parent post.
+  const formRef = useRef();
+
   // New comments should be in edit mode by default, else view mode is default.
   const [isEditing, setIsEditing] = useState(isNew);
 
@@ -96,18 +99,37 @@ export default function Comment({ comment, isNew, post, setPosts, authUser }) {
     }    
   };
 
+  const onCancel = () => {
+    if (isNew) {
+      // Remove placeholder post.
+      setPosts(prevPosts => {
+        // Get this post from array of all posts.
+        const thisPost = prevPosts.find(prevPost => prevPost._id === post._id);
+        // Remove placeholder comment at end.
+        thisPost.comments.pop();
+        // Return a new array object, not just the changed array, to force render.
+        return [ ...prevPosts ];
+      });
+    }
+
+    setIsEditing(false);
+  }
+
   if (isEditing) {
     // What to show if editing a new or existing comment.
     return (
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} ref={formRef}>
         <CardContent>
+          <p><strong>{comment.name}</strong></p>
           <TextareaAutosize
+            autoFocus
             className={classes.textarea}
             defaultValue={comment.text}
             id="text"
-            label="Comment text"
+            label="Reply text"
             name="text"
-            placeholder="Type comment here"
+            placeholder="Type reply here"
+            onFocus={() => setScrollRef(formRef)}
           />
         </CardContent>
         <CardActions>
@@ -115,6 +137,9 @@ export default function Comment({ comment, isNew, post, setPosts, authUser }) {
             type="submit"
           >
             Save Reply
+          </Button>
+          <Button onClick={onCancel}>
+            Cancel
           </Button>
         </CardActions>
       </form>
