@@ -16,10 +16,18 @@ router.get('/', auth, async (req, res) => {
   }
 
   try {
+    // Allow filtering for tenants only (those with a unit ref)
+    let findParams;
+    if (req.query.tenantsOnly && req.query.tenantsOnly==='1') {
+      findParams = { unit: { $ne: null} };
+    } else {
+      findParams = {};
+    }
+
     // ### If we need to bring in unit number, this worked...
     //const users = await User.find().select('-password').populate('unit', ['number']);
     const users = await User
-      .find()
+      .find(findParams)
       .select('-password')
       .collation({locale: "en"}) // Make sort case-insensitive.
       .sort({lastName: 1, firstName: 1});

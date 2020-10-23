@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
   },
   newPostButton: {
     margin: theme.spacing(2),
-  }
+  },
 }));
 
 export default function Posts({ authUser }) {
