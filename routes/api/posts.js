@@ -58,6 +58,45 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
+// @route   PATCH api/posts/:id
+// @desc    Edit a post by ID
+// @access  Private
+router.patch(
+  '/:id',
+  auth,
+  [
+    check('text', 'Text is required').not().isEmpty(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const post = await Post.findById(req.params.id);
+
+      if (!post) {
+        return res.status(404).json({ msg: 'Post not found' });
+      }
+
+      // Only allow a user to delete their own post unless they are staff.
+      if (! (req.user.isStaff || post.user.toString() === req.user.id)) {
+        return res.status(401).json({ msg: 'User not authorized' });
+      }
+
+      post.text = req.body.text;
+
+      await post.save();
+
+      res.json(post);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+    }
+  }
+);
+
 // @route   GET api/posts/:id
 // @desc    Get post by ID
 // @access  Private
