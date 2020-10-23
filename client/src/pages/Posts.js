@@ -4,9 +4,22 @@ import {
   Button,
   Typography,
 } from "@material-ui/core"
+import { makeStyles } from "@material-ui/core/styles";
 import Post from "../layout/Post";
 
+const useStyles = makeStyles(theme => ({
+  heading: {
+    marginLeft: theme.spacing(2),
+    marginTop: theme.spacing(2),
+  },
+  newPostButton: {
+    margin: theme.spacing(2),
+  }
+}));
+
 export default function Posts({ authUser }) {
+  const classes = useStyles();
+
   const [posts, setPosts] = useState([]);
 
   const onNewPost = () => {
@@ -37,10 +50,12 @@ export default function Posts({ authUser }) {
 
   return (
     <Fragment>
-      <Typography variant='h5' component='h2'>
+      <Typography variant='h5' component='h2' className={classes.heading}>
         Bulletin Board
       </Typography>
-      <Button onClick={onNewPost} variant="outlined">New Post</Button>
+      <Button onClick={onNewPost} variant="outlined" className={classes.newPostButton}>
+        New Post
+      </Button>
       {
         posts.map(post =>
           post._id === "new" ?

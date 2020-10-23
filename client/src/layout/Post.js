@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { makeStyles } from "@material-ui/core/styles";
 import Comment from "./Comment";
 
@@ -147,20 +148,6 @@ export default function Post({ post, isNew, setPosts, authUser }) {
             </Grid>
           </Typography>
         </CardContent>
-        <Collapse in={expanded} mountOnEnter unmountOnExit>
-          <CardContent>
-            <Typography component="div">
-              {
-                post.comments.map(comment =>
-                  comment._id === "new" ?
-                    <Comment isNew={true} key={comment._id} post={post} setPosts={setPosts} authUser={authUser} />
-                  :
-                    <Comment key={comment._id} comment={comment} post={post} setPosts={setPosts} authUser={authUser}/>
-                )
-              }
-            </Typography>
-          </CardContent>
-        </Collapse>
         <CardActions>
           { // Only user who created post or staff can edit.
             (authUser.isStaff || authUser._id === post.user) &&   
@@ -177,11 +164,32 @@ export default function Post({ post, isNew, setPosts, authUser }) {
           <Button onClick={onNewReply}>
             New Reply
           </Button>
-          <Button onClick={onExpandedClick} aria-expanded={expanded}>
-            Show Replies
-            <ExpandMoreIcon />
-          </Button>
-        </CardActions>
+          {expanded ?
+            <Button onClick={onExpandedClick} aria-expanded={true}>
+              Hide Replies
+              <ExpandLessIcon />
+            </Button>
+          :
+            <Button onClick={onExpandedClick} aria-expanded={false}>
+              Show Replies
+              <ExpandMoreIcon />
+            </Button>
+          }  
+        </CardActions>        
+        <Collapse in={expanded} mountOnEnter unmountOnExit>
+          <CardContent>
+            <Typography component="div">
+              {
+                post.comments.map(comment =>
+                  comment._id === "new" ?
+                    <Comment isNew={true} key={comment._id} post={post} setPosts={setPosts} authUser={authUser} />
+                  :
+                    <Comment key={comment._id} comment={comment} post={post} setPosts={setPosts} authUser={authUser}/>
+                )
+              }
+            </Typography>
+          </CardContent>
+        </Collapse>
       </Card>
     );
   }

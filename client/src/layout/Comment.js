@@ -13,6 +13,10 @@ const useStyles = makeStyles({
   textarea: {
     width: "100%",
   },
+  commentBackground: {
+    backgroundColor: "#dddddd",
+    borderTop: "1px solid #999999"
+  },
 });
 
 export default function Comment({ comment, isNew, post, setPosts, authUser }) {
@@ -110,7 +114,7 @@ export default function Comment({ comment, isNew, post, setPosts, authUser }) {
           <Button
             type="submit"
           >
-            Save Comment
+            Save Reply
           </Button>
         </CardActions>
       </form>
@@ -118,30 +122,36 @@ export default function Comment({ comment, isNew, post, setPosts, authUser }) {
   } else {
     // What to show if viewing an existing comment.
     return (
-      <Grid container>
-        <Grid item xs={6}>
-          <p><strong>{comment.name}</strong></p>
-        </Grid> 
-        <Grid item xs={6}>
-          <p>{(new Date(comment.date)).toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" })}</p>
-        </Grid>
-        <Grid item xs={12}>
-          <p>{comment.text}</p>
-        </Grid>
+      <div className={classes.commentBackground}>
+        <CardContent>
+          <Grid container>
+            <Grid item xs={6}>
+              <p><strong>{comment.name}</strong></p>
+            </Grid> 
+            <Grid item xs={6}>
+              <p>{(new Date(comment.date)).toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" })}</p>
+            </Grid>
+            <Grid item xs={12}>
+              <p>{comment.text}</p>
+            </Grid>
+          </Grid>
+        </CardContent>
         { // Only user who created comment or staff can edit.
           (authUser.isStaff || authUser._id === comment.user) && 
-          <Grid item xs={12}>
-            <CardActions>
-              <Button onClick={onEdit}>
-                Edit comment
-              </Button>
-              <Button onClick={onDelete}>
-                Delete comment
-              </Button>
-            </CardActions>
-          </Grid>
+          <CardActions>
+            <Grid container>
+              <Grid item xs={12}>
+                  <Button onClick={onEdit}>
+                    Edit reply
+                  </Button>
+                  <Button onClick={onDelete}>
+                    Delete reply
+                  </Button>
+              </Grid>
+            </Grid>
+          </CardActions>
         }
-      </Grid>      
+      </div>
     );
   }
 };
