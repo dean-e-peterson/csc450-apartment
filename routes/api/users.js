@@ -18,7 +18,11 @@ router.get('/', auth, async (req, res) => {
   try {
     // ### If we need to bring in unit number, this worked...
     //const users = await User.find().select('-password').populate('unit', ['number']);
-    const users = await User.find().select('-password');
+    const users = await User
+      .find()
+      .select('-password')
+      .collation({locale: "en"}) // Make sort case-insensitive.
+      .sort({lastName: 1, firstName: 1});
 
     res.json(users);
   } catch (err) {
