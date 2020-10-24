@@ -57,9 +57,16 @@ export default function User({ user, setUsers, authUser }) {
       );
 
       // Update UI state.
-      setUsers(prevUsers => prevUsers.map(prevUser =>
-        prevUser._id === user._id ? response.data : prevUser
-      ));
+      setUsers(prevUsers => prevUsers.map(prevUser => {
+        if (prevUser._id === user._id) {
+          const updatedUser = response.data;
+          // Include unit number like GET /api/users even though that's not in user in db.
+          updatedUser.unit = unit ? { _id: response.data.unit, number: unit.number } : null;
+          return updatedUser;
+        } else {
+          return prevUser;
+        }
+      }));
       
       setIsEditing(false);      
     } catch (err) {
@@ -143,7 +150,7 @@ export default function User({ user, setUsers, authUser }) {
                   labelId="unitLabel"
                   name="unit"
                 >
-                  <MenuItem value=""></MenuItem>
+                  <MenuItem value="">&nbsp;</MenuItem>
                   {
                     units.map(unit => 
                       <MenuItem key={unit._id} value={unit.number}>{unit.number}</MenuItem>
