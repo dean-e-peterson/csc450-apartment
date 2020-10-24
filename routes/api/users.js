@@ -29,7 +29,7 @@ router.get('/', auth, async (req, res) => {
     const users = await User
       .find(findParams)
       .select('-password')
-      .collation({locale: "en"}) // Make sort case-insensitive.
+      .collation({locale: 'en'}) // Make sort case-insensitive.
       .sort({lastName: 1, firstName: 1})
       .populate('unit', ['number']); // If unit, look up unit number in unit table.
 

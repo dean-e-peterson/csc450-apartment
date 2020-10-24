@@ -65,7 +65,7 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
   return (
     <AppBar position='static'>
       <Toolbar>
-        <img src="images/logo.svg" height="50" width="50" />
+        <img src="images/logo.svg" alt="" height="50" width="50" />
         <Typography
           style={{ textAlign: "Center" }}
           variant='h4'
