@@ -80,10 +80,12 @@ router.post(
 
       // Save unit.
       const unit = new Unit({
+        location: req.body.location,
         number: req.body.number,
         bedrooms: req.body.bedrooms,
+        bathrooms: req.body.bathrooms
       });
-      unit.save();
+      await unit.save();
 
       res.end();
     } catch (err) {
