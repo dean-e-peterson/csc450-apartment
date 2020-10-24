@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Checkbox,
@@ -10,10 +10,12 @@ import User from "../layout/User";
 
 const useStyles = makeStyles(theme => ({
   heading: {
-    marginBottom: theme.spacing(2),
     marginLeft: theme.spacing(2),
     marginTop: theme.spacing(2),
   },
+  tenantsOnly: {
+    margin: theme.spacing(2),
+  }
 }));
 
 export default function Users({ authUser }) {
@@ -44,18 +46,22 @@ export default function Users({ authUser }) {
   }, [authUser, tenantsOnly]); // Only re-run when these change.
 
   return (
-    <Fragment>
-      <Typography variant='h5' component='h2' className={classes.heading}>
+    <Typography component="div">
+      <Typography variant="h5" component="h2" className={classes.heading}>
         Users
       </Typography>
-      <FormControlLabel label="Tenants only" control={
-        <Checkbox checked={tenantsOnly} onChange={onTenantsOnlyChange} />
-      } />
+      <FormControlLabel
+        className={classes.tenantsOnly}
+        label="Tenants only"
+        control={
+          <Checkbox checked={tenantsOnly} onChange={onTenantsOnlyChange} />
+        }
+      />
       {
         users.map(user =>
           <User key={user._id} user={user} setUsers={setUsers} authUser={authUser} />
         )
       }
-    </Fragment>
+    </Typography>
   );
 };

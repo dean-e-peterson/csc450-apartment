@@ -50,7 +50,7 @@ export default function Posts({ authUser }) {
 
   return (
     <Fragment>
-      <Typography variant='h5' component='h2' className={classes.heading}>
+      <Typography variant="h5" component="h2" className={classes.heading}>
         Bulletin Board
       </Typography>
       <Button onClick={onNewPost} variant="outlined" className={classes.newPostButton}>
