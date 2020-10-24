@@ -7,6 +7,7 @@ import {
   Checkbox,
   FormControlLabel,
   Grid,
+  InputLabel,
   MenuItem,
   Select,
   TextField,
@@ -18,6 +19,10 @@ import SaveIcon from '@material-ui/icons/Save';
 const useStyles = makeStyles(theme => ({
   dropdown: {
     width: "100%",
+  },
+  unitLabel: {
+    transform: "translate(0, 1.5px) scale(0.75)",
+    transformOrigin: "top left",
   },
 }));
 
@@ -31,8 +36,35 @@ export default function User({ user, setUsers, authUser }) {
     setIsEditing(true);
   }
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
+    try {
+      // Get selected unit, if any.
+      const unit = units.find(unit => e.target.unit.value === unit.number);
+      const body = {
+        firstName: e.target.firstName.value,
+        lastName: e.target.lastName.value,
+        email: e.target.email.value,
+        isStaff: e.target.isStaff.checked,
+        unit: unit ? unit._id : null,
+      };
+
+      // Update database.
+      const response = await axios.patch(
+        "api/users/" + user._id,
+        body,
+        { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
+      );
+
+      // Update UI state.
+      setUsers(prevUsers => prevUsers.map(prevUser =>
+        prevUser._id === user._id ? response.data : prevUser
+      ));
+      
+      setIsEditing(false);      
+    } catch (err) {
+      console.error(err.message);
+    }
   }
 
   useEffect(() => {
@@ -94,15 +126,27 @@ export default function User({ user, setUsers, authUser }) {
                   control={
                     <Checkbox
                       defaultChecked={user.isStaff}
+                      id="isStaff"
+                      name="isStaff"
                     />
                   }
                 />
               </Grid>
               <Grid item xs={2}>
-                <Select className={classes.dropdown}>
+                <InputLabel className={classes.unitLabel} id="unitLabel">
+                  Unit
+                </InputLabel>
+                <Select
+                  className={classes.dropdown}
+                  defaultValue={user.unit ? user.unit.number : ""}
+                  id="unit"
+                  labelId="unitLabel"
+                  name="unit"
+                >
+                  <MenuItem value=""></MenuItem>
                   {
                     units.map(unit => 
-                      <MenuItem>{unit.number}</MenuItem>
+                      <MenuItem key={unit._id} value={unit.number}>{unit.number}</MenuItem>
                     )
                   }
                 </Select>

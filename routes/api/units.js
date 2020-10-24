@@ -16,7 +16,10 @@ router.get('/', auth, async (req, res) => {
   }
 
   try {
-    const units = await Unit.find();
+    const units = await Unit
+      .find()
+      .collation({ locale: 'en' }) // Make sort case-insensitive.
+      .sort({location: 1, number: 1});
 
     // ### If you want tenants from users to come back as a subobject.
     // // Lean gives you a plain javascript object you can modify.

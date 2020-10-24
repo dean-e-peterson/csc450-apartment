@@ -87,7 +87,7 @@ router.post(
       // Save user.
       await user.save();
 
-      res.end();
+      res.json(user);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
@@ -154,7 +154,7 @@ router.patch(
       // Handle duplicate email by rejecting request.
       if (req.body.email) {
         const userWithSameEmail = await User.findOne({ email: req.body.email });
-        if (userWithSameEmail) {
+        if (userWithSameEmail._id.toString() !== req.params.id) {
           return res.status(400).json({ errors: [{ msg: 'Another user has that email' }] });
         }
       }
@@ -186,8 +186,9 @@ router.patch(
       }
 
       // Save modified user.
-      user.save();
-      res.end();
+      await user.save();
+
+      res.json(user);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
