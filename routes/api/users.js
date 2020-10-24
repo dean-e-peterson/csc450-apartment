@@ -16,13 +16,22 @@ router.get('/', auth, async (req, res) => {
   }
 
   try {
+    // Allow filtering for tenants only (those with a unit ref)
+    let findParams;
+    if (req.query.tenantsOnly && req.query.tenantsOnly==='1') {
+      findParams = { unit: { $ne: null} };
+    } else {
+      findParams = {};
+    }
+
     // ### If we need to bring in unit number, this worked...
     //const users = await User.find().select('-password').populate('unit', ['number']);
     const users = await User
-      .find()
+      .find(findParams)
       .select('-password')
       .collation({locale: "en"}) // Make sort case-insensitive.
-      .sort({lastName: 1, firstName: 1});
+      .sort({lastName: 1, firstName: 1})
+      .populate('unit', ['number']); // If unit, look up unit number in unit table.
 
     res.json(users);
   } catch (err) {
@@ -78,7 +87,7 @@ router.post(
       // Save user.
       await user.save();
 
-      res.end();
+      res.json(user);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
@@ -145,7 +154,7 @@ router.patch(
       // Handle duplicate email by rejecting request.
       if (req.body.email) {
         const userWithSameEmail = await User.findOne({ email: req.body.email });
-        if (userWithSameEmail) {
+        if (userWithSameEmail._id.toString() !== req.params.id) {
           return res.status(400).json({ errors: [{ msg: 'Another user has that email' }] });
         }
       }
@@ -177,8 +186,9 @@ router.patch(
       }
 
       // Save modified user.
-      user.save();
-      res.end();
+      await user.save();
+
+      res.json(user);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
