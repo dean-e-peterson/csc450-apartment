@@ -93,7 +93,7 @@ router.post(
     check('location', 'Apartment complex is required').not().isEmpty(),
     check('number', 'Unit number is required').not().isEmpty(),
     check('bedrooms', 'Bedrooms must be a number').isNumeric(),
-    check('bathrooms', 'Bathrooms must be a number').isNumeric(),
+    check('bathrooms', 'Bathrooms must be a number').optional().isNumeric(),
   ],
   async (req, res) => {
     // Staff only.
@@ -121,7 +121,8 @@ router.post(
         location: req.body.location,
         number: req.body.number,
         bedrooms: req.body.bedrooms,
-        bathrooms: req.body.bathrooms
+        bathrooms: req.body.bathrooms,
+        description: req.body.description,
       });
       await unit.save();
 
@@ -163,7 +164,10 @@ router.get('/:id', auth, async (req, res) => {
 router.patch(
   '/:id',
   auth,
-  [check('bedrooms', 'Bedrooms must be a number').optional().isNumeric()],
+  [
+    check('bedrooms', 'Bedrooms must be a number').optional().isNumeric(),
+    check('bathrooms', 'Bathrooms must be a number').optional().isNumeric(),    
+  ],
   async (req, res) => {
     // Staff only.
     if (!req.user.isStaff) {
@@ -177,13 +181,11 @@ router.patch(
     }
 
     try {
-      // Check for duplicate unit.
+      // Check for duplicate unit number.
       if (req.body.number) {
-        const existingUnit = await Unit.findOne({ number: req.body.number });
-        if (existingUnit) {
-          return res
-            .status(400)
-            .json({ errors: [{ msg: 'Another unit has that number' }] });
+        const unitWithSameNumber = await Unit.findOne({ number: req.body.number });
+        if (unitWithSameNumber && (unitWithSameNumber._id.toString() !== req.params.id)) {
+          return res.status(400).json({ errors: [{ msg: 'Another unit has that number' }] });
         }
       }
 

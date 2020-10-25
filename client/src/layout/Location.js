@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
+import Vacancy from "./Vacancy";
 
 export default function Location({ locationNumber, vacancies }) {
   const [expanded, setExpanded] = useState(false);
@@ -59,11 +60,15 @@ export default function Location({ locationNumber, vacancies }) {
           </CardActions>
           <Collapse in={expanded} mountOnEnter unmountOnExit>
             <CardContent>
-              {
-                vacancies.map(vacancy =>
-                  <p>{vacancy.number}</p>
-                )
-              }
+              <Typography color='textSecondary' component="div">
+                <ul>
+                  {
+                    vacancies.map(vacancy =>
+                      <Vacancy key={vacancy.number} vacancy={vacancy} />
+                    )
+                  }
+                </ul>
+              </Typography>
             </CardContent>
           </Collapse>
         </Card>
