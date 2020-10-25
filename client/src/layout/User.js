@@ -24,6 +24,9 @@ const useStyles = makeStyles(theme => ({
     transform: "translate(0, 1.5px) scale(0.75)",
     transformOrigin: "top left",
   },
+  userFlexContainer: {
+    alignItems: "center",
+  },
 }));
 
 export default function User({ user, setUsers, authUser }) {
@@ -173,7 +176,7 @@ export default function User({ user, setUsers, authUser }) {
     return (
       <Card>
         <CardContent>
-          <Grid container>
+          <Grid container className={classes.userFlexContainer}>
             <Grid item xs={4}>
               {user.firstName + " " + (user.lastName ? user.lastName : "") }
             </Grid>
