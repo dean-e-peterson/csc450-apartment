@@ -29,7 +29,7 @@ router.get('/', auth, async (req, res) => {
     //   unit['tenants'] = users;
     // }
 
-    // ### Another way to include tenants with one db trip, including password.
+    // ### Another way to include tenants with one db trip.
     // const units = await Unit.aggregate([
     //   {
     //     "$lookup": {
@@ -38,6 +38,9 @@ router.get('/', auth, async (req, res) => {
     //       "foreignField": "unit",
     //       "as": "tenants",
     //     }
+    //   },
+    //   {
+    //     "$unset": "tenants.password"
     //   }
     // ]);
 
