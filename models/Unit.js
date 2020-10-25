@@ -11,9 +11,13 @@ const UnitSchema = new mongoose.Schema({
   },
   bedrooms: {
     type: Number,
+    required: true,
   },
   bathrooms: {
     type: Number,
+  },
+  description: {
+    type: String,
   },
 });
 

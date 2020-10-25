@@ -154,7 +154,7 @@ router.patch(
       // Handle duplicate email by rejecting request.
       if (req.body.email) {
         const userWithSameEmail = await User.findOne({ email: req.body.email });
-        if (userWithSameEmail._id.toString() !== req.params.id) {
+        if (userWithSameEmail && (userWithSameEmail._id.toString() !== req.params.id)) {
           return res.status(400).json({ errors: [{ msg: 'Another user has that email' }] });
         }
       }
