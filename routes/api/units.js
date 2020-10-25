@@ -6,6 +6,38 @@ const auth = require('../../middleware/auth');
 const Unit = require('../../models/Unit');
 const User = require('../../models/User');
 
+// @route   GET /api/units/vacancies
+// @desc    Get vacant units
+// @access  Public
+router.get('/vacancies', async (req, res) => {
+  try {
+    const units = await Unit.aggregate([
+      { // Bring in users with that unit as a tenants array.
+        "$lookup": {
+          "from": "users",
+          "localField": "_id",
+          "foreignField": "unit",
+          "as": "tenants",
+        }
+      },
+      { // Match only unit records with tenants array length 0.
+        "$match": {
+          "tenants": { "$size" : 0 }
+        }
+      },
+      { // Get rid of the empty tenants array from the result.
+        "$unset": "tenants"
+      },
+    ]);
+
+    res.json(units);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+
 // @route   GET /api/units
 // @desc    Get all units
 // @access  Private
