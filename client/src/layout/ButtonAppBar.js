@@ -12,6 +12,10 @@ const useStyles = makeStyles(theme => ({
   title: {
     flexGrow: 1
   },
+  titleLink: {
+    color: "white",
+    textDecoration: "none",
+  }
 }));
 
 const ButtonAppBar = ({ authUser, setAuthUser }) => {
@@ -65,14 +69,18 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
   return (
     <AppBar position='static'>
       <Toolbar>
-        <img src="images/logo.svg" alt="" height="50" width="50" />
+        <Link to="/">
+          <img src="images/logo.svg" alt="Home" height="50" width="50" />
+        </Link>
         <Typography
           style={{ textAlign: "Center" }}
           variant='h4'
           component='h1'
           className={classes.title}
         >
-          Sunshine Apartments
+          <Link to="/" className={classes.titleLink}>
+            Sunshine Apartments
+          </Link>
         </Typography>
         {buttons}
       </Toolbar>
