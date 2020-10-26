@@ -13,7 +13,7 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import Vacancy from "./Vacancy";
 
-export default function Location({ locationNumber, vacancies }) {
+export default function Location({ location, vacancies }) {
   const [expanded, setExpanded] = useState(false);
 
   const onExpandedClick = () => {
@@ -26,18 +26,17 @@ export default function Location({ locationNumber, vacancies }) {
         <Card>
           <CardMedia
             component='img'
-            alt={'Apartment ' + locationNumber}
+            alt={location.name}
             height='140'
-            image={'/images/location' + locationNumber + '.jpg'}
-            title={'Apartment ' + locationNumber}
+            image={'/images/location' + location.homePageOrder + '.jpg'}
+            title={location.name}
           />
           <CardContent>
             <Typography variant='h5' component='h2'>
-              Apartment {locationNumber}
+              {location.name}
             </Typography>
             <Typography variant='body2' color='textSecondary' component='p'>
-              Beautiful 1, 2 and 3 bedroom apartments - full of amenities!
-              Underground Parking
+              {location.description}
             </Typography>
           </CardContent>
           <CardActions>
@@ -64,7 +63,7 @@ export default function Location({ locationNumber, vacancies }) {
                 <ul>
                   {
                     vacancies.map(vacancy =>
-                      <Vacancy key={vacancy.number} vacancy={vacancy} />
+                      <Vacancy key={vacancy._id} vacancy={vacancy} />
                     )
                   }
                 </ul>

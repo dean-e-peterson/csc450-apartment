@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <svg xmlns="http://www.w3.org/2000/svg"
      xmlns:xlink="http://www.w3.org/1999/xlink"
-     width="16" height="16">
+     width="12" height="12"
+     viewBox="0 0 16 16">
   <circle cx="8" cy="8" r="7.5"
     style="stroke: #3f51b5; fill: #3f51b5; stroke-width: 1;" />
   <g style="stroke: yellow; fill: yellow; stroke-width: 1;">

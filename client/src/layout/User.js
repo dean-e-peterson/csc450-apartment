@@ -24,6 +24,9 @@ const useStyles = makeStyles(theme => ({
     transform: "translate(0, 1.5px) scale(0.75)",
     transformOrigin: "top left",
   },
+  userFlexContainer: {
+    alignItems: "center",
+  },
 }));
 
 export default function User({ user, setUsers, authUser }) {
@@ -31,6 +34,7 @@ export default function User({ user, setUsers, authUser }) {
 
   const [isEditing, setIsEditing] = useState(false);
   const [units, setUnits] = useState([]);
+  const [locations, setLocations] = useState([]);
 
   const onEdit = () => {
     setIsEditing(true);
@@ -75,6 +79,18 @@ export default function User({ user, setUsers, authUser }) {
   }
 
   useEffect(() => {
+    const getLocations = async () => {
+      try {
+        const response = await axios.get("/api/locations");
+        setLocations(response.data);
+      } catch (err) {
+        console.error(err.message);
+      }
+    }
+    getLocations();
+  }, []);
+
+  useEffect(() => {
     // We get units for the unit dropdown when we edit.
     const getUnits = async () => {
       try {
@@ -82,7 +98,7 @@ export default function User({ user, setUsers, authUser }) {
           const response = await axios.get(
             "/api/units",
             { headers: { "x-auth-token": authUser.token }}
-          )
+          );
           setUnits(response.data);
         }
       } catch (err) {
@@ -173,17 +189,20 @@ export default function User({ user, setUsers, authUser }) {
     return (
       <Card>
         <CardContent>
-          <Grid container>
-            <Grid item xs={4}>
+          <Grid container className={classes.userFlexContainer}>
+            <Grid item xs={3}>
               {user.firstName + " " + (user.lastName ? user.lastName : "") }
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               {user.email }
             </Grid>          
             <Grid item xs={1}>
               {user.isStaff ? "staff" : "" }
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={3}>
+              {user.unit ? user.unit.location.name : "" }
+            </Grid>            
+            <Grid item xs={1}>
               {user.unit ? "unit " + user.unit.number : ""}
             </Grid>
             <Grid item xs={1}>

@@ -24,14 +24,21 @@ router.get('/', auth, async (req, res) => {
       findParams = {};
     }
 
-    // ### If we need to bring in unit number, this worked...
+    // If we need to just bring in unit number, this worked...
     //const users = await User.find().select('-password').populate('unit', ['number']);
     const users = await User
       .find(findParams)
       .select('-password')
       .collation({locale: 'en'}) // Make sort case-insensitive.
       .sort({lastName: 1, firstName: 1})
-      .populate('unit', ['number']); // If unit, look up unit number in unit table.
+      .populate({
+        path: 'unit', 
+        select: ['number', 'location'], 
+        populate: {
+          path: 'location', 
+          select: 'name'
+        }
+      }); // If unit, look up unit number in unit table and location name in location table.
 
     res.json(users);
   } catch (err) {
