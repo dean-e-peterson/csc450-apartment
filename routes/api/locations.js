@@ -12,7 +12,6 @@ router.get('/', async (req, res) => {
   try {
     const locations = await Location
       .find()
-      .collation({locale: 'en'}) // Make sort case-insensitive.
       .sort({homePageOrder: 1});
 
     res.json(locations);    

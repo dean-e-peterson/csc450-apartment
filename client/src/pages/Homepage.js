@@ -3,9 +3,18 @@ import axios from "axios";
 import Location from "../layout/Location";
 
 export default function Homepage() {
+  const [locations, setLocations] = useState([]);
   const [vacancies, setVacancies] = useState([]);
 
   useEffect(() => {
+    const getLocations = async () => {
+      try {
+        const response = await axios.get("/api/locations");
+        setLocations(response.data);
+      } catch (err) {
+        console.error(err.message);
+      }
+    }
     const getVacancies = async () => {
       try {
         const response = await axios.get("/api/units/vacancies");
@@ -15,15 +24,17 @@ export default function Homepage() {
         console.error(err.message);
       }
     }
+
+    getLocations();
     getVacancies();
   }, []);
   
   return (
-    [1,2].map(locationNumber =>
+    locations.map(location =>
       <Location
-        key={locationNumber}
-        locationNumber={locationNumber}
-        vacancies={vacancies.filter(vacancy => vacancy.location === String(locationNumber))}
+        key={location._id}
+        location={location}
+        vacancies={vacancies.filter(vacancy => vacancy.location === location._id)}
       />
     )
   );
