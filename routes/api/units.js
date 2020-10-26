@@ -51,7 +51,8 @@ router.get('/', auth, async (req, res) => {
     const units = await Unit
       .find()
       .collation({ locale: 'en' }) // Make sort case-insensitive.
-      .sort({location: 1, number: 1});
+      .sort({location: 1, number: 1})
+      .populate({path: 'location', select: 'name'}); // To match double populate in users.js
 
     // ### If you want tenants from users to come back as a subobject.
     // // Lean gives you a plain javascript object you can modify.

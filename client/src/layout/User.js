@@ -18,7 +18,7 @@ import SaveIcon from '@material-ui/icons/Save';
 
 const useStyles = makeStyles(theme => ({
   dropdown: {
-    width: "100%",
+    width: "90%",
   },
   unitLabel: {
     transform: "translate(0, 1.5px) scale(0.75)",
@@ -33,18 +33,26 @@ export default function User({ user, setUsers, authUser }) {
   const classes = useStyles();
 
   const [isEditing, setIsEditing] = useState(false);
-  const [units, setUnits] = useState([]);
-  const [locations, setLocations] = useState([]);
+  const [units, setUnits] = useState([]); // For filling units dropdown.
+  const [locations, setLocations] = useState([]); // For filling location dropdown.
+  // For filtering units dropdown.
+  const [location, setLocation] = useState(user.unit ? user.unit.location._id: "");
 
   const onEdit = () => {
     setIsEditing(true);
+  }
+
+  const onLocationChange = (e) => {
+    setLocation(e.target.value);
   }
 
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
       // Get selected unit, if any.
-      const unit = units.find(unit => e.target.unit.value === unit.number);
+      const unit = units.find(unit => e.target.unit.value === unit._id);
+
+      // Update database.
       const body = {
         firstName: e.target.firstName.value,
         lastName: e.target.lastName.value,
@@ -52,8 +60,6 @@ export default function User({ user, setUsers, authUser }) {
         isStaff: e.target.isStaff.checked,
         unit: unit ? unit._id : null,
       };
-
-      // Update database.
       const response = await axios.patch(
         "api/users/" + user._id,
         body,
@@ -65,7 +71,12 @@ export default function User({ user, setUsers, authUser }) {
         if (prevUser._id === user._id) {
           const updatedUser = response.data;
           // Include unit number like GET /api/users even though that's not in user in db.
-          updatedUser.unit = unit ? { _id: response.data.unit, number: unit.number } : null;
+          if (unit) {
+            console.log(unit);
+            updatedUser.unit = unit;
+          } else {
+            updatedUser.unit = null;
+          }
           return updatedUser;
         } else {
           return prevUser;
@@ -134,7 +145,7 @@ export default function User({ user, setUsers, authUser }) {
                   placeholder="Last Name"
                 />
               </Grid>              
-              <Grid item xs={4}>
+              <Grid item xs={2}>
                 <TextField
                   defaultValue={user.email}
                   id="email"
@@ -155,21 +166,41 @@ export default function User({ user, setUsers, authUser }) {
                   }
                 />
               </Grid>
-              <Grid item xs={2}>
+              <Grid item xs={3}>
+                <InputLabel className={classes.unitLabel} id="locationLabel">
+                  Location
+                </InputLabel>
+                <Select
+                  className={classes.dropdown}
+                  defaultValue={user.unit ? user.unit.location._id: ""}
+                  id="location"
+                  labelId="locationLabel"
+                  name="location"
+                  onChange={onLocationChange}
+                >
+                  <MenuItem value="">&nbsp;</MenuItem>
+                  {
+                    locations.map(location =>
+                      <MenuItem key={location._id} value={location._id}>{location.name}</MenuItem>
+                    )
+                  }
+                </Select>
+              </Grid>
+              <Grid item xs={1}>
                 <InputLabel className={classes.unitLabel} id="unitLabel">
                   Unit
                 </InputLabel>
                 <Select
                   className={classes.dropdown}
-                  defaultValue={user.unit ? user.unit.number : ""}
+                  defaultValue={user.unit ? user.unit._id : ""}
                   id="unit"
                   labelId="unitLabel"
                   name="unit"
                 >
                   <MenuItem value="">&nbsp;</MenuItem>
                   {
-                    units.map(unit => 
-                      <MenuItem key={unit._id} value={unit.number}>{unit.number}</MenuItem>
+                    units.filter(unit => unit.location._id === location).map(unit => 
+                      <MenuItem key={unit._id} value={unit._id}>{unit.number}</MenuItem>
                     )
                   }
                 </Select>
