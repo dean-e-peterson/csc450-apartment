@@ -199,7 +199,7 @@ export default function User({ user, setUsers, authUser }) {
                 >
                   <MenuItem value="">&nbsp;</MenuItem>
                   {
-                    units.filter(unit => unit.location === location).map(unit => 
+                    units.filter(unit => unit.location._id === location).map(unit => 
                       <MenuItem key={unit._id} value={unit._id}>{unit.number}</MenuItem>
                     )
                   }
