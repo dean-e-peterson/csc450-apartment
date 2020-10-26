@@ -30,7 +30,7 @@ router.post(
   auth,
   [
     check('homePageOrder', 'Home page order must be a number').isNumeric(),
-    check('abbreviation', 'Abbreviation is required').not().isEmpty(),
+    check('name', 'Name is required').not().isEmpty(),
     check('address1', 'Address line 1 is required').not().isEmpty(),
     check('city', 'City is required').not().isEmpty(),
     check('state', 'State is required').not().isEmpty(),            
@@ -51,7 +51,7 @@ router.post(
     try {
       const location = new Location({
         homePageOrder: req.body.homePageOrder,
-        abbreviation: req.body.abbreviation,
+        name: req.body.name,
         address1: req.body.address1,
         address2: req.body.address2,
         city: req.body.city,
