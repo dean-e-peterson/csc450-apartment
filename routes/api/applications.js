@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { check, validationResult } = require('express-validator');
+const { check, validationResult, body } = require('express-validator');
 const auth = require('../../middleware/auth');
 
 const Application = require('../../models/Application');
@@ -21,7 +21,10 @@ router.post(
     check('creditPermission', 'Credit permission must be true or false').isBoolean(),
   ],
   async (req, res) => {
-    console.log(req.body);
+    // Only allow a person to submit an application for themself.
+    if (!(req.user.id === req.body.user)) {
+      return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
+    }
 
     // Apply validations.
     const errors = validationResult(req);
@@ -38,7 +41,7 @@ router.post(
 
       const application = new Application(req.body);
       application.save();
-      
+
       res.json(application);
     } catch (err) {
       console.error(err.message);
