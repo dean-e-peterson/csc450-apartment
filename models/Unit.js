@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const UnitSchema = new mongoose.Schema({
   location: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'location',    
     required: true,
   },
   number: {
@@ -11,9 +12,13 @@ const UnitSchema = new mongoose.Schema({
   },
   bedrooms: {
     type: Number,
+    required: true,
   },
   bathrooms: {
     type: Number,
+  },
+  description: {
+    type: String,
   },
 });
 
