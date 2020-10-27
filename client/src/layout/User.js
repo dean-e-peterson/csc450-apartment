@@ -37,6 +37,8 @@ export default function User({ user, setUsers, authUser }) {
   const [locations, setLocations] = useState([]); // For filling location dropdown.
   // For filtering units dropdown.
   const [location, setLocation] = useState(user.unit ? user.unit.location._id: "");
+  // For clearing unit value when changing location dropdown
+  const [unit, setUnit] = useState(user.unit ? user.unit._id : "");
 
   const onEdit = () => {
     setIsEditing(true);
@@ -44,13 +46,17 @@ export default function User({ user, setUsers, authUser }) {
 
   const onLocationChange = (e) => {
     setLocation(e.target.value);
+    setUnit("");
+  }
+
+  const onUnitChange = (e) => {
+    setUnit(e.target.value);
   }
 
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Get selected unit, if any.
-      const unit = units.find(unit => e.target.unit.value === unit._id);
+
 
       // Update database.
       const body = {
@@ -58,7 +64,7 @@ export default function User({ user, setUsers, authUser }) {
         lastName: e.target.lastName.value,
         email: e.target.email.value,
         isStaff: e.target.isStaff.checked,
-        unit: unit ? unit._id : null,
+        unit: unit ? unit : null,
       };
       const response = await axios.patch(
         "api/users/" + user._id,
@@ -66,14 +72,16 @@ export default function User({ user, setUsers, authUser }) {
         { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
       );
 
+      // Get full record of selected unit, if any.
+      const fullUnit = units.find(candidateUnit => unit === candidateUnit._id);
+
       // Update UI state.
       setUsers(prevUsers => prevUsers.map(prevUser => {
         if (prevUser._id === user._id) {
           const updatedUser = response.data;
           // Include unit number like GET /api/users even though that's not in user in db.
           if (unit) {
-            console.log(unit);
-            updatedUser.unit = unit;
+            updatedUser.unit = fullUnit;
           } else {
             updatedUser.unit = null;
           }
@@ -192,10 +200,11 @@ export default function User({ user, setUsers, authUser }) {
                 </InputLabel>
                 <Select
                   className={classes.dropdown}
-                  defaultValue={user.unit ? user.unit._id : ""}
+                  defaultValue={unit}
                   id="unit"
                   labelId="unitLabel"
                   name="unit"
+                  onChange={onUnitChange}
                 >
                   <MenuItem value="">&nbsp;</MenuItem>
                   {
