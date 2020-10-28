@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Chat from './pages/Chat';
 import Users from "./pages/Users";
+import Apply from "./pages/Apply";
 import { checkAuthToken } from "./utils/auth";
 
 const theme = createMuiTheme({
@@ -62,6 +63,9 @@ const App = () => {
           <Route exact path="/users"> {/* TODO: authenticate route */}
             <Users authUser={authUser}/>
           </Route>
+          <Route exact path="/apply"> {/* TODO: authenticate route */}
+            <Apply authUser={authUser}/>
+          </Route>          
         </Switch>
       </Router>
     </ThemeProvider>
