@@ -70,6 +70,42 @@ export default function Application({ authUser }) {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    try {
+      // User is already in database by the time they get to this page,
+      // So we never need the new user API, just the changed user API.
+      // Note that end user doesn't have rights to change fields like
+      // isStaff and unit, so, we make sure not to include those.
+      const updatedUser = {
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        //TODO: ### Add phone.
+      }
+      await axios.patch(
+        "/api/users/" + user._id,
+        updatedUser,
+        { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
+      );
+
+      // Application may be a new record in the database,
+      // so call the new or changed API accordingly.
+      if (isNew) {
+        await axios.post(
+          "/api/applications",
+          application,
+          { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
+        )
+      } else {
+        await axios.patch(
+          "/api/applications/" + application._id,
+          application,
+          { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
+        )
+      }
+    } catch (err) {
+      console.error(err.message);
+    }
   }
 
   const onChangeUser = (e) => {
@@ -87,6 +123,11 @@ export default function Application({ authUser }) {
       <form onSubmit={onSubmit}>
         <CardContent>
           <Grid container>
+            <Grid item xs={12}>
+              <Typography variant="h6" component="h3">
+                Contact Information
+              </Typography>
+            </Grid>            
             <Grid item xs={12}>
               <TextField
                 id="firstName"
