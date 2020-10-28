@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
+  Button,
   Card,
+  CardActions,
   CardContent,
   Checkbox,
   FormControlLabel,
+  Grid,
   TextField,
   Typography,
 } from "@material-ui/core";
@@ -71,70 +74,113 @@ export default function Application({ authUser }) {
 
   return (
     <Card>
-      <CardContent>
-        <form>
-          <TextField
-            id="firstName"
-            label="First Name"
-            name="firstName"
-            onChange={onChangeUser}
-            placeholder="First Name"
-            value={user.firstName}
-          />
-          <TextField
-            id="lastName"
-            label="Last Name"
-            name="lastName"
-            onChange={onChangeUser}
-            placeholder="LastName"
-            value={user.lastName}
-          />
-          <TextField
-            id="email"
-            label="Email"
-            name="email"
-            onChange={onChangeUser}
-            placeholder="Email"
-            value={user.email}
-          />
-          <TextField
-            id="phone"
-            label="Phone"
-            name="phone"
-            onChange={onChangeUser}
-            placeholder="Phone"
-            value="Add to User model"
-          />
-          <Typography variant="h6" component="h3">
-            References
-          </Typography>
-          {
-            application.references.map(reference =>
-              <Reference key={reference._id} reference={reference} />
-            )
-          }
-          <FormControlLabel
-            label="Background check permitted"
-            control={
-              <Checkbox
-                checked={application.backgroundPermission}
-                name="backgroundPermission"
-                onChange={onChangeApplicationCheckbox}
+      <form>
+        <CardContent>
+          <Grid container>
+            <Grid item xs={12}>
+              <TextField
+                id="firstName"
+                label="First Name"
+                name="firstName"
+                onChange={onChangeUser}
+                placeholder="First Name"
+                value={user.firstName}
               />
-            }
-          />
-          <FormControlLabel
-            label="Credit check permitted"
-            control={
-              <Checkbox
-                checked={application.creditPermission}
-                name="creditPermission"
-                onChange={onChangeApplicationCheckbox}
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id="lastName"
+                label="Last Name"
+                name="lastName"
+                onChange={onChangeUser}
+                placeholder="LastName"
+                value={user.lastName}
               />
-            }
-          />
-        </form>
-      </CardContent>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id="email"
+                label="Email"
+                name="email"
+                onChange={onChangeUser}
+                placeholder="Email"
+                value={user.email}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id="phone"
+                label="Phone"
+                name="phone"
+                onChange={onChangeUser}
+                placeholder="Phone"
+                value="Add to User model"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="h6" component="h3">
+                References
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              {
+                application.references.map(reference =>
+                  <Reference key={reference._id} reference={reference} />
+                )
+              }
+            </Grid>
+            <Grid item xs={12}>
+              <Button variant="outlined">
+                Add Reference
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography>
+                To rent to you, we need to conduct a background check.
+                Do we have your permission to conduct a background check.
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                label="Background check permitted"
+                control={
+                  <Checkbox
+                    checked={application.backgroundPermission}
+                    name="backgroundPermission"
+                    onChange={onChangeApplicationCheckbox}
+                  />
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography>
+                To rent to you, we need to conduct a credit check.
+                Do we have your permission to conduct a credit check.
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                label="Credit check permitted"
+                control={
+                  <Checkbox
+                    checked={application.creditPermission}
+                    name="creditPermission"
+                    onChange={onChangeApplicationCheckbox}
+                  />
+                }
+              />
+            </Grid>
+          </Grid>
+        </CardContent>
+        <CardActions>
+          <Button type="submit" variant="outlined">
+            Save Application
+          </Button>
+          <Button variant="outlined">
+            Submit Application
+          </Button>
+        </CardActions>
+      </form>
     </Card>
   );
 };
