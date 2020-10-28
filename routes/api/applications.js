@@ -81,7 +81,7 @@ router.get('/user/:id', auth, async (req, res) => {
   try {
     const application = await Application.findOne({ user: req.params.id });
     if (!application) {
-      return res.status(400).json({ errors: [{ msg: 'Application not found' }] });
+      return res.status(404).json({ errors: [{ msg: 'Application not found' }] });
     }
 
     res.json(application);

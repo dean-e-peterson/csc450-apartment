@@ -29,9 +29,10 @@ import Reference from "./Reference";
   }
 
 // Note: "Application" here refers to someone's application to live
-// at Sunshine Apartments, not the whole apartment management computer
+// at Sunshine Apartments, not the apartment management computer
 // application.  See App.js for that.
 export default function Application({ authUser }) {
+  const [isNew, setIsNew] = useState(false);
   const [application, setApplication] = useState(emptyApplication);
   const [user, setUser] = useState(emptyUser);
 
@@ -56,11 +57,20 @@ export default function Application({ authUser }) {
           setApplication(response.data);
         }
       } catch (err) {
-        console.error(err.message);
+        if (err.message === "Request failed with status code 404") {
+          // Must be a new application for this user.
+          setIsNew(true);
+        } else {
+          console.error(err.message);
+        }
       }
     }
     getApplication();
   }, [authUser]);
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+  }
 
   const onChangeUser = (e) => {
     e.persist(); // No longer needed as of React v 17?
@@ -74,7 +84,7 @@ export default function Application({ authUser }) {
 
   return (
     <Card>
-      <form>
+      <form onSubmit={onSubmit}>
         <CardContent>
           <Grid container>
             <Grid item xs={12}>
