@@ -6,6 +6,10 @@ const ApplicationSchema = new mongoose.Schema({
     ref: 'user',
     required: true,
   },
+  status: {
+    type: String,
+    default: "New",
+  },
   references: [
     {
       name: {

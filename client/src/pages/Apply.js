@@ -14,6 +14,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+// Note: This Apply.js page is for a prospective tenant to
+// apply to live at the apartments.  For the staff page where
+// applications are reviewed, see the Applications.js page.
 export default function Apply({ authUser }) {
   const classes = useStyles();
 

@@ -18,6 +18,7 @@ import Reference from "./Reference";
   // like user ? user.firstName : "" in the form controls.
   const emptyApplication = {
     user: null,
+    status: "New",
     references: [],
     backgroundPermission: false,
     creditPermission: false,
@@ -83,8 +84,16 @@ export default function Application({ authUser }) {
     });
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmitApplication = async (e) => {
+    setApplication(application => {
+      application.status = "Submitted";
+      return { ...application };
+    });
+    await onSaveApplication(e);
+  }
+
+  const onSaveApplication = async (e) => {
+    //e.preventDefault();
 
     try {
       // User is already in database by the time they get to this page,
@@ -102,7 +111,6 @@ export default function Application({ authUser }) {
         updatedUser,
         { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
       );
-
 
       // Note that the server won't save new references if an _id is given, so
       // we remove the pseudo-id's added to new references in onAddReference.
@@ -151,9 +159,14 @@ export default function Application({ authUser }) {
 
   return (
     <Card>
-      <form onSubmit={onSubmit}>
+      <form>
         <CardContent>
-          <Grid container>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Typography variant="h6" component="h3">
+                Application Status: {application.status}
+              </Typography>
+            </Grid>            
             <Grid item xs={12}>
               <Typography variant="h6" component="h3">
                 Contact Information
@@ -225,8 +238,6 @@ export default function Application({ authUser }) {
                 To rent to you, we need to conduct a background check.
                 Do we have your permission to conduct a background check.
               </Typography>
-            </Grid>
-            <Grid item xs={12}>
               <FormControlLabel
                 label="Background check permitted"
                 control={
@@ -243,8 +254,6 @@ export default function Application({ authUser }) {
                 To rent to you, we need to conduct a credit check.
                 Do we have your permission to conduct a credit check.
               </Typography>
-            </Grid>
-            <Grid item xs={12}>
               <FormControlLabel
                 label="Credit check permitted"
                 control={
@@ -259,10 +268,10 @@ export default function Application({ authUser }) {
           </Grid>
         </CardContent>
         <CardActions>
-          <Button type="submit" variant="outlined">
+          <Button variant="outlined" onClick={onSaveApplication}>
             Save Application
           </Button>
-          <Button variant="outlined">
+          <Button variant="outlined" onClick={onSubmitApplication}>
             Submit Application
           </Button>
         </CardActions>

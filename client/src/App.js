@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import ButtonAppBar from "./layout/ButtonAppBar";
 import Homepage from "./pages/Homepage";
@@ -10,6 +10,7 @@ import Chat from "./pages/Chat";
 import Users from "./pages/Users";
 import Calendar from "./pages/Calendar";
 import Apply from "./pages/Apply";
+import Applications from "./pages/Applications";
 import { checkAuthToken } from "./utils/auth";
 
 const theme = createMuiTheme({
@@ -43,8 +44,8 @@ const App = () => {
       <Router>
         <ButtonAppBar authUser={authUser} setAuthUser={setAuthUser} />
         <Switch>
-          <Route exact path='/'>
-            <Homepage />
+          <Route exact path="/">
+            <Homepage authUser={authUser} />
           </Route>
           <Route exact path='/login'>
             <Login setAuthUser={setAuthUser} />
@@ -69,14 +70,17 @@ const App = () => {
             <Calendar authUser={authUser} setAuthUser={setAuthUser} />
             {/* {" "} */}
             {/* TODO: authenticate route */}
-          </Route>          
-          <Route exact path="/apply">
-            {authUser ?
+          </Route>
+          {authUser && authUser.isStaff && // Must be staff for this route.
+            <Route exact path="/applications"> 
+              <Applications authUser={authUser}/>
+            </Route>
+          }
+          {authUser && // Must be logged in for this route.
+            <Route exact path="/apply">
               <Apply authUser={authUser}/>
-            :
-              <Redirect to="/register" />
-            }
-          </Route>          
+            </Route>
+          }
         </Switch>
       </Router>
     </ThemeProvider>

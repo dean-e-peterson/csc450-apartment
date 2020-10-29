@@ -14,13 +14,21 @@ import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import ArrowDropUpIcon from "@material-ui/icons/ArrowDropUp";
 import Vacancy from "./Vacancy";
 
-export default function Location({ location, vacancies }) {
+export default function Location({ location, vacancies, authUser }) {
   const [expanded, setExpanded] = useState(false);
   const history = useHistory();
 
   const onExpandedClick = () => {
     setExpanded(!expanded);
   };
+
+  const onApplyClick = () => {
+    if (authUser) {
+      history.push('/apply');
+    } else {
+      history.push('/register');
+    }
+  }
 
   return (
     <Grid container>
@@ -42,7 +50,7 @@ export default function Location({ location, vacancies }) {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size='small' color='primary' onClick={() => history.push('/apply')}>
+            <Button size='small' color='primary' onClick={onApplyClick}>
               Apply
             </Button>
             {vacancies.length > 0 &&
