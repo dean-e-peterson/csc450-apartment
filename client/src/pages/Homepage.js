@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Location from "../layout/Location";
 
-export default function Homepage() {
+export default function Homepage({ authUser }) {
   const [locations, setLocations] = useState([]);
   const [vacancies, setVacancies] = useState([]);
 
@@ -35,6 +35,7 @@ export default function Homepage() {
         key={location._id}
         location={location}
         vacancies={vacancies.filter(vacancy => vacancy.location === location._id)}
+        authUser={authUser}
       />
     )
   );

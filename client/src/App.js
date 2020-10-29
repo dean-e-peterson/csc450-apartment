@@ -46,7 +46,7 @@ const App = () => {
         <ButtonAppBar authUser={authUser} setAuthUser={setAuthUser} />
         <Switch>
           <Route exact path="/">
-            <Homepage />
+            <Homepage authUser={authUser} />
           </Route>
           <Route exact path="/login">
             <Login setAuthUser={setAuthUser} />
@@ -68,11 +68,7 @@ const App = () => {
             </Route>
           }
           <Route exact path="/apply">
-            {authUser ?
-              <Apply authUser={authUser}/>
-            :
-              <Redirect to="/register" />
-            }
+            <Apply authUser={authUser}/>
           </Route>          
         </Switch>
       </Router>
