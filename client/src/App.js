@@ -6,19 +6,17 @@ import Homepage from "./pages/Homepage";
 import Posts from "./pages/Posts";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Chat from './pages/Chat';
+import Chat from "./pages/Chat";
 import Users from "./pages/Users";
+import Calendar from "./pages/Calendar";
 import Apply from "./pages/Apply";
 import Applications from "./pages/Applications";
 import { checkAuthToken } from "./utils/auth";
 
 const theme = createMuiTheme({
   typography: {
-    fontFamily: [
-      "Raleway",
-      "sans-serif",
-    ].join(","),
-  },
+    fontFamily: ["Raleway", "sans-serif"].join(",")
+  }
 });
 
 const App = () => {
@@ -49,13 +47,13 @@ const App = () => {
           <Route exact path="/">
             <Homepage authUser={authUser} />
           </Route>
-          <Route exact path="/login">
+          <Route exact path='/login'>
             <Login setAuthUser={setAuthUser} />
           </Route>
-          <Route exact path="/register">
+          <Route exact path='/register'>
             <Register setAuthUser={setAuthUser} />
-          </Route>        
-          <Route exact path="/chat"> 
+          </Route>
+          <Route exact path='/chat'>
             <Chat />
           </Route>
           {authUser && authUser.unit && // Must be tenant for this route.
@@ -68,6 +66,11 @@ const App = () => {
               <Users authUser={authUser}/>
             </Route>
           }
+          <Route exact path='/calendar'>
+            <Calendar authUser={authUser} setAuthUser={setAuthUser} />
+            {/* {" "} */}
+            {/* TODO: authenticate route */}
+          </Route>
           {authUser && authUser.isStaff && // Must be staff for this route.
             <Route exact path="/applications"> 
               <Applications authUser={authUser}/>
@@ -75,7 +78,7 @@ const App = () => {
           }
           <Route exact path="/apply">
             <Apply authUser={authUser}/>
-          </Route>          
+          </Route>
         </Switch>
       </Router>
     </ThemeProvider>
