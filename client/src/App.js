@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import ButtonAppBar from "./layout/ButtonAppBar";
 import Homepage from "./pages/Homepage";
@@ -63,8 +63,13 @@ const App = () => {
           <Route exact path="/users"> {/* TODO: authenticate route */}
             <Users authUser={authUser}/>
           </Route>
-          <Route exact path="/apply"> {/* TODO: authenticate route */}
-            <Apply authUser={authUser}/>
+          <Route exact path="/apply">
+            {
+              authUser ?
+                <Apply authUser={authUser}/>
+              :
+                <Redirect to="/register" />
+            }
           </Route>          
         </Switch>
       </Router>
