@@ -15,10 +15,18 @@ router.get('/', auth, async (req, res) => {
   }
   
   try {
+    // Allow filtering by application status (typically for "Submitted" status)
+    let findParams;
+    if (req.query.status) {
+      findParams = { status: req.query.status };
+    } else {
+      findParams = {};
+    }
+
     // This brings in some user fields as well for convenience
     // when reviewing applications as staff.
     const applications = await Application
-      .find()
+      .find(findParams)
       .populate({path: 'user', select: ['firstName', 'lastName', 'email', 'phone']});
 
     res.json(applications);
