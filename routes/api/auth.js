@@ -4,6 +4,7 @@ const { check, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const bcrypt = require('bcryptjs');
+const mongoose = require('mongoose');
 const auth = require('../../middleware/auth');
 
 const User = require('../../models/User');
@@ -13,7 +14,30 @@ const User = require('../../models/User');
 // @access  Private
 router.get('/', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
+    //const user = await User.findById(req.user.id).select('-password');
+    // We get not just the user, but an application if they are applying
+    // to live in the apartment, to facilitate showing a user's existing
+    // application on a navigation bar.
+    const users = await User.aggregate([
+      {
+        "$match": { _id: mongoose.Types.ObjectId(req.user.id) }
+      },
+      {
+        "$lookup": {
+          "from": "applications",
+          "localField": "_id",
+          "foreignField": "user",
+          "as": "applications",
+        }
+      },
+      {
+        "$unset": "password"
+      }
+    ]);
+
+    // Aggregate operation returns an array.  We just want the bare user.
+    const user = users.length > 0 ? users[0] : null;
+
     res.json(user);
   } catch(err) {
     console.error(err.message);

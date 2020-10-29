@@ -18,6 +18,7 @@ import Reference from "./Reference";
   // like user ? user.firstName : "" in the form controls.
   const emptyApplication = {
     user: null,
+    status: "New",
     references: [],
     backgroundPermission: false,
     creditPermission: false,
@@ -83,8 +84,16 @@ export default function Application({ authUser }) {
     });
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmitApplication = async (e) => {
+    setApplication(application => {
+      application.status = "Submitted";
+      return { ...application };
+    });
+    await onSaveApplication(e);
+  }
+
+  const onSaveApplication = async (e) => {
+    //e.preventDefault();
 
     try {
       // User is already in database by the time they get to this page,
@@ -151,9 +160,14 @@ export default function Application({ authUser }) {
 
   return (
     <Card>
-      <form onSubmit={onSubmit}>
+      <form>
         <CardContent>
           <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Typography variant="h6" component="h3">
+                Application Status: {application.status}
+              </Typography>
+            </Grid>            
             <Grid item xs={12}>
               <Typography variant="h6" component="h3">
                 Contact Information
@@ -255,10 +269,10 @@ export default function Application({ authUser }) {
           </Grid>
         </CardContent>
         <CardActions>
-          <Button type="submit" variant="outlined">
+          <Button variant="outlined" onClick={onSaveApplication}>
             Save Application
           </Button>
-          <Button variant="outlined">
+          <Button variant="outlined" onClick={onSubmitApplication}>
             Submit Application
           </Button>
         </CardActions>

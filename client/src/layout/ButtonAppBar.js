@@ -60,6 +60,9 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
   } else { // Logged in as but not as tenant or staff.
     buttons = (
       <Fragment>
+        {authUser && authUser.applications.length > 0 &&
+          <Button color='inherit' component={Link} to="/apply">My Application</Button>
+        }
         <Button color='inherit' onClick={onLogout}>Logout</Button>
         <Button color='inherit'>Chat</Button>
       </Fragment>

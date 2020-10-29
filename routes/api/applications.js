@@ -126,6 +126,7 @@ router.patch(
       // Replace only fields included in the request body,
       // but replace references array as a whole for now.      
       application.user = 'user' in req.body ? req.body.user : application.user;
+      application.status = 'status' in req.body ? req.body.status : application.status;
       application.references = 'references' in req.body ? req.body.references : application.references;
       application.backgroundPermission = 'backgroundPermission' in req.body ? req.body.backgroundPermission : application.backgroundPermission;
       application.creditPermission = 'creditPermission' in req.body ? req.body.creditPermission : application.creditPermission;
