@@ -153,7 +153,7 @@ export default function Application({ authUser }) {
     <Card>
       <form onSubmit={onSubmit}>
         <CardContent>
-          <Grid container>
+          <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography variant="h6" component="h3">
                 Contact Information
@@ -225,8 +225,6 @@ export default function Application({ authUser }) {
                 To rent to you, we need to conduct a background check.
                 Do we have your permission to conduct a background check.
               </Typography>
-            </Grid>
-            <Grid item xs={12}>
               <FormControlLabel
                 label="Background check permitted"
                 control={
@@ -243,8 +241,6 @@ export default function Application({ authUser }) {
                 To rent to you, we need to conduct a credit check.
                 Do we have your permission to conduct a credit check.
               </Typography>
-            </Grid>
-            <Grid item xs={12}>
               <FormControlLabel
                 label="Credit check permitted"
                 control={
