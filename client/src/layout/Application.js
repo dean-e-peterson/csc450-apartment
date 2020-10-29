@@ -21,12 +21,17 @@ import Reference from "./Reference";
     references: [],
     backgroundPermission: false,
     creditPermission: false,
-  }
+  };
   const emptyUser = {
     firstName: "",
     lastName: "",
     email: "",
-  }
+  };
+  const emptyReference = {
+    name: "",
+    email: "",
+    phone: "",
+  };
 
 // Note: "Application" here refers to someone's application to live
 // at Sunshine Apartments, not the apartment management computer
@@ -68,6 +73,15 @@ export default function Application({ authUser }) {
     getApplication();
   }, [authUser]);
 
+  const onAddReference = () => {
+    // Date.now() just uses time in milliseconds
+    // to generate a pseudo-unique temporary key.
+    setApplication(application => {
+      application.references.push({ ...emptyReference, _id: "new" + Date.now() });
+      return { ...application };
+    });
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -88,18 +102,30 @@ export default function Application({ authUser }) {
         { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
       );
 
+
+      // Note that the server won't save new references if an _id is given, so
+      // we remove the pseudo-id's added to new references in onAddReference.
+      const updatedApplication = { ...application };
+      updatedApplication.references = application.references.map(reference => {
+        const updatedReference = { ...reference };
+        if (updatedReference._id.substr(0, 3) === "new") {
+          delete updatedReference._id;
+        }
+        return updatedReference;
+      });
+
       // Application may be a new record in the database,
       // so call the new or changed API accordingly.
       if (isNew) {
         await axios.post(
           "/api/applications",
-          application,
+          updatedApplication,
           { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
         )
       } else {
         await axios.patch(
           "/api/applications/" + application._id,
-          application,
+          updatedApplication,
           { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
         )
       }
@@ -176,12 +202,16 @@ export default function Application({ authUser }) {
             <Grid item xs={12}>
               {
                 application.references.map(reference =>
-                  <Reference key={reference._id} reference={reference} />
+                  <Reference 
+                    key={reference._id}
+                    reference={reference}
+                    setApplication={setApplication}
+                  />
                 )
               }
             </Grid>
             <Grid item xs={12}>
-              <Button variant="outlined">
+              <Button variant="outlined" onClick={onAddReference}>
                 Add Reference
               </Button>
             </Grid>
