@@ -5,6 +5,8 @@ import {
   Card,
   CardActions,
   CardContent,
+  Checkbox,
+  FormControlLabel,
   Grid,
   Typography,
 } from "@material-ui/core";
@@ -93,6 +95,28 @@ export default function ApplicationView({ application, setApplications, authUser
               Status: {application.status}
             </Typography>
           </Grid>
+          <Grid item xs={6}>
+            <FormControlLabel
+              label="Background check permission given"
+              control={
+                <Checkbox
+                  checked={application.backgroundPermission}
+                  id="backgroundPermission"
+                />
+              }
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <FormControlLabel
+              label="Credit check permission given"
+              control={
+                <Checkbox
+                  checked={application.creditPermission}
+                  id="creditPermission"
+                />
+              }
+            />
+          </Grid>          
         </Grid>
       </CardContent>
       <CardActions>
