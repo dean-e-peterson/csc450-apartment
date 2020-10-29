@@ -66,10 +66,9 @@ const App = () => {
             <Users authUser={authUser} />
           </Route>
           <Route exact path='/calendar'>
-            <Calendar />
+            <Calendar authUser={authUser} setAuthUser={setAuthUser} />
             {/* {" "} */}
             {/* TODO: authenticate route */}
-            {/* <Users authUser={setAuthUser} /> */}
           </Route>
         </Switch>
       </Router>
