@@ -57,18 +57,21 @@ const App = () => {
           <Route exact path="/chat"> 
             <Chat />
           </Route>
-          <Route exact path="/posts"> {/* TODO: authenticate route */}
-            <Posts authUser={authUser}/>
-          </Route>
-          <Route exact path="/users"> {/* TODO: authenticate route */}
-            <Users authUser={authUser}/>
-          </Route>
+          {authUser && authUser.unit && // Must be tenant for this route.
+            <Route exact path="/posts">
+              <Posts authUser={authUser}/>
+            </Route>
+          }
+          {authUser && authUser.isStaff && // Must be staff for this route.
+            <Route exact path="/users"> 
+              <Users authUser={authUser}/>
+            </Route>
+          }
           <Route exact path="/apply">
-            {
-              authUser ?
-                <Apply authUser={authUser}/>
-              :
-                <Redirect to="/register" />
+            {authUser ?
+              <Apply authUser={authUser}/>
+            :
+              <Redirect to="/register" />
             }
           </Route>          
         </Switch>
