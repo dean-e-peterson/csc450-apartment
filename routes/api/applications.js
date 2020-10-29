@@ -94,7 +94,6 @@ router.get('/user/:id', auth, async (req, res) => {
 // @route   PATCH /api/applications/:id
 // @desc    Update existing application by application's ID
 // @access  Private
-// TODO: ### Test changing references and see how it behaves.
 router.patch(
   '/:id',
   auth,
@@ -124,9 +123,16 @@ router.patch(
         return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
       }
 
-      const query = await application.updateOne(req.body);
+      // Replace only fields included in the request body,
+      // but replace references array as a whole for now.      
+      application.user = 'user' in req.body ? req.body.user : application.user;
+      application.references = 'references' in req.body ? req.body.references : application.references;
+      application.backgroundPermission = 'backgroundPermission' in req.body ? req.body.backgroundPermission : application.backgroundPermission;
+      application.creditPermission = 'creditPermission' in req.body ? req.body.creditPermission : application.creditPermission;
+     
+      await application.save();
 
-      res.end();
+      res.json(application);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');

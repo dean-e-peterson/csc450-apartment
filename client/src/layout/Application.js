@@ -116,19 +116,23 @@ export default function Application({ authUser }) {
 
       // Application may be a new record in the database,
       // so call the new or changed API accordingly.
+      let response;
       if (isNew) {
-        await axios.post(
+        response = await axios.post(
           "/api/applications",
           updatedApplication,
           { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
-        )
+        );
       } else {
-        await axios.patch(
+        response = await axios.patch(
           "/api/applications/" + application._id,
           updatedApplication,
           { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
-        )
+        );
       }
+
+      // Update application UI state, in particular any db-assigned IDs.
+      setApplication(response.data);
     } catch (err) {
       console.error(err.message);
     }
