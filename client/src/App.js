@@ -8,12 +8,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Chat from "./pages/Chat";
 import Users from "./pages/Users";
-<<<<<<< HEAD
 import Calendar from "./pages/Calendar";
-
-=======
 import Apply from "./pages/Apply";
->>>>>>> b6ff08b6065eacc808a3cfa055971386f9228294
 import { checkAuthToken } from "./utils/auth";
 
 const theme = createMuiTheme({
@@ -59,23 +55,6 @@ const App = () => {
           <Route exact path='/chat'>
             <Chat />
           </Route>
-<<<<<<< HEAD
-          <Route exact path='/posts'>
-            {" "}
-            {/* TODO: authenticate route */}
-            <Posts authUser={authUser} />
-          </Route>
-          <Route exact path='/users'>
-            {" "}
-            {/* TODO: authenticate route */}
-            <Users authUser={authUser} />
-          </Route>
-          <Route exact path='/calendar'>
-            <Calendar authUser={authUser} setAuthUser={setAuthUser} />
-            {/* {" "} */}
-            {/* TODO: authenticate route */}
-          </Route>
-=======
           {authUser && authUser.unit && // Must be tenant for this route.
             <Route exact path="/posts">
               <Posts authUser={authUser}/>
@@ -86,6 +65,11 @@ const App = () => {
               <Users authUser={authUser}/>
             </Route>
           }
+          <Route exact path='/calendar'>
+            <Calendar authUser={authUser} setAuthUser={setAuthUser} />
+            {/* {" "} */}
+            {/* TODO: authenticate route */}
+          </Route>          
           <Route exact path="/apply">
             {authUser ?
               <Apply authUser={authUser}/>
@@ -93,7 +77,6 @@ const App = () => {
               <Redirect to="/register" />
             }
           </Route>          
->>>>>>> b6ff08b6065eacc808a3cfa055971386f9228294
         </Switch>
       </Router>
     </ThemeProvider>
