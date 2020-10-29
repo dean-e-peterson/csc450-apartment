@@ -141,7 +141,7 @@ router.patch(
   async (req, res) => {
     // Only allow a user to modify their own info, unless they're staff.
     if (! (req.user.isStaff || req.user.id === req.params.id)) {
-      return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });      
+      return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
     }
     // Also, only staff can modify isStaff and unit fields.
     if (!req.user.isStaff && 'isStaff' in req.body) {

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import {
   Button,
   Card,
@@ -15,6 +16,7 @@ import Vacancy from "./Vacancy";
 
 export default function Location({ location, vacancies }) {
   const [expanded, setExpanded] = useState(false);
+  const history = useHistory();
 
   const onExpandedClick = () => {
     setExpanded(!expanded);
@@ -40,7 +42,7 @@ export default function Location({ location, vacancies }) {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size='small' color='primary'>
+            <Button size='small' color='primary' onClick={() => history.push('/apply')}>
               Apply
             </Button>
             {vacancies.length > 0 &&
