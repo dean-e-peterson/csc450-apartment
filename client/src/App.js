@@ -76,9 +76,11 @@ const App = () => {
               <Applications authUser={authUser}/>
             </Route>
           }
-          <Route exact path="/apply">
-            <Apply authUser={authUser}/>
-          </Route>
+          {authUser && // Must be logged in for this route.
+            <Route exact path="/apply">
+              <Apply authUser={authUser}/>
+            </Route>
+          }
         </Switch>
       </Router>
     </ThemeProvider>
