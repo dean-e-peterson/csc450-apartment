@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 import ButtonAppBar from "./layout/ButtonAppBar";
 import Homepage from "./pages/Homepage";
@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 import Chat from './pages/Chat';
 import Users from "./pages/Users";
 import Apply from "./pages/Apply";
+import Applications from "./pages/Applications";
 import { checkAuthToken } from "./utils/auth";
 
 const theme = createMuiTheme({
@@ -65,6 +66,11 @@ const App = () => {
           {authUser && authUser.isStaff && // Must be staff for this route.
             <Route exact path="/users"> 
               <Users authUser={authUser}/>
+            </Route>
+          }
+          {authUser && authUser.isStaff && // Must be staff for this route.
+            <Route exact path="/applications"> 
+              <Applications authUser={authUser}/>
             </Route>
           }
           <Route exact path="/apply">

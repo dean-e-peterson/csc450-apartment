@@ -44,6 +44,7 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
       <Fragment>
         <Button color='inherit' onClick={onLogout}>Logout</Button>
         <Button color='inherit' component={Link} to="/posts">Bulletin Board</Button>
+        <Button color='inherit' component={Link} to="/applications">Applications</Button>
         <Button color='inherit' component={Link} to="/users">Users</Button>
         <Button color='inherit'>Chat</Button>
       </Fragment>

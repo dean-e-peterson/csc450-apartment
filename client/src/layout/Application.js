@@ -112,7 +112,6 @@ export default function Application({ authUser }) {
         { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
       );
 
-
       // Note that the server won't save new references if an _id is given, so
       // we remove the pseudo-id's added to new references in onAddReference.
       const updatedApplication = { ...application };

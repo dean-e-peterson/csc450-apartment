@@ -15,7 +15,11 @@ router.get('/', auth, async (req, res) => {
   }
   
   try {
-    const applications = await Application.find();
+    // This brings in some user fields as well for convenience
+    // when reviewing applications as staff.
+    const applications = await Application
+      .find()
+      .populate({path: 'user', select: ['firstName', 'lastName', 'email', 'phone']});
 
     res.json(applications);
   } catch (err) {
