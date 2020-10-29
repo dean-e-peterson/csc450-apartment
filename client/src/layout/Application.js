@@ -26,6 +26,7 @@ import Reference from "./Reference";
     firstName: "",
     lastName: "",
     email: "",
+    phone: "",
   };
   const emptyReference = {
     name: "",
@@ -94,7 +95,7 @@ export default function Application({ authUser }) {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        //TODO: ### Add phone.
+        phone: user.phone,
       }
       await axios.patch(
         "/api/users/" + user._id,
@@ -195,7 +196,7 @@ export default function Application({ authUser }) {
                 name="phone"
                 onChange={onChangeUser}
                 placeholder="Phone"
-                value="Add to User model"
+                value={user.phone}
               />
             </Grid>
             <Grid item xs={12}>

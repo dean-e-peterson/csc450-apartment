@@ -84,6 +84,7 @@ router.post(
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
+        phone: req.body.phone,        
         password: req.body.password,
         unit: req.body.unit,
         isStaff: req.body.isStaff,
@@ -167,8 +168,7 @@ router.patch(
       }
 
       // The following simplification might have worked if not for the need to
-      // encrypt the password, but might have allowed modifying other fields,
-      // including isStaff.
+      // encrypt the password.
       //const query = await User.findByIdAndUpdate(req.params.id, req.body);
 
       const user = await User.findById(req.params.id);
@@ -180,6 +180,7 @@ router.patch(
       user.firstName = 'firstName' in req.body ? req.body.firstName : user.firstName;
       user.lastName = 'lastName' in req.body ? req.body.lastName : user.lastName;
       user.email = 'email' in req.body ? req.body.email : user.email;
+      user.phone = 'phone' in req.body ? req.body.phone : user.phone;      
       user.unit = 'unit' in req.body ? req.body.unit : user.unit;
       user.isStaff = 'isStaff' in req.body ? req.body.isStaff : user.isStaff;
 
