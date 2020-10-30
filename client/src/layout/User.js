@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-  Button,
   Card,
   CardContent,
   Checkbox,
   FormControlLabel,
   Grid,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -63,6 +63,7 @@ export default function User({ user, setUsers, authUser }) {
         firstName: e.target.firstName.value,
         lastName: e.target.lastName.value,
         email: e.target.email.value,
+        phone: e.target.phone.value,        
         isStaff: e.target.isStaff.checked,
         unit: unit ? unit : null,
       };
@@ -224,9 +225,9 @@ export default function User({ user, setUsers, authUser }) {
                 </Select>
               </Grid>
               <Grid item xs={1}>
-                <Button type="submit">
+                <IconButton type="submit" aria-label="Save" title="Save">
                   <SaveIcon />
-                </Button>
+                </IconButton>
               </Grid>
             </Grid>            
           </CardContent>
@@ -258,9 +259,9 @@ export default function User({ user, setUsers, authUser }) {
               {user.unit ? "unit " + user.unit.number : ""}
             </Grid>
             <Grid item xs={1}>
-              <Button onClick={onEdit}>
+              <IconButton onClick={onEdit} aria-label="Edit" title="Edit">
                 <EditIcon />
-              </Button>
+              </IconButton>
             </Grid>
           </Grid>
         </CardContent>
