@@ -18,9 +18,9 @@ import SaveIcon from '@material-ui/icons/Save';
 
 const useStyles = makeStyles(theme => ({
   dropdown: {
-    width: "90%",
+    width: "100%",
   },
-  unitLabel: {
+  dropdownLabel: {
     transform: "translate(0, 1.5px) scale(0.75)",
     transformOrigin: "top left",
   },
@@ -37,7 +37,7 @@ export default function User({ user, setUsers, authUser }) {
   const [locations, setLocations] = useState([]); // For filling location dropdown.
   // For filtering units dropdown.
   const [location, setLocation] = useState(user.unit ? user.unit.location._id: "");
-  // For clearing unit value when changing location dropdown
+  // For clearing unit value when changing location dropdown.
   const [unit, setUnit] = useState(user.unit ? user.unit._id : "");
 
   const onEdit = () => {
@@ -133,7 +133,7 @@ export default function User({ user, setUsers, authUser }) {
       <Card>
         <form onSubmit={onSubmit}>
           <CardContent>
-            <Grid container>
+            <Grid container spacing={2}>
               <Grid item xs={2}>
                 <TextField
                   autoFocus
@@ -161,7 +161,16 @@ export default function User({ user, setUsers, authUser }) {
                   name="email"
                   placeholder="Email"
                 />
-              </Grid>          
+              </Grid>
+              <Grid item xs={1}>
+                <TextField
+                  defaultValue={user.phone}
+                  id="phone"
+                  label="Phone"
+                  name="phone"
+                  placeholder="Phone"
+                />
+              </Grid>                      
               <Grid item xs={1}>
                 <FormControlLabel
                   label="Staff?"
@@ -174,8 +183,8 @@ export default function User({ user, setUsers, authUser }) {
                   }
                 />
               </Grid>
-              <Grid item xs={3}>
-                <InputLabel className={classes.unitLabel} id="locationLabel">
+              <Grid item xs={2}>
+                <InputLabel className={classes.dropdownLabel} id="locationLabel">
                   Location
                 </InputLabel>
                 <Select
@@ -195,7 +204,7 @@ export default function User({ user, setUsers, authUser }) {
                 </Select>
               </Grid>
               <Grid item xs={1}>
-                <InputLabel className={classes.unitLabel} id="unitLabel">
+                <InputLabel className={classes.dropdownLabel} id="unitLabel">
                   Unit
                 </InputLabel>
                 <Select
@@ -229,17 +238,20 @@ export default function User({ user, setUsers, authUser }) {
     return (
       <Card>
         <CardContent>
-          <Grid container className={classes.userFlexContainer}>
+          <Grid container spacing={2} className={classes.userFlexContainer}>
             <Grid item xs={3}>
               {user.firstName + " " + (user.lastName ? user.lastName : "") }
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={2}>
               {user.email }
-            </Grid>          
+            </Grid>
+            <Grid item xs={2}>
+              {user.phone }
+            </Grid>                     
             <Grid item xs={1}>
               {user.isStaff ? "staff" : "" }
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={2}>
               {user.unit ? user.unit.location.name : "" }
             </Grid>            
             <Grid item xs={1}>
