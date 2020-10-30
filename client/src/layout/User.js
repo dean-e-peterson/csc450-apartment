@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Prompt } from "react-router-dom";
 import axios from "axios";
 import {
   Card,
@@ -29,6 +30,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const editingLeaveMessage = "You are editing and may have unsaved changes.  Do you wish to continue anyway?";
+const beforeUnload = (e) => {
+  e.preventDefault();
+  return editingLeaveMessage; // For non-standard browsers.
+}
+
 export default function User({ user, setUsers, authUser }) {
   const classes = useStyles();
 
@@ -39,9 +46,19 @@ export default function User({ user, setUsers, authUser }) {
   const [location, setLocation] = useState(user.unit ? user.unit.location._id: "");
   // For clearing unit value when changing location dropdown.
   const [unit, setUnit] = useState(user.unit ? user.unit._id : "");
+  
+  const setEdit = (edit) => {
+    setIsEditing(edit);
+    if (edit) {
+      window.addEventListener("beforeunload", beforeUnload, false);
+    } else {
+      // The following removal does not appear to work.
+      window.removeEventListener("beforeunload", beforeUnload, false);
+    }
+  }
 
   const onEdit = () => {
-    setIsEditing(true);
+    setEdit(true);
   }
 
   const onLocationChange = (e) => {
@@ -56,8 +73,6 @@ export default function User({ user, setUsers, authUser }) {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-
-
       // Update database.
       const body = {
         firstName: e.target.firstName.value,
@@ -92,7 +107,7 @@ export default function User({ user, setUsers, authUser }) {
         }
       }));
       
-      setIsEditing(false);      
+      setEdit(false);      
     } catch (err) {
       console.error(err.message);
     }
@@ -132,6 +147,7 @@ export default function User({ user, setUsers, authUser }) {
     // What to show if editing a user/tenant.
     return (
       <Card>
+        <Prompt message={editingLeaveMessage} />
         <form onSubmit={onSubmit}>
           <CardContent>
             <Grid container spacing={2}>
