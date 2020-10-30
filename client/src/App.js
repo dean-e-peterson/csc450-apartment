@@ -56,7 +56,7 @@ const App = () => {
           <Route exact path='/chat'>
             <Chat />
           </Route>
-          {authUser && authUser.unit && // Must be tenant for this route.
+          {authUser && (authUser.unit || authUser.isStaff) && // Must be tenant or staff for this route.
             <Route exact path="/posts">
               <Posts authUser={authUser}/>
             </Route>
