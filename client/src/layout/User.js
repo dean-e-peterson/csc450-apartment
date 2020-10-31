@@ -16,6 +16,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 const useStyles = makeStyles(theme => ({
   dropdown: {
@@ -65,6 +66,10 @@ export default function User({ user, setUsers, authUser }) {
 
   const onEdit = () => {
     setEdit(true);
+  }
+
+  const onCancel = () => {
+    setEdit(false);
   }
 
   const onLocationChange = (e) => {
@@ -250,6 +255,9 @@ export default function User({ user, setUsers, authUser }) {
                 <IconButton type="submit" aria-label="Save" title="Save">
                   <SaveIcon />
                 </IconButton>
+                <IconButton aria-label="Cancel" title="Cancel" onClick={onCancel}>
+                  <CancelIcon />
+                </IconButton>                
               </Grid>
             </Grid>            
           </CardContent>
