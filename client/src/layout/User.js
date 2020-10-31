@@ -162,7 +162,7 @@ export default function User({ user, setUsers, authUser }) {
         <form onSubmit={onSubmit}>
           <CardContent>
             <Grid container spacing={2}>
-              <Grid item xs={2}>
+              <Grid item>
                 <TextField
                   autoFocus
                   defaultValue={user.firstName}
@@ -172,7 +172,7 @@ export default function User({ user, setUsers, authUser }) {
                   placeholder="First Name"
                 />
               </Grid>
-              <Grid item xs={2}>
+              <Grid item>
                 <TextField
                   defaultValue={user.lastName}
                   id="lastName"
@@ -181,7 +181,7 @@ export default function User({ user, setUsers, authUser }) {
                   placeholder="Last Name"
                 />
               </Grid>              
-              <Grid item xs={2}>
+              <Grid item>
                 <TextField
                   defaultValue={user.email}
                   id="email"
@@ -190,7 +190,7 @@ export default function User({ user, setUsers, authUser }) {
                   placeholder="Email"
                 />
               </Grid>
-              <Grid item xs={1}>
+              <Grid item>
                 <TextField
                   defaultValue={user.phone}
                   id="phone"
@@ -199,7 +199,7 @@ export default function User({ user, setUsers, authUser }) {
                   placeholder="Phone"
                 />
               </Grid>                      
-              <Grid item xs={1}>
+              <Grid item>
                 <FormControlLabel
                   label="Staff?"
                   control={
@@ -211,7 +211,7 @@ export default function User({ user, setUsers, authUser }) {
                   }
                 />
               </Grid>
-              <Grid item xs={2}>
+              <Grid item>
                 <InputLabel className={classes.dropdownLabel} id="locationLabel">
                   Location
                 </InputLabel>
@@ -231,7 +231,7 @@ export default function User({ user, setUsers, authUser }) {
                   }
                 </Select>
               </Grid>
-              <Grid item xs={1}>
+              <Grid item>
                 <InputLabel className={classes.dropdownLabel} id="unitLabel">
                   Unit
                 </InputLabel>
@@ -251,7 +251,7 @@ export default function User({ user, setUsers, authUser }) {
                   }
                 </Select>
               </Grid>
-              <Grid item xs={1}>
+              <Grid item>
                 <IconButton type="submit" aria-label="Save" title="Save">
                   <SaveIcon />
                 </IconButton>
@@ -270,25 +270,25 @@ export default function User({ user, setUsers, authUser }) {
       <Card>
         <CardContent>
           <Grid container spacing={2} className={classes.userFlexContainer}>
-            <Grid item xs={3}>
+            <Grid item xs={12} sm={4} lg={3}>
               {user.firstName + " " + (user.lastName ? user.lastName : "") }
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={12} sm={4} lg={2}>
               {user.email }
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={12} sm={3} lg={2}>
               {user.phone }
             </Grid>                     
-            <Grid item xs={1}>
+            <Grid item xs={12} sm={1} lg={1}>
               {user.isStaff ? "staff" : "" }
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={12} sm={4} lg={2}>
               {user.unit ? user.unit.location.name : "" }
             </Grid>            
-            <Grid item xs={1}>
+            <Grid item xs={12} sm={4} lg={1}>
               {user.unit ? "unit " + user.unit.number : ""}
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={12} sm={4} lg={1}>
               <IconButton onClick={onEdit} aria-label="Edit" title="Edit">
                 <EditIcon />
               </IconButton>
