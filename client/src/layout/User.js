@@ -35,6 +35,7 @@ const beforeUnload = (e) => {
   e.preventDefault();
   return editingLeaveMessage; // For non-standard browsers.
 }
+let beforeUnloadReferenceCount = 0;
 
 export default function User({ user, setUsers, authUser }) {
   const classes = useStyles();
@@ -50,10 +51,15 @@ export default function User({ user, setUsers, authUser }) {
   const setEdit = (edit) => {
     setIsEditing(edit);
     if (edit) {
-      window.addEventListener("beforeunload", beforeUnload, false);
+      if (beforeUnloadReferenceCount === 0) {
+        window.addEventListener("beforeunload", beforeUnload, false);
+      }
+      beforeUnloadReferenceCount += 1;
     } else {
-      // The following removal does not appear to work.
-      window.removeEventListener("beforeunload", beforeUnload, false);
+      beforeUnloadReferenceCount -= 1;
+      if (beforeUnloadReferenceCount === 0) {
+        window.removeEventListener("beforeunload", beforeUnload, false);
+      }
     }
   }
 
