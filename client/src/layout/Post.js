@@ -110,6 +110,8 @@ export default function Post({ post, isNew, setPosts, authUser }) {
 
   const onNewReply = () => {
     setPosts(prevPosts => {
+      // Warn if leave the page when editing page.
+      setAppEditing(true);
       // Get this post from array of all posts.
       const thisPost = prevPosts.find(prevPost => prevPost._id === post._id);
       // Append a placeholder comment to the end.
