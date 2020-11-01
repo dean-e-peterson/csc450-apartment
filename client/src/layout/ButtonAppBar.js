@@ -27,7 +27,6 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
   
   const onLogout = () => {
     // If user is editing, prompt to confirm first.
-    console.log("In onLogout, ref count is " + getAppEditing());
     if (getAppEditing() > 0) {
       if (!window.confirm(confirmLogoutMessage)) {
         return;

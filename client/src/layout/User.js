@@ -152,6 +152,7 @@ export default function User({ user, setUsers, authUser }) {
                   label="First Name"
                   name="firstName"
                   placeholder="First Name"
+                  required
                 />
               </Grid>
               <Grid item>
@@ -170,6 +171,8 @@ export default function User({ user, setUsers, authUser }) {
                   label="Email"
                   name="email"
                   placeholder="Email"
+                  required
+                  type="email"
                 />
               </Grid>
               <Grid item>

@@ -85,7 +85,8 @@ export default function Application({ authUser }) {
     });
   };
 
-  const onSubmitApplication = async (e) => {
+  const onSubmit = async (e) => {
+    e.preventDefault();
     setApplication(application => {
       application.status = "Submitted";
       return { ...application };
@@ -167,7 +168,7 @@ export default function Application({ authUser }) {
 
   return (
     <Card>
-      <form>
+      <form onSubmit={onSubmit}>
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -187,6 +188,7 @@ export default function Application({ authUser }) {
                 name="firstName"
                 onChange={onChangeUserField}
                 placeholder="First Name"
+                required
                 value={user.firstName}
               />
             </Grid>
@@ -197,6 +199,7 @@ export default function Application({ authUser }) {
                 name="lastName"
                 onChange={onChangeUserField}
                 placeholder="LastName"
+                required
                 value={user.lastName}
               />
             </Grid>
@@ -207,6 +210,8 @@ export default function Application({ authUser }) {
                 name="email"
                 onChange={onChangeUserField}
                 placeholder="Email"
+                required
+                type="email"
                 value={user.email}
               />
             </Grid>
@@ -217,6 +222,7 @@ export default function Application({ authUser }) {
                 name="phone"
                 onChange={onChangeUserField}
                 placeholder="Phone"
+                required
                 value={user.phone}
               />
             </Grid>
@@ -279,7 +285,7 @@ export default function Application({ authUser }) {
           <Button variant="outlined" onClick={onSaveApplication}>
             Save Application
           </Button>
-          <Button variant="outlined" onClick={onSubmitApplication}>
+          <Button type="submit" variant="outlined">
             Submit Application
           </Button>
         </CardActions>

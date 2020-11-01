@@ -10,7 +10,6 @@ let editingReferenceCount = 0;
 const editingLeaveMessage = "The page you are editing may have unsaved changes. Do you wish to leave anyway?";
 
 const beforeUnload = (e) => {
-  console.log(editingReferenceCount);
   if (editingReferenceCount > 0) {
     e.preventDefault();
     return editingLeaveMessage; // For non-standard browsers.
@@ -49,7 +48,7 @@ export default function EditingHandler() {
       // We changed pages, so always reset editing count to 0.
       editingReferenceCount = 0;
     });
-  }, []); // [] means don't run on every render.
+  }, [history]); // [] means don't run on every render.
 
   return (
     <Fragment></Fragment>
