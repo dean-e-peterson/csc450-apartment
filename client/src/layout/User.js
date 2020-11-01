@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-  Button,
   Card,
   CardContent,
   Checkbox,
   FormControlLabel,
   Grid,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -15,12 +15,14 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
+import CancelIcon from '@material-ui/icons/Cancel';
+import { setAppEditing } from "../utils/EditingHandler";
 
 const useStyles = makeStyles(theme => ({
   dropdown: {
-    width: "90%",
+    width: "100%",
   },
-  unitLabel: {
+  dropdownLabel: {
     transform: "translate(0, 1.5px) scale(0.75)",
     transformOrigin: "top left",
   },
@@ -37,11 +39,20 @@ export default function User({ user, setUsers, authUser }) {
   const [locations, setLocations] = useState([]); // For filling location dropdown.
   // For filtering units dropdown.
   const [location, setLocation] = useState(user.unit ? user.unit.location._id: "");
-  // For clearing unit value when changing location dropdown
+  // For clearing unit value when changing location dropdown.
   const [unit, setUnit] = useState(user.unit ? user.unit._id : "");
+  
+  const setEdit = (edit) => {
+    setIsEditing(edit); // State on this page.
+    setAppEditing(edit); // Global reference counter to prompt on page navigation.
+  }
 
   const onEdit = () => {
-    setIsEditing(true);
+    setEdit(true);
+  }
+
+  const onCancel = () => {
+    setEdit(false);
   }
 
   const onLocationChange = (e) => {
@@ -56,13 +67,12 @@ export default function User({ user, setUsers, authUser }) {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-
-
       // Update database.
       const body = {
         firstName: e.target.firstName.value,
         lastName: e.target.lastName.value,
         email: e.target.email.value,
+        phone: e.target.phone.value,        
         isStaff: e.target.isStaff.checked,
         unit: unit ? unit : null,
       };
@@ -91,7 +101,7 @@ export default function User({ user, setUsers, authUser }) {
         }
       }));
       
-      setIsEditing(false);      
+      setEdit(false);      
     } catch (err) {
       console.error(err.message);
     }
@@ -133,8 +143,8 @@ export default function User({ user, setUsers, authUser }) {
       <Card>
         <form onSubmit={onSubmit}>
           <CardContent>
-            <Grid container>
-              <Grid item xs={2}>
+            <Grid container spacing={2}>
+              <Grid item>
                 <TextField
                   autoFocus
                   defaultValue={user.firstName}
@@ -142,9 +152,10 @@ export default function User({ user, setUsers, authUser }) {
                   label="First Name"
                   name="firstName"
                   placeholder="First Name"
+                  required
                 />
               </Grid>
-              <Grid item xs={2}>
+              <Grid item>
                 <TextField
                   defaultValue={user.lastName}
                   id="lastName"
@@ -153,16 +164,27 @@ export default function User({ user, setUsers, authUser }) {
                   placeholder="Last Name"
                 />
               </Grid>              
-              <Grid item xs={2}>
+              <Grid item>
                 <TextField
                   defaultValue={user.email}
                   id="email"
                   label="Email"
                   name="email"
                   placeholder="Email"
+                  required
+                  type="email"
                 />
-              </Grid>          
-              <Grid item xs={1}>
+              </Grid>
+              <Grid item>
+                <TextField
+                  defaultValue={user.phone}
+                  id="phone"
+                  label="Phone"
+                  name="phone"
+                  placeholder="Phone"
+                />
+              </Grid>                      
+              <Grid item>
                 <FormControlLabel
                   label="Staff?"
                   control={
@@ -174,8 +196,8 @@ export default function User({ user, setUsers, authUser }) {
                   }
                 />
               </Grid>
-              <Grid item xs={3}>
-                <InputLabel className={classes.unitLabel} id="locationLabel">
+              <Grid item>
+                <InputLabel className={classes.dropdownLabel} id="locationLabel">
                   Location
                 </InputLabel>
                 <Select
@@ -194,8 +216,8 @@ export default function User({ user, setUsers, authUser }) {
                   }
                 </Select>
               </Grid>
-              <Grid item xs={1}>
-                <InputLabel className={classes.unitLabel} id="unitLabel">
+              <Grid item>
+                <InputLabel className={classes.dropdownLabel} id="unitLabel">
                   Unit
                 </InputLabel>
                 <Select
@@ -214,10 +236,13 @@ export default function User({ user, setUsers, authUser }) {
                   }
                 </Select>
               </Grid>
-              <Grid item xs={1}>
-                <Button type="submit">
+              <Grid item>
+                <IconButton type="submit" aria-label="Save" title="Save">
                   <SaveIcon />
-                </Button>
+                </IconButton>
+                <IconButton aria-label="Cancel" title="Cancel" onClick={onCancel}>
+                  <CancelIcon />
+                </IconButton>                
               </Grid>
             </Grid>            
           </CardContent>
@@ -229,26 +254,29 @@ export default function User({ user, setUsers, authUser }) {
     return (
       <Card>
         <CardContent>
-          <Grid container className={classes.userFlexContainer}>
-            <Grid item xs={3}>
+          <Grid container spacing={2} className={classes.userFlexContainer}>
+            <Grid item xs={12} sm={4} lg={3}>
               {user.firstName + " " + (user.lastName ? user.lastName : "") }
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={12} sm={4} lg={2}>
               {user.email }
-            </Grid>          
-            <Grid item xs={1}>
+            </Grid>
+            <Grid item xs={12} sm={3} lg={2}>
+              {user.phone }
+            </Grid>                     
+            <Grid item xs={12} sm={1} lg={1}>
               {user.isStaff ? "staff" : "" }
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={12} sm={4} lg={2}>
               {user.unit ? user.unit.location.name : "" }
             </Grid>            
-            <Grid item xs={1}>
+            <Grid item xs={12} sm={4} lg={1}>
               {user.unit ? "unit " + user.unit.number : ""}
             </Grid>
-            <Grid item xs={1}>
-              <Button onClick={onEdit}>
+            <Grid item xs={12} sm={4} lg={1}>
+              <IconButton onClick={onEdit} aria-label="Edit" title="Edit">
                 <EditIcon />
-              </Button>
+              </IconButton>
             </Grid>
           </Grid>
         </CardContent>

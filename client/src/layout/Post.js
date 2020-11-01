@@ -13,7 +13,9 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { makeStyles } from "@material-ui/core/styles";
+import { setAppEditing } from "../utils/EditingHandler";
 import Comment from "./Comment";
+
 
 const useStyles = makeStyles({
   textarea: {
@@ -40,6 +42,7 @@ export default function Post({ post, isNew, setPosts, authUser }) {
 
   const onEdit = () => {
     setIsEditing(true);
+    setAppEditing(true);
   }
 
   const onDelete = async () => {
@@ -87,6 +90,7 @@ export default function Post({ post, isNew, setPosts, authUser }) {
         // Return to viewing mode (new post gets different id on save, so not needed).
         setIsEditing(false);
       }
+      setAppEditing(false);
     } catch (err) {
       console.error(err.message);
     }
@@ -101,10 +105,13 @@ export default function Post({ post, isNew, setPosts, authUser }) {
     }
 
     setIsEditing(false);
+    setAppEditing(false);
   }
 
   const onNewReply = () => {
     setPosts(prevPosts => {
+      // Warn if leave the page when editing page.
+      setAppEditing(true);
       // Get this post from array of all posts.
       const thisPost = prevPosts.find(prevPost => prevPost._id === post._id);
       // Append a placeholder comment to the end.

@@ -5,6 +5,7 @@ import {
   Typography,
 } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles";
+import { setAppEditing } from "../utils/EditingHandler";
 import Post from "../layout/Post";
 
 const useStyles = makeStyles(theme => ({
@@ -29,6 +30,8 @@ export default function Posts({ authUser }) {
       // Return a new array object, not just the changed array, to force render.
       return [ ...prevPosts ];
     });
+    // Prevent leaving page with warning that user may have unsaved changes.
+    setAppEditing(true);    
   };
 
   useEffect(() => {

@@ -72,6 +72,7 @@ export default function Login({ setAuthUser }) {
             label='Email'
             margin='dense'
             name='email'
+            required
             type='email'
             variant='outlined'
           />
@@ -80,6 +81,7 @@ export default function Login({ setAuthUser }) {
             label='Password'
             margin='dense'            
             name='password'
+            required
             type='password'
             variant='outlined'
           />

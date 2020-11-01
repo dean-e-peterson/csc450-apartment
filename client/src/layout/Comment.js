@@ -8,6 +8,7 @@ import {
   TextareaAutosize,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { setAppEditing } from "../utils/EditingHandler";
 
 const useStyles = makeStyles({
   textarea: {
@@ -35,6 +36,7 @@ export default function Comment({ comment, isNew, post, setPosts, authUser, setS
 
   const onEdit = () => {
     setIsEditing(true);
+    setAppEditing(true);
   }
 
   const onDelete = async () => {
@@ -94,6 +96,7 @@ export default function Comment({ comment, isNew, post, setPosts, authUser, setS
         // Return to viewing mode (new comment gets different id on save, so not needed).
         setIsEditing(false);
       }
+      setAppEditing(false);
     } catch (err) {
       console.error(err.message);
     }    
@@ -113,6 +116,7 @@ export default function Comment({ comment, isNew, post, setPosts, authUser, setS
     }
 
     setIsEditing(false);
+    setAppEditing(false);
   }
 
   if (isEditing) {

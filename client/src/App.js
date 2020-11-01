@@ -12,6 +12,7 @@ import Calendar from "./pages/Calendar";
 import Apply from "./pages/Apply";
 import Applications from "./pages/Applications";
 import { checkAuthToken } from "./utils/auth";
+import EditingHandler from "./utils/EditingHandler";
 
 const theme = createMuiTheme({
   typography: {
@@ -42,6 +43,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Router>
+        <EditingHandler />
         <ButtonAppBar authUser={authUser} setAuthUser={setAuthUser} />
         <Switch>
           <Route exact path="/">
@@ -56,14 +58,14 @@ const App = () => {
           <Route exact path='/chat'>
             <Chat />
           </Route>
-          {authUser && authUser.unit && // Must be tenant for this route.
+          {authUser && (authUser.unit || authUser.isStaff) && // Must be tenant or staff for this route.
             <Route exact path="/posts">
               <Posts authUser={authUser}/>
             </Route>
           }
           {authUser && authUser.isStaff && // Must be staff for this route.
             <Route exact path="/users"> 
-              <Users authUser={authUser}/>
+              <Users authUser={authUser} />
             </Route>
           }
           <Route exact path='/calendar'>

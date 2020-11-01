@@ -74,6 +74,7 @@ export default function Register({ setAuthUser }) {
             label='First Name'
             margin='dense'
             name='firstName'
+            required
             variant='outlined'
           />
           <TextField 
@@ -88,14 +89,17 @@ export default function Register({ setAuthUser }) {
             label='Email'
             margin='dense'
             name='email'
+            required
             type='email'
             variant='outlined'
           />
           <TextField
             id='password'
             label='Password'
-            margin='dense'            
+            margin='dense'
+            inputProps={{minLength: 8}}            
             name='password'
+            required
             type='password'
             variant='outlined'
           />

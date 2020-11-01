@@ -12,6 +12,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import Reference from "./Reference";
+import { setAppEditing } from "../utils/EditingHandler";
 
   // Even before we get application or user from the server,
   // we want the fields available to avoid having to do stuff
@@ -84,7 +85,8 @@ export default function Application({ authUser }) {
     });
   };
 
-  const onSubmitApplication = async (e) => {
+  const onSubmit = async (e) => {
+    e.preventDefault();
     setApplication(application => {
       application.status = "Submitted";
       return { ...application };
@@ -123,7 +125,7 @@ export default function Application({ authUser }) {
         return updatedReference;
       });
 
-      // Application may be a new record in the database,
+      // Application may be a new record in the database or existing,
       // so call the new or changed API accordingly.
       let response;
       if (isNew) {
@@ -142,24 +144,31 @@ export default function Application({ authUser }) {
 
       // Update application UI state, in particular any db-assigned IDs.
       setApplication(response.data);
+
+      // Prevent prompting about editing changes when leaving just-saved page.
+      setAppEditing(false);
     } catch (err) {
       console.error(err.message);
     }
   }
 
-  const onChangeUser = (e) => {
+  const onChangeUserField = (e) => {
     e.persist(); // No longer needed as of React v 17?
     setUser(prevUser => ({ ...prevUser, [e.target.name]: e.target.value }));
+    // Prompt before leaving page because there are unsaved changes.
+    setAppEditing(1);
   };
 
   const onChangeApplicationCheckbox = (e) => {
     e.persist(); // No longer needed as of React v 17?
     setApplication(prevApplication => ({ ...prevApplication, [e.target.name]: e.target.checked }));
+    // Prompt before leaving page because there are unsaved changes.
+    setAppEditing(1);
   };
 
   return (
     <Card>
-      <form>
+      <form onSubmit={onSubmit}>
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -177,8 +186,9 @@ export default function Application({ authUser }) {
                 id="firstName"
                 label="First Name"
                 name="firstName"
-                onChange={onChangeUser}
+                onChange={onChangeUserField}
                 placeholder="First Name"
+                required
                 value={user.firstName}
               />
             </Grid>
@@ -187,8 +197,9 @@ export default function Application({ authUser }) {
                 id="lastName"
                 label="Last Name"
                 name="lastName"
-                onChange={onChangeUser}
+                onChange={onChangeUserField}
                 placeholder="LastName"
+                required
                 value={user.lastName}
               />
             </Grid>
@@ -197,8 +208,10 @@ export default function Application({ authUser }) {
                 id="email"
                 label="Email"
                 name="email"
-                onChange={onChangeUser}
+                onChange={onChangeUserField}
                 placeholder="Email"
+                required
+                type="email"
                 value={user.email}
               />
             </Grid>
@@ -207,8 +220,9 @@ export default function Application({ authUser }) {
                 id="phone"
                 label="Phone"
                 name="phone"
-                onChange={onChangeUser}
+                onChange={onChangeUserField}
                 placeholder="Phone"
+                required
                 value={user.phone}
               />
             </Grid>
@@ -271,7 +285,7 @@ export default function Application({ authUser }) {
           <Button variant="outlined" onClick={onSaveApplication}>
             Save Application
           </Button>
-          <Button variant="outlined" onClick={onSubmitApplication}>
+          <Button type="submit" variant="outlined">
             Submit Application
           </Button>
         </CardActions>
