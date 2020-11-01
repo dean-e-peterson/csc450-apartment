@@ -1,5 +1,5 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Button,
   Card,
@@ -9,12 +9,12 @@ import {
   CardMedia,
   Grid,
   Typography,
-} from "@material-ui/core";
-import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+} from '@material-ui/core';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   menuButton: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
 }));
 
@@ -29,7 +29,7 @@ export default function Homepage() {
               component='img'
               alt='Apartment 1'
               height='140'
-              image="/images/pexels-george-becker-129494.jpg"
+              image='/images/pexels-george-becker-129494.jpg'
               title='Apartment 1'
             />
             <CardContent>
@@ -50,7 +50,7 @@ export default function Homepage() {
               Vacancies
               <ArrowDropDownIcon />
             </Button>
-            <Button style={{ textAlign: "right" }} size='small' color='primary'>
+            <Button style={{ textAlign: 'right' }} size='small' color='primary'>
               Contact Us
             </Button>
           </CardActions>
@@ -84,7 +84,7 @@ export default function Homepage() {
               <ArrowDropDownIcon />
             </Button>
             <Button
-              style={{ alignSelf: "flex-end" }}
+              style={{ alignSelf: 'flex-end' }}
               size='small'
               color='primary'
             >

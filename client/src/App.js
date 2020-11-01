@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
-import ButtonAppBar from "./layout/ButtonAppBar";
-import Homepage from "./pages/Homepage";
-import Posts from "./pages/Posts";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import ButtonAppBar from './layout/ButtonAppBar';
+import Homepage from './pages/Homepage';
+import Posts from './pages/Posts';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import Chat from './pages/Chat';
-import Users from "./pages/Users";
-import { checkAuthToken } from "./utils/auth";
+import Users from './pages/Users';
+import Footer from './layout/Footer';
+import { checkAuthToken } from './utils/auth';
 
 const theme = createMuiTheme({
   typography: {
-    fontFamily: [
-      "Raleway",
-      "sans-serif",
-    ].join(","),
+    fontFamily: ['Raleway', 'sans-serif'].join(','),
   },
 });
 
@@ -25,7 +23,7 @@ const App = () => {
   useEffect(() => {
     const handleAuth = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem('token');
         if (token) {
           const user = await checkAuthToken(token);
           setAuthUser(user);
@@ -44,25 +42,30 @@ const App = () => {
       <Router>
         <ButtonAppBar authUser={authUser} setAuthUser={setAuthUser} />
         <Switch>
-          <Route exact path="/">
+          <Route exact path='/'>
             <Homepage />
           </Route>
-          <Route exact path="/login">
+          <Route exact path='/login'>
             <Login setAuthUser={setAuthUser} />
           </Route>
-          <Route exact path="/register">
+          <Route exact path='/register'>
             <Register setAuthUser={setAuthUser} />
-          </Route>        
-          <Route exact path="/chat"> 
+          </Route>
+          <Route exact path='/chat'>
             <Chat />
           </Route>
-          <Route exact path="/posts"> {/* TODO: authenticate route */}
-            <Posts authUser={authUser}/>
+          <Route exact path='/posts'>
+            {' '}
+            {/* TODO: authenticate route */}
+            <Posts authUser={authUser} />
           </Route>
-          <Route exact path="/users"> {/* TODO: authenticate route */}
-            <Users authUser={authUser}/>
+          <Route exact path='/users'>
+            {' '}
+            {/* TODO: authenticate route */}
+            <Users authUser={authUser} />
           </Route>
         </Switch>
+        <Footer />
       </Router>
     </ThemeProvider>
   );

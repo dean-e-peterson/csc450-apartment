@@ -12,11 +12,11 @@ handler function. Please pass a http.Server instance.
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 
-io.on('connection', socket => {
-    socket.on('message', ({ name, message }) => {
-      io.emit('message', { name, message })
-    })
-  })
+io.on('connection', (socket) => {
+  socket.on('message', ({ name, message }) => {
+    io.emit('message', { name, message });
+  });
+});
 
 // Connect Database
 connectDB();
@@ -32,6 +32,7 @@ app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api/units', require('./routes/api/units'));
 app.use('/api/maintenance', require('./routes/api/maintenance'));
 app.use('/api/posts', require('./routes/api/posts'));
+app.use('/api/social', require('./routes/api/social'));
 
 const PORT = process.env.PORT || 4000;
 

@@ -4,13 +4,14 @@ const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
 
 const User = require('../../models/User');
-const Social = require('../models/Social');
+const Social = require('../../models/Social');
 
 // @route POST api/social
 // @desc Create or update social links
-// @access Private
+// @access Public
 router.post(
   '/',
+  auth,
 
   async (req, res) => {
     // Staff only.
@@ -63,11 +64,6 @@ router.post(
 // @desc    Get social fields
 // @access  Private
 router.get('/:id', auth, async (req, res) => {
-  // Staff only.
-  if (!req.user.isStaff) {
-    return res.status(403).json({ errors: [{ msg: 'Not authorized' }] });
-  }
-
   try {
     const social = await Social.findById(req.params.id);
     if (!unit) {
@@ -83,3 +79,5 @@ router.get('/:id', auth, async (req, res) => {
     res.status(500).send('Server error');
   }
 });
+
+module.exports = router;
