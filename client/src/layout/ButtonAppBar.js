@@ -7,6 +7,7 @@ import {
   Typography,  
 } from '@material-ui/core';
 import { makeStyles } from "@material-ui/core/styles";
+import { getAppEditing, setAppEditing } from "../utils/EditingHandler";
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -18,13 +19,26 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const confirmLogoutMessage = "You are about to log out, but the page you are editing may contain changes.  Do you wish to log out?"
+
 const ButtonAppBar = ({ authUser, setAuthUser }) => {
   const classes = useStyles();
   const history = useHistory();
   
   const onLogout = () => {
+    // If user is editing, prompt to confirm first.
+    console.log("In onLogout, ref count is " + getAppEditing());
+    if (getAppEditing() > 0) {
+      if (!window.confirm(confirmLogoutMessage)) {
+        return;
+      }
+    }
     setAuthUser(null);
     localStorage.removeItem("token");
+
+    // Don't prompt for confirmation again.
+    setAppEditing(0);
+
     // Back to homepage in case user no longer has rights to where they were.
     history.push("/");
   };

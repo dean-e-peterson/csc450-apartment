@@ -59,7 +59,12 @@ export default function Users({ authUser }) {
       />
       {
         users.map(user =>
-          <User key={user._id} user={user} setUsers={setUsers} authUser={authUser} />
+          <User 
+            key={user._id}
+            user={user}
+            setUsers={setUsers}
+            authUser={authUser}
+          />
         )
       }
     </Typography>

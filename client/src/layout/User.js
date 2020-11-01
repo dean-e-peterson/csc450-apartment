@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Prompt } from "react-router-dom";
 import axios from "axios";
 import {
   Card,
@@ -17,6 +16,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
+import { setAppEditing } from "../utils/EditingHandler";
 
 const useStyles = makeStyles(theme => ({
   dropdown: {
@@ -31,13 +31,6 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const editingLeaveMessage = "You are editing and may have unsaved changes.  Do you wish to continue anyway?";
-const beforeUnload = (e) => {
-  e.preventDefault();
-  return editingLeaveMessage; // For non-standard browsers.
-}
-let beforeUnloadReferenceCount = 0;
-
 export default function User({ user, setUsers, authUser }) {
   const classes = useStyles();
 
@@ -50,18 +43,8 @@ export default function User({ user, setUsers, authUser }) {
   const [unit, setUnit] = useState(user.unit ? user.unit._id : "");
   
   const setEdit = (edit) => {
-    setIsEditing(edit);
-    if (edit) {
-      if (beforeUnloadReferenceCount === 0) {
-        window.addEventListener("beforeunload", beforeUnload, false);
-      }
-      beforeUnloadReferenceCount += 1;
-    } else {
-      beforeUnloadReferenceCount -= 1;
-      if (beforeUnloadReferenceCount === 0) {
-        window.removeEventListener("beforeunload", beforeUnload, false);
-      }
-    }
+    setIsEditing(edit); // State on this page.
+    setAppEditing(edit); // Global reference counter to prompt on page navigation.
   }
 
   const onEdit = () => {
@@ -158,7 +141,6 @@ export default function User({ user, setUsers, authUser }) {
     // What to show if editing a user/tenant.
     return (
       <Card>
-        <Prompt message={editingLeaveMessage} />
         <form onSubmit={onSubmit}>
           <CardContent>
             <Grid container spacing={2}>
