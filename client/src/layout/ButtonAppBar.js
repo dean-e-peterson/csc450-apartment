@@ -36,7 +36,7 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
     setAuthUser(null);
     localStorage.removeItem("token");
 
-    // Don't prompt for confirmation again.
+    // Don't prompt for confirmation again just because we are leaving the page.
     setAppEditing(0);
 
     // Back to homepage in case user no longer has rights to where they were.
