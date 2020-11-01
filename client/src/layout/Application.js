@@ -144,9 +144,8 @@ export default function Application({ authUser }) {
       // Update application UI state, in particular any db-assigned IDs.
       setApplication(response.data);
 
-      // Clear out reference count of fields being edited to prevent
-      // prompting when leaving just-saved page.
-      setAppEditing(0);
+      // Prevent prompting about editing changes when leaving just-saved page.
+      setAppEditing(false);
     } catch (err) {
       console.error(err.message);
     }
@@ -156,14 +155,14 @@ export default function Application({ authUser }) {
     e.persist(); // No longer needed as of React v 17?
     setUser(prevUser => ({ ...prevUser, [e.target.name]: e.target.value }));
     // Prompt before leaving page because there are unsaved changes.
-    setAppEditing(true);
+    setAppEditing(1);
   };
 
   const onChangeApplicationCheckbox = (e) => {
     e.persist(); // No longer needed as of React v 17?
     setApplication(prevApplication => ({ ...prevApplication, [e.target.name]: e.target.checked }));
     // Prompt before leaving page because there are unsaved changes.
-    setAppEditing(true);
+    setAppEditing(1);
   };
 
   return (
