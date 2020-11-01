@@ -28,6 +28,7 @@ export function setAppEditing(editing) {
   } else {
     editingReferenceCount = editing; // Allow directly resetting reference count.
   }
+  //console.log("ref count is " + editingReferenceCount);
 }
 
 export function getAppEditing() {
