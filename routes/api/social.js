@@ -28,19 +28,19 @@ router.post(
 
     //Build social object
     const socialFields = {};
-    socialFields.user = req.user.isStaff;
+    socialFields.user = req.user.id;
     socialFields.social = {};
     if (youtube) socialFields.social.youtube = youtube;
     if (twitter) socialFields.social.twitter = twitter;
     if (facebook) socialFields.social.facebook = facebook;
 
     try {
-      let social = await Social.findOne({ user: req.user.isStaff });
+      let social = await Social.findOne({ user: req.user.id });
 
       if (social) {
         // Update
         social = await Social.findOneAndUpdate(
-          { user: req.user.isStaff },
+          { user: req.user.id },
           { $set: socialFields },
           { new: true }
         );

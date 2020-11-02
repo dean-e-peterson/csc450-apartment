@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, ThemeProvider, makeStyles } from '@material-ui/core/styles';
 import ButtonAppBar from './layout/ButtonAppBar';
 import Homepage from './pages/Homepage';
 import Posts from './pages/Posts';
@@ -21,7 +21,15 @@ const theme = createMuiTheme({
   },
 });
 
+const useStyles = makeStyles(theme => ({
+  fixedAppBarSpacing: {
+    height: "3rem",
+  },
+}));
+
 const App = () => {
+  const classes = useStyles();
+
   const [authUser, setAuthUser] = useState(null);
 
   useEffect(() => {
@@ -46,6 +54,7 @@ const App = () => {
       <Router>
         <EditingHandler />
         <ButtonAppBar authUser={authUser} setAuthUser={setAuthUser} />
+        <div className={classes.fixedAppBarSpacing}></div>
         <Switch>
           <Route exact path='/'>
             <Homepage authUser={authUser} />

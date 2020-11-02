@@ -131,7 +131,7 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
   }
 
   return (
-    <AppBar position='static'>
+    <AppBar position='fixed'>
       <Toolbar>
         <Link to='/'>
           <img src='images/logo.svg' alt='Home' height='50' width='50' />
