@@ -8,8 +8,12 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Chat from './pages/Chat';
 import Users from './pages/Users';
+import Calendar from './pages/Calendar';
+import Apply from './pages/Apply';
+import Applications from './pages/Applications';
 import Footer from './layout/Footer';
 import { checkAuthToken } from './utils/auth';
+import EditingHandler from './utils/EditingHandler';
 
 const theme = createMuiTheme({
   typography: {
@@ -40,10 +44,11 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <Router>
+        <EditingHandler />
         <ButtonAppBar authUser={authUser} setAuthUser={setAuthUser} />
         <Switch>
           <Route exact path='/'>
-            <Homepage />
+            <Homepage authUser={authUser} />
           </Route>
           <Route exact path='/login'>
             <Login setAuthUser={setAuthUser} />
@@ -54,18 +59,36 @@ const App = () => {
           <Route exact path='/chat'>
             <Chat />
           </Route>
-          <Route exact path='/posts'>
-            {' '}
+          {authUser &&
+            (authUser.unit || authUser.isStaff) && ( // Must be tenant or staff for this route.
+              <Route exact path='/posts'>
+                <Posts authUser={authUser} />
+              </Route>
+            )}
+          {authUser &&
+            authUser.isStaff && ( // Must be staff for this route.
+              <Route exact path='/users'>
+                <Users authUser={authUser} />
+              </Route>
+            )}
+          <Route exact path='/calendar'>
+            <Calendar authUser={authUser} setAuthUser={setAuthUser} />
+            {/* {" "} */}
             {/* TODO: authenticate route */}
-            <Posts authUser={authUser} />
           </Route>
-          <Route exact path='/users'>
-            {' '}
-            {/* TODO: authenticate route */}
-            <Users authUser={authUser} />
-          </Route>
+          {authUser &&
+            authUser.isStaff && ( // Must be staff for this route.
+              <Route exact path='/applications'>
+                <Applications authUser={authUser} />
+              </Route>
+            )}
+          {authUser && ( // Must be logged in for this route.
+            <Route exact path='/apply'>
+              <Apply authUser={authUser} />
+            </Route>
+          )}
         </Switch>
-        <Footer />
+        <Footer authUser={authUser} />
       </Router>
     </ThemeProvider>
   );

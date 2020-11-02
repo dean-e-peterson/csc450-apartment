@@ -2,13 +2,21 @@ import React, { Fragment, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { getAppEditing, setAppEditing } from '../utils/EditingHandler';
 import Notification from '../layout/Notification';
 
 const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  titleLink: {
+    color: 'white',
+    textDecoration: 'none',
+  },
 }));
+
+const confirmLogoutMessage =
+  'You are about to log out, but the page you are editing may contain changes.  Do you wish to log out?';
 
 const ButtonAppBar = ({ authUser, setAuthUser }) => {
   const classes = useStyles();
@@ -20,8 +28,18 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
   });
 
   const onLogout = () => {
+    // If user is editing, prompt to confirm first.
+    if (getAppEditing() > 0) {
+      if (!window.confirm(confirmLogoutMessage)) {
+        return;
+      }
+    }
     setAuthUser(null);
     localStorage.removeItem('token');
+
+    // Don't prompt for confirmation again just because we are leaving the page.
+    setAppEditing(0);
+
     // Back to homepage in case user no longer has rights to where they were.
     history.push('/');
   };
@@ -66,6 +84,9 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
         <Button color='inherit' component={Link} to='/posts'>
           Bulletin Board
         </Button>
+        <Button color='inherit' component={Link} to='/applications'>
+          Applications
+        </Button>
         <Button color='inherit' component={Link} to='/users'>
           Users
         </Button>
@@ -94,6 +115,11 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
     // Logged in as but not as tenant or staff.
     buttons = (
       <Fragment>
+        {authUser && authUser.applications.length > 0 && (
+          <Button color='inherit' component={Link} to='/apply'>
+            My Application
+          </Button>
+        )}
         <Button color='inherit' onClick={onLogout}>
           Logout
         </Button>
@@ -107,14 +133,18 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
   return (
     <AppBar position='static'>
       <Toolbar>
-        <img src='images/logo.svg' alt='' height='50' width='50' />
+        <Link to='/'>
+          <img src='images/logo.svg' alt='Home' height='50' width='50' />
+        </Link>
         <Typography
           style={{ textAlign: 'Center' }}
           variant='h4'
           component='h1'
           className={classes.title}
         >
-          Sunshine Apartments
+          <Link to='/' className={classes.titleLink}>
+            Sunshine Apartments
+          </Link>
         </Typography>
         {buttons}
       </Toolbar>

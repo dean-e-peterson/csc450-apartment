@@ -6,6 +6,38 @@ const auth = require('../../middleware/auth');
 const Unit = require('../../models/Unit');
 const User = require('../../models/User');
 
+// @route   GET /api/units/vacancies
+// @desc    Get vacant units
+// @access  Public
+router.get('/vacancies', async (req, res) => {
+  try {
+    const units = await Unit.aggregate([
+      { // Bring in users with that unit as a tenants array.
+        "$lookup": {
+          "from": "users",
+          "localField": "_id",
+          "foreignField": "unit",
+          "as": "tenants",
+        }
+      },
+      { // Match only unit records with tenants array length 0.
+        "$match": {
+          "tenants": { "$size" : 0 }
+        }
+      },
+      { // Get rid of the empty tenants array from the result.
+        "$unset": "tenants"
+      },
+    ]);
+
+    res.json(units);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+
 // @route   GET /api/units
 // @desc    Get all units
 // @access  Private
@@ -19,7 +51,8 @@ router.get('/', auth, async (req, res) => {
     const units = await Unit
       .find()
       .collation({ locale: 'en' }) // Make sort case-insensitive.
-      .sort({location: 1, number: 1});
+      .sort({location: 1, number: 1})
+      .populate({path: 'location', select: 'name'}); // To match double populate in users.js
 
     // ### If you want tenants from users to come back as a subobject.
     // // Lean gives you a plain javascript object you can modify.
@@ -29,7 +62,7 @@ router.get('/', auth, async (req, res) => {
     //   unit['tenants'] = users;
     // }
 
-    // ### Another way to include tenants with one db trip, including password.
+    // ### Another way to include tenants with one db trip.
     // const units = await Unit.aggregate([
     //   {
     //     "$lookup": {
@@ -38,6 +71,9 @@ router.get('/', auth, async (req, res) => {
     //       "foreignField": "unit",
     //       "as": "tenants",
     //     }
+    //   },
+    //   {
+    //     "$unset": "tenants.password"
     //   }
     // ]);
 
@@ -58,7 +94,7 @@ router.post(
     check('location', 'Apartment complex is required').not().isEmpty(),
     check('number', 'Unit number is required').not().isEmpty(),
     check('bedrooms', 'Bedrooms must be a number').isNumeric(),
-    check('bathrooms', 'Bathrooms must be a number').isNumeric(),
+    check('bathrooms', 'Bathrooms must be a number').optional().isNumeric(),
   ],
   async (req, res) => {
     // Staff only.
@@ -86,7 +122,8 @@ router.post(
         location: req.body.location,
         number: req.body.number,
         bedrooms: req.body.bedrooms,
-        bathrooms: req.body.bathrooms
+        bathrooms: req.body.bathrooms,
+        description: req.body.description,
       });
       await unit.save();
 
@@ -128,7 +165,10 @@ router.get('/:id', auth, async (req, res) => {
 router.patch(
   '/:id',
   auth,
-  [check('bedrooms', 'Bedrooms must be a number').optional().isNumeric()],
+  [
+    check('bedrooms', 'Bedrooms must be a number').optional().isNumeric(),
+    check('bathrooms', 'Bathrooms must be a number').optional().isNumeric(),    
+  ],
   async (req, res) => {
     // Staff only.
     if (!req.user.isStaff) {
@@ -142,13 +182,11 @@ router.patch(
     }
 
     try {
-      // Check for duplicate unit.
+      // Check for duplicate unit number.
       if (req.body.number) {
-        const existingUnit = await Unit.findOne({ number: req.body.number });
-        if (existingUnit) {
-          return res
-            .status(400)
-            .json({ errors: [{ msg: 'Another unit has that number' }] });
+        const unitWithSameNumber = await Unit.findOne({ number: req.body.number });
+        if (unitWithSameNumber && (unitWithSameNumber._id.toString() !== req.params.id)) {
+          return res.status(400).json({ errors: [{ msg: 'Another unit has that number' }] });
         }
       }
 

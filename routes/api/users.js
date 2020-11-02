@@ -24,14 +24,21 @@ router.get('/', auth, async (req, res) => {
       findParams = {};
     }
 
-    // ### If we need to bring in unit number, this worked...
+    // If we need to just bring in unit number, this worked...
     //const users = await User.find().select('-password').populate('unit', ['number']);
     const users = await User
       .find(findParams)
       .select('-password')
       .collation({locale: 'en'}) // Make sort case-insensitive.
       .sort({lastName: 1, firstName: 1})
-      .populate('unit', ['number']); // If unit, look up unit number in unit table.
+      .populate({
+        path: 'unit', 
+        select: ['number', 'location'], 
+        populate: {
+          path: 'location', 
+          select: 'name'
+        }
+      }); // If unit, look up unit number in unit table and location name in location table.
 
     res.json(users);
   } catch (err) {
@@ -77,6 +84,7 @@ router.post(
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
+        phone: req.body.phone,        
         password: req.body.password,
         unit: req.body.unit,
         isStaff: req.body.isStaff,
@@ -134,7 +142,7 @@ router.patch(
   async (req, res) => {
     // Only allow a user to modify their own info, unless they're staff.
     if (! (req.user.isStaff || req.user.id === req.params.id)) {
-      return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });      
+      return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
     }
     // Also, only staff can modify isStaff and unit fields.
     if (!req.user.isStaff && 'isStaff' in req.body) {
@@ -154,14 +162,13 @@ router.patch(
       // Handle duplicate email by rejecting request.
       if (req.body.email) {
         const userWithSameEmail = await User.findOne({ email: req.body.email });
-        if (userWithSameEmail._id.toString() !== req.params.id) {
+        if (userWithSameEmail && (userWithSameEmail._id.toString() !== req.params.id)) {
           return res.status(400).json({ errors: [{ msg: 'Another user has that email' }] });
         }
       }
 
       // The following simplification might have worked if not for the need to
-      // encrypt the password, but might have allowed modifying other fields,
-      // including isStaff.
+      // encrypt the password.
       //const query = await User.findByIdAndUpdate(req.params.id, req.body);
 
       const user = await User.findById(req.params.id);
@@ -173,6 +180,7 @@ router.patch(
       user.firstName = 'firstName' in req.body ? req.body.firstName : user.firstName;
       user.lastName = 'lastName' in req.body ? req.body.lastName : user.lastName;
       user.email = 'email' in req.body ? req.body.email : user.email;
+      user.phone = 'phone' in req.body ? req.body.phone : user.phone;      
       user.unit = 'unit' in req.body ? req.body.unit : user.unit;
       user.isStaff = 'isStaff' in req.body ? req.body.isStaff : user.isStaff;
 

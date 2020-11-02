@@ -126,7 +126,7 @@ export default function Social({ authUser }) {
           <FacebookIcon />
         </IconButton>
 
-        <Button onClick={onEdit}>
+        <Button onClick={onEdit} color='inherit'>
           <EditIcon />
         </Button>
       </Fragment>
