@@ -23,7 +23,7 @@ const theme = createMuiTheme({
 
 const useStyles = makeStyles(theme => ({
   fixedAppBarSpacing: {
-    height: "3rem",
+    height: "3.5rem", // Otherwise fixed app bar covers part of content.
   },
 }));
 

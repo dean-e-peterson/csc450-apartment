@@ -97,7 +97,7 @@ export default function Register({ setAuthUser }) {
             id='password'
             label='Password'
             margin='dense'
-            inputProps={{minLength: 8}}            
+            inputProps={{minLength: 8}}
             name='password'
             required
             type='password'
