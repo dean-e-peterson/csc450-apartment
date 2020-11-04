@@ -206,18 +206,6 @@ export default function User({ user, setUsers, authUser }) {
                 />
               </Grid>                      
               <Grid item>
-                <FormControlLabel
-                  label="Staff?"
-                  control={
-                    <Checkbox
-                      defaultChecked={user.isStaff}
-                      id="isStaff"
-                      name="isStaff"
-                    />
-                  }
-                />
-              </Grid>
-              <Grid item>
                 <InputLabel className={classes.dropdownLabel} id="locationLabel">
                   Location
                 </InputLabel>
@@ -258,6 +246,18 @@ export default function User({ user, setUsers, authUser }) {
                 </Select>
               </Grid>
               <Grid item>
+                <FormControlLabel
+                  label="Staff?"
+                  control={
+                    <Checkbox
+                      defaultChecked={user.isStaff}
+                      id="isStaff"
+                      name="isStaff"
+                    />
+                  }
+                />
+              </Grid>
+              <Grid item>
                 <TextField
                   defaultValue=""
                   id="password"
@@ -285,26 +285,26 @@ export default function User({ user, setUsers, authUser }) {
     return (
       <Card>
         <CardContent>
-          <Grid container spacing={2} className={classes.userFlexContainer}>
-            <Grid item xs={12} sm={4} lg={3}>
+          <Grid container spacing={1} className={classes.userFlexContainer}>
+            <Grid item xs={12} md={3}>
               {user.firstName + " " + (user.lastName ? user.lastName : "") }
             </Grid>
-            <Grid item xs={12} sm={4} lg={2}>
+            <Grid item xs={12} md={2}>
               {user.email }
             </Grid>
-            <Grid item xs={12} sm={3} lg={2}>
+            <Grid item xs={12} md={2}>
               {user.phone }
             </Grid>                     
-            <Grid item xs={12} sm={1} lg={1}>
-              {user.isStaff ? "staff" : "" }
-            </Grid>
-            <Grid item xs={12} sm={4} lg={2}>
+            <Grid item xs={12} md={2}>
               {user.unit ? user.unit.location.name : "" }
             </Grid>            
-            <Grid item xs={12} sm={4} lg={1}>
+            <Grid item xs={12} md={1}>
               {user.unit ? "unit " + user.unit.number : ""}
             </Grid>
-            <Grid item xs={12} sm={4} lg={1}>
+            <Grid item xs={12} md={1}>
+              {user.isStaff ? "staff" : "" }
+            </Grid>
+            <Grid item xs={12} md={1}>
               <IconButton onClick={onEdit} aria-label="Edit" title="Edit">
                 <EditIcon />
               </IconButton>
