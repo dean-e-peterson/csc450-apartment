@@ -179,12 +179,12 @@ export default function Comment({ comment, isNew, post, setPosts, authUser, setS
           <CardActions>
             <Grid container>
               <Grid item xs={12}>
-                  <Button onClick={onEdit}>
-                    Edit reply
-                  </Button>
-                  <Button onClick={onDelete}>
-                    Delete reply
-                  </Button>
+                <Button onClick={onEdit}>
+                  Edit reply
+                </Button>
+                <Button onClick={onDelete}>
+                  Delete reply
+                </Button>
               </Grid>
             </Grid>
           </CardActions>
