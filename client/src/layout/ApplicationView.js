@@ -10,8 +10,18 @@ import {
   Grid,
   Typography,
 } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles(theme => ({
+  referenceBackground: {
+    backgroundColor: "#dddddd",
+    borderTop: "1px solid #999999"
+  },
+}));
 
 export default function ApplicationView({ application, setApplications, authUser }) {
+  const classes = useStyles();
+
   const setStatus = async (status) => {
     try {
       // Update database.
@@ -69,7 +79,7 @@ export default function ApplicationView({ application, setApplications, authUser
             </Typography>
             {
               application.references.map(reference =>
-                <Card key={reference._id}>
+                <Card key={reference._id} className={classes.referenceBackground}>
                   <CardContent>
                     <Grid container>
                       <Grid item xs={3}>
