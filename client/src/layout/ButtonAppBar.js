@@ -105,7 +105,6 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
         <Button color='inherit' component={Link} to='/posts'>
           Bulletin Board
         </Button>
-        <Button color='inherit'>Tenant</Button>
         <Button color='inherit' component={Link} to='/chat'>
           Chat
         </Button>

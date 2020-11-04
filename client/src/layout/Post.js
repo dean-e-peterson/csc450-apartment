@@ -17,11 +17,14 @@ import { setAppEditing } from "../utils/EditingHandler";
 import Comment from "./Comment";
 
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   textarea: {
+    border: "solid 1px rgba(0, 0, 0, .23)", // Make look like other inputs.
+    borderRadius: "4px",
+    padding: "4px",
     width: "100%",
   },
-});
+}));
 
 export default function Post({ post, isNew, setPosts, authUser }) {
   const classes = useStyles();
@@ -169,13 +172,17 @@ export default function Post({ post, isNew, setPosts, authUser }) {
           <Typography component="div">
             <Grid container>
               <Grid item xs={6}>
-                <p><strong>{post.name}</strong></p>
+                <strong>{post.name}</strong>
               </Grid> 
               <Grid item xs={6}>
-                <p>{(new Date(post.date)).toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" })}</p>
+                {(new Date(post.date)).toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" })}
               </Grid>
               <Grid item xs={12}>
-                <p>{post.text}</p>
+                {
+                  post.text.split("\n").map(para =>
+                    <p>{para}</p>
+                  )
+                }
               </Grid>
             </Grid>
           </Typography>
@@ -196,16 +203,18 @@ export default function Post({ post, isNew, setPosts, authUser }) {
           <Button onClick={onNewReply}>
             New Reply
           </Button>
-          {expanded ?
-            <Button onClick={onExpandedClick} aria-expanded={true}>
-              Hide Replies
-              <ExpandLessIcon />
-            </Button>
-          :
-            <Button onClick={onExpandedClick} aria-expanded={false}>
-              Show Replies
-              <ExpandMoreIcon />
-            </Button>
+          { post.comments.length > 0 &&
+            (expanded ?
+              <Button onClick={onExpandedClick} aria-expanded={true}>
+                Hide Replies
+                <ExpandLessIcon />
+              </Button>
+            :
+              <Button onClick={onExpandedClick} aria-expanded={false}>
+                Show Replies
+                <ExpandMoreIcon />
+              </Button>
+            )
           }  
         </CardActions>        
         <Collapse in={expanded} mountOnEnter unmountOnExit>
