@@ -166,7 +166,11 @@ export default function Comment({ comment, isNew, post, setPosts, authUser, setS
               {(new Date(comment.date)).toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" })}
             </Grid>
             <Grid item xs={12}>
-              <p>{comment.text}</p>
+              {
+                comment.text.split("\n").map(para =>
+                  <p>{para}</p>
+                )
+              }
             </Grid>
           </Grid>
         </CardContent>

@@ -178,7 +178,11 @@ export default function Post({ post, isNew, setPosts, authUser }) {
                 {(new Date(post.date)).toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" })}
               </Grid>
               <Grid item xs={12}>
-                <p>{post.text}</p>
+                {
+                  post.text.split("\n").map(para =>
+                    <p>{para}</p>
+                  )
+                }
               </Grid>
             </Grid>
           </Typography>
