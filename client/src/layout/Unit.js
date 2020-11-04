@@ -17,6 +17,9 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import { setAppEditing } from "../utils/EditingHandler";
 
 const useStyles = makeStyles(theme => ({
+  descriptionField: {
+    width: "70vw", // 70% of viewport width.
+  },
   dropdown: {
     width: "100%",
   },
@@ -182,6 +185,7 @@ export default function Unit({ unit, setUnits, authUser }) {
               </Grid>
               <Grid item>
                 <TextField
+                  className={classes.descriptionField}
                   defaultValue={unit.description}
                   id="description"
                   label="Description"
