@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Chat from './pages/Chat';
 import Users from './pages/Users';
+import Units from './pages/Units';
 import Calendar from './pages/Calendar';
 import Apply from './pages/Apply';
 import Applications from './pages/Applications';
@@ -78,6 +79,12 @@ const App = () => {
             authUser.isStaff && ( // Must be staff for this route.
               <Route exact path='/users'>
                 <Users authUser={authUser} />
+              </Route>
+            )}
+          {authUser &&
+            authUser.isStaff && ( // Must be staff for this route.
+              <Route exact path='/units'>
+                <Units authUser={authUser} />
               </Route>
             )}
           <Route exact path='/calendar'>
