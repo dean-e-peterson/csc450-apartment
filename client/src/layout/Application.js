@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 import {
   Button,
@@ -43,6 +44,7 @@ export default function Application({ authUser }) {
   const [isNew, setIsNew] = useState(false);
   const [application, setApplication] = useState(emptyApplication);
   const [user, setUser] = useState(emptyUser);
+  const history = useHistory();
 
   useEffect(() => {
     if (authUser) {
@@ -147,6 +149,9 @@ export default function Application({ authUser }) {
 
       // Prevent prompting about editing changes when leaving just-saved page.
       setAppEditing(false);
+
+      // Go to homepage.
+      history.push("/");
     } catch (err) {
       console.error(err.message);
     }

@@ -26,7 +26,7 @@ export default function Location({ location, vacancies, authUser }) {
     if (authUser) {
       history.push('/apply');
     } else {
-      history.push('/register');
+      history.push('/register', { referrer: '/apply' });
     }
   }
 
