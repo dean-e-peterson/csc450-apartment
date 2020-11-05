@@ -4,6 +4,7 @@ const { check, validationResult } = require('express-validator');
 const auth = require('../../middleware/auth');
 
 const Request = require('../../models/Request');
+const User = require('../../models/User');
 
 // @route   POST /api/requests
 // @desc    Create a request
@@ -25,6 +26,12 @@ router.post(
     }
 
     try {
+      // Check that user is staff or is creating a request for their own unit.
+      const user = await User.findById(req.user.id);
+      if (! (req.user.isStaff || user.unit.toString() === req.body.unit)) {
+        return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
+      }
+
       const newRequest = new Request(req.body);
 
       const request = await newRequest.save();
@@ -40,9 +47,14 @@ router.post(
 // @route   GET /api/requests
 // @desc    Get requests
 // @access  Private
-// TODO: ### Make so non-staff can only access their own unit's requests.
 router.get('/', auth, async (req, res) => {
   try {
+    // Check that user is staff or is only getting requests for their own unit.
+    const user = await User.findById(req.user.id);
+    if (! (req.user.isStaff || req.query.unit && req.query.unit === user.unit.toString())) {
+      return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
+    }
+    
     // Allow filtering by unit.
     let findParams;
     if (req.query.unit) {
@@ -66,7 +78,6 @@ router.get('/', auth, async (req, res) => {
 // @route   GET /api/requests/:id
 // @desc    Get request by ID
 // @access  Private
-// TODO: ### Make so non-staff can only access their own unit's requests.
 router.get('/:id', auth, async (req, res) => {
   try {
     // Query database.
@@ -75,6 +86,12 @@ router.get('/:id', auth, async (req, res) => {
     // Make sure we found a request with that ID.
     if (!request) {
       return res.status(404).json({ msg: 'Request not found' });      
+    }
+
+    // Check that user is staff or is requesting their own unit's request.
+    const user = await User.findById(req.user.id);
+    if (! (req.user.isStaff || user.unit.toString() === request.unit.toString())) {
+      return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
     }
 
     // Return results.
@@ -91,7 +108,6 @@ router.get('/:id', auth, async (req, res) => {
 // @route   PATCH /api/requests/:id
 // @desc    Update request by ID
 // @access  Private
-// TODO: ### Make so non-staff can only access their own unit's requests.
 router.patch(
   '/:id',
   auth,
@@ -106,6 +122,12 @@ router.patch(
       // Make sure we found a request with that ID.
       if (!request) {
         return res.status(404).json({ msg: 'Request not found' });      
+      }
+
+      // Check that user is staff or is updating their own unit's request.
+      const user = await User.findById(req.user.id);
+      if (! (req.user.isStaff || user.unit.toString() === request.unit.toString())) {
+        return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
       }
 
       request.unit = 'unit' in req.body ? req.body.unit : request.unit;
@@ -134,7 +156,6 @@ router.patch(
 // @route   DELETE /api/requests/:id
 // @desc    Delete request by ID
 // @access  Private
-// TODO: ### Make so non-staff can only access their own unit's requests.
 router.delete('/:id', auth, async (req, res) => {
   try {
     // Query database.
@@ -143,6 +164,12 @@ router.delete('/:id', auth, async (req, res) => {
     // Make sure we found a request with that ID.
     if (!request) {
       return res.status(404).json({ msg: 'Request not found' });      
+    }
+
+    // Check that user is staff or is deleting their own unit's request.
+    const user = await User.findById(req.user.id);
+    if (! (req.user.isStaff || user.unit.toString() === request.unit.toString())) {
+      return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
     }
 
     await request.delete();
