@@ -1,22 +1,22 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { check, validationResult } = require('express-validator');
-const auth = require('../../middleware/auth');
+const { check, validationResult } = require("express-validator");
+const auth = require("../../middleware/auth");
 
-const User = require('../../models/User');
-const Social = require('../../models/Social');
+const User = require("../../models/User");
+const Social = require("../../models/Social");
 
 // @route POST api/social
 // @desc Create or update social links
 // @access Public
 router.post(
-  '/',
+  "/",
   auth,
 
   async (req, res) => {
     // Staff only.
     if (!req.user.isStaff) {
-      return res.status(403).json({ errors: [{ msg: 'Not authorized' }] });
+      return res.status(403).json({ errors: [{ msg: "Not authorized" }] });
     }
 
     const errors = validationResult(req);
@@ -28,19 +28,19 @@ router.post(
 
     //Build social object
     const socialFields = {};
-    socialFields.user = req.user.isStaff;
+    socialFields.user = req.user.id;
     socialFields.social = {};
     if (youtube) socialFields.social.youtube = youtube;
     if (twitter) socialFields.social.twitter = twitter;
     if (facebook) socialFields.social.facebook = facebook;
 
     try {
-      let social = await Social.findOne({ user: req.user.isStaff });
+      let social = await Social.findOne({ user: req.user.id });
 
       if (social) {
         // Update
         social = await Social.findOneAndUpdate(
-          { user: req.user.isStaff },
+          { user: req.user.id },
           { $set: socialFields },
           { new: true }
         );
@@ -55,7 +55,7 @@ router.post(
       res.json(social);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server Error');
+      res.status(500).send("Server Error");
     }
   }
 );
@@ -63,20 +63,20 @@ router.post(
 // @route   GET /api/social/:id
 // @desc    Get social fields
 // @access  Private
-router.get('/:id', auth, async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
   try {
     const social = await Social.findById(req.params.id);
     if (!unit) {
       return res
         .status(400)
-        .json({ errors: [{ msg: 'Social fields not found' }] });
+        .json({ errors: [{ msg: "Social fields not found" }] });
     }
 
     // Return social fields.
     res.json(unit);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server error');
+    res.status(500).send("Server error");
   }
 });
 
