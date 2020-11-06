@@ -26,11 +26,30 @@ export default function Maintenance({ authUser }) {
   const classes = useStyles();
 
   const [requests, setRequests] = useState([]);
+  const [units, setUnits] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All"); // by default.
     
   const onStatusFilterChange = (e) => {
     setStatusFilter(e.target.value);
   }
+
+  useEffect(() => {
+    // Get units for displaying location and unit name.
+    const getUnits = async () => {
+      try {
+        if (authUser) {
+          const response = await axios.get(
+            "/api/units",
+            { headers: { "x-auth-token" : authUser.token }}            
+          );
+          setUnits(response.data);
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    }
+    getUnits();
+  }, [authUser]);
 
   useEffect(() => {
     const getRequests = async () => {
@@ -89,11 +108,13 @@ export default function Maintenance({ authUser }) {
         </Fragment>
       }
 
-      {
-        requests.map(request =>
-          <Request key={request._id} request={request} authUser={authUser} />
-        )
-      }
+      <Typography component="div">
+        {
+          requests.map(request =>
+            <Request key={request._id} request={request} units={units} authUser={authUser} />
+          )
+        }
+      </Typography>
     </Fragment>
   );
 };
