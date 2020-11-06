@@ -41,7 +41,7 @@ const RequestSchema = new Schema({
   status: {
     type: String,
     required: true,
-    default: "New" // Other statuses, "In-Progress", "Completed"
+    default: "New" // Other status, "Completed"
   },
   date: {
     type: Date,

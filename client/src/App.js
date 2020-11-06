@@ -12,6 +12,7 @@ import Units from './pages/Units';
 import Calendar from './pages/Calendar';
 import Apply from './pages/Apply';
 import Applications from './pages/Applications';
+import Maintenance from './pages/Maintenance';
 import Footer from './layout/Footer';
 import { checkAuthToken } from './utils/auth';
 import EditingHandler from './utils/EditingHandler';
@@ -73,6 +74,12 @@ const App = () => {
             (authUser.unit || authUser.isStaff) && ( // Must be tenant or staff for this route.
               <Route exact path='/posts'>
                 <Posts authUser={authUser} />
+              </Route>
+            )}
+          {authUser &&
+            (authUser.unit || authUser.isStaff) && ( // Must be tenant or staff for this route.
+              <Route exact path='/maintenance'>
+                <Maintenance authUser={authUser} />
               </Route>
             )}
           {authUser &&
