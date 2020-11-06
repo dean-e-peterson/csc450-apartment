@@ -4,8 +4,9 @@ import {
   CardContent,
   Grid,
 } from "@material-ui/core";
+import Comment from "./Comment";
 
-export default function Request({ request, units, authUser }) {
+export default function Request({ request, setRequests, units, authUser }) {
   return (
     <Card>
       <CardContent>
@@ -32,7 +33,19 @@ export default function Request({ request, units, authUser }) {
             {request.details}
           </Grid>
           <Grid item xs={12}>
-            {request.comments}
+            {
+              request.comments.map(comment =>
+                <Comment
+                  key={comment._id}
+                  comment={comment}
+                  isNew={false}
+                  post={request}
+                  setPosts={setRequests}
+                  authUser={authUser}
+                  setScrollRef={null}
+                />
+              )
+            }
           </Grid>
         </Grid>
       </CardContent>

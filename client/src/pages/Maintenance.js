@@ -111,7 +111,13 @@ export default function Maintenance({ authUser }) {
       <Typography component="div">
         {
           requests.map(request =>
-            <Request key={request._id} request={request} units={units} authUser={authUser} />
+            <Request
+              key={request._id}
+              request={request}
+              setRequests={setRequests}
+              units={units}
+              authUser={authUser}
+            />
           )
         }
       </Typography>
