@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Comment({ comment, isNew, post, setPosts, authUser, setScrollRef }) {
+export default function Comment({ comment, isNew, apiRoute, parent, setParents, authUser, setScrollRef }) {
   const classes = useStyles();
 
   if (isNew) {
@@ -31,7 +31,7 @@ export default function Comment({ comment, isNew, post, setPosts, authUser, setS
     comment = { text: "" };
   }
 
-  // For scrolling form into view, especially when clicking New Reply on parent post.
+  // For scrolling form into view, especially when clicking New Reply on parent.
   const formRef = useRef();
 
   // New comments should be in edit mode by default, else view mode is default.
@@ -45,19 +45,19 @@ export default function Comment({ comment, isNew, post, setPosts, authUser, setS
   const onDelete = async () => {
     // Delete comment from server.
     const response = await axios.delete(
-      "/api/posts/comment/" + post._id + "/" + comment._id,
+      "/api/" + apiRoute + "/comment/" + parent._id + "/" + comment._id,
       { headers: { "x-auth-token": authUser.token }}
     );
 
     // Replace comments with those returned by server with this comment deleted.
-    setPosts(prevPosts => {
-      for (let prevPost of prevPosts) {
-        if (prevPost._id === post._id) {
-          prevPost.comments = response.data;
+    setParents(prevParents => {
+      for (let prevParent of prevParents) {
+        if (prevParent._id === parent._id) {
+          prevParent.comments = response.data;
         }
       }
       // Return a new array object, not just the changed array, to force render.
-      return [ ...prevPosts ];
+      return [ ...prevParents ];
     });
   }
 
@@ -72,27 +72,27 @@ export default function Comment({ comment, isNew, post, setPosts, authUser, setS
       let response;
       if (isNew) {
         response = await axios.post(
-          "/api/posts/comment/" + post._id,
+          "/api/" + apiRoute + "/comment/" + parent._id,
           body,
           { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
         );
       } else {
         response = await axios.patch(
-          "/api/posts/comment/" + post._id + "/" + comment._id,
+          "/api/" + apiRoute + "/comment/" + parent._id + "/" + comment._id,
           body,
           { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
         );
       }
 
       // Replace comments with those returned by server with real id on new comment.
-      setPosts(prevPosts => {
-        for (let prevPost of prevPosts) {
-          if (prevPost._id === post._id) {
-            prevPost.comments = response.data;
+      setParents(prevParents => {
+        for (let prevParent of prevParents) {
+          if (prevParent._id === parent._id) {
+            prevParent.comments = response.data;
           }
         }
         // Return a new array object, not just the changed array, to force render.
-        return [ ...prevPosts ];
+        return [ ...prevParents ];
       });
 
       if (!isNew) {
@@ -107,14 +107,14 @@ export default function Comment({ comment, isNew, post, setPosts, authUser, setS
 
   const onCancel = () => {
     if (isNew) {
-      // Remove placeholder post.
-      setPosts(prevPosts => {
-        // Get this post from array of all posts.
-        const thisPost = prevPosts.find(prevPost => prevPost._id === post._id);
+      // Remove placeholder.
+      setParents(prevParents => {
+        // Get this parent from array of all parents.
+        const thisParent = prevParents.find(prevParent => prevParent._id === parent._id);
         // Remove placeholder comment at end.
-        thisPost.comments.pop();
+        thisParent.comments.pop();
         // Return a new array object, not just the changed array, to force render.
-        return [ ...prevPosts ];
+        return [ ...prevParents ];
       });
     }
 

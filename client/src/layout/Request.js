@@ -39,8 +39,8 @@ export default function Request({ request, setRequests, units, authUser }) {
                   key={comment._id}
                   comment={comment}
                   isNew={false}
-                  post={request}
-                  setPosts={setRequests}
+                  parent={request}
+                  setParents={setRequests}
                   authUser={authUser}
                   setScrollRef={null}
                 />

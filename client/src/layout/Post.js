@@ -226,8 +226,9 @@ export default function Post({ post, isNew, setPosts, authUser }) {
                     <Comment
                       isNew={true}
                       key={comment._id}
-                      post={post}
-                      setPosts={setPosts}
+                      apiRoute="posts"
+                      parent={post}
+                      setParents={setPosts}
                       authUser={authUser}
                       setScrollRef={setScrollRef}
                     />
@@ -235,8 +236,9 @@ export default function Post({ post, isNew, setPosts, authUser }) {
                     <Comment
                       key={comment._id}
                       comment={comment}
-                      post={post}
-                      setPosts={setPosts}
+                      apiRoute="posts"                      
+                      parent={post}
+                      setParents={setPosts}
                       authUser={authUser}
                       setScrollRef={setScrollRef}
                     />
