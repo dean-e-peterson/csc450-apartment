@@ -90,6 +90,9 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
         <Button color='inherit' component={Link} to='/users'>
           Users
         </Button>
+        <Button color='inherit' component={Link} to='/units'>
+          Units
+        </Button>
         <Button color='inherit' component={Link} to='/chat'>
           Chat
         </Button>
@@ -105,7 +108,6 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
         <Button color='inherit' component={Link} to='/posts'>
           Bulletin Board
         </Button>
-        <Button color='inherit'>Tenant</Button>
         <Button color='inherit' component={Link} to='/chat'>
           Chat
         </Button>
@@ -131,7 +133,7 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
   }
 
   return (
-    <AppBar position='static'>
+    <AppBar position='fixed'>
       <Toolbar>
         <Link to='/'>
           <img src='images/logo.svg' alt='Home' height='50' width='50' />

@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Footer(props) {
   const classes = useStyles();
   return (
-    <AppBar position='fixed' color='primary' className={classes.appBar}>
+    <AppBar position='static' color='primary' className={classes.appBar}>
       <Toolbar position='static'>
         <div className={classes.grow} />
         <Social authUser={props.authUser} />

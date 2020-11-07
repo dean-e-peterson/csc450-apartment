@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, ThemeProvider, makeStyles } from '@material-ui/core/styles';
 import ButtonAppBar from './layout/ButtonAppBar';
 import Homepage from './pages/Homepage';
 import Posts from './pages/Posts';
@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Chat from './pages/Chat';
 import Users from './pages/Users';
+import Units from './pages/Units';
 import Calendar from './pages/Calendar';
 import Apply from './pages/Apply';
 import Applications from './pages/Applications';
@@ -21,7 +22,15 @@ const theme = createMuiTheme({
   },
 });
 
+const useStyles = makeStyles(theme => ({
+  fixedAppBarSpacing: {
+    height: "3.5rem", // Otherwise fixed app bar covers part of content.
+  },
+}));
+
 const App = () => {
+  const classes = useStyles();
+
   const [authUser, setAuthUser] = useState(null);
 
   useEffect(() => {
@@ -46,6 +55,7 @@ const App = () => {
       <Router>
         <EditingHandler />
         <ButtonAppBar authUser={authUser} setAuthUser={setAuthUser} />
+        <div className={classes.fixedAppBarSpacing}></div>
         <Switch>
           <Route exact path='/'>
             <Homepage authUser={authUser} />
@@ -69,6 +79,12 @@ const App = () => {
             authUser.isStaff && ( // Must be staff for this route.
               <Route exact path='/users'>
                 <Users authUser={authUser} />
+              </Route>
+            )}
+          {authUser &&
+            authUser.isStaff && ( // Must be staff for this route.
+              <Route exact path='/units'>
+                <Units authUser={authUser} />
               </Route>
             )}
           <Route exact path='/calendar'>

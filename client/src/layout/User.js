@@ -34,7 +34,8 @@ const useStyles = makeStyles(theme => ({
 export default function User({ user, setUsers, authUser }) {
   const classes = useStyles();
 
-  const [isEditing, setIsEditing] = useState(false);
+  // Only new users should be in editing mode by default.
+  const [isEditing, setIsEditing] = useState(user._id.substr(0, 3) === "new");
   const [units, setUnits] = useState([]); // For filling units dropdown.
   const [locations, setLocations] = useState([]); // For filling location dropdown.
   // For filtering units dropdown.
@@ -52,6 +53,12 @@ export default function User({ user, setUsers, authUser }) {
   }
 
   const onCancel = () => {
+    // If it's a new record, get rid of it entirely on cancel.
+    if (user._id.substr(0, 3) === "new") {
+      setUsers(prevUsers => prevUsers.filter(prevUser =>
+        prevUser._id.substr(0, 3) !== "new"
+      ));
+    }
     setEdit(false);
   }
 
@@ -76,11 +83,25 @@ export default function User({ user, setUsers, authUser }) {
         isStaff: e.target.isStaff.checked,
         unit: unit ? unit : null,
       };
-      const response = await axios.patch(
-        "api/users/" + user._id,
-        body,
-        { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
-      );
+      // Only set/reset password if one was entered.
+      if (e.target.password.value !== "") {
+        body.password = e.target.password.value;
+      }
+
+      let response;
+      if (user._id.substr(0, 3) === "new") {
+        response = await axios.post(
+          "api/users/",
+          body,
+          { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}          
+        );
+      } else {
+        response = await axios.patch(
+          "api/users/" + user._id,
+          body,
+          { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
+        );        
+      }
 
       // Get full record of selected unit, if any.
       const fullUnit = units.find(candidateUnit => unit === candidateUnit._id);
@@ -185,18 +206,6 @@ export default function User({ user, setUsers, authUser }) {
                 />
               </Grid>                      
               <Grid item>
-                <FormControlLabel
-                  label="Staff?"
-                  control={
-                    <Checkbox
-                      defaultChecked={user.isStaff}
-                      id="isStaff"
-                      name="isStaff"
-                    />
-                  }
-                />
-              </Grid>
-              <Grid item>
                 <InputLabel className={classes.dropdownLabel} id="locationLabel">
                   Location
                 </InputLabel>
@@ -237,6 +246,28 @@ export default function User({ user, setUsers, authUser }) {
                 </Select>
               </Grid>
               <Grid item>
+                <FormControlLabel
+                  label="Staff?"
+                  control={
+                    <Checkbox
+                      defaultChecked={user.isStaff}
+                      id="isStaff"
+                      name="isStaff"
+                    />
+                  }
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                  defaultValue=""
+                  id="password"
+                  inputProps={{minLength: 8}}                  
+                  label="Set/Reset Password"
+                  name="password"
+                  placeholder="Set/Reset Password"
+                />
+              </Grid>
+              <Grid item>
                 <IconButton type="submit" aria-label="Save" title="Save">
                   <SaveIcon />
                 </IconButton>
@@ -254,26 +285,26 @@ export default function User({ user, setUsers, authUser }) {
     return (
       <Card>
         <CardContent>
-          <Grid container spacing={2} className={classes.userFlexContainer}>
-            <Grid item xs={12} sm={4} lg={3}>
+          <Grid container spacing={1} className={classes.userFlexContainer}>
+            <Grid item xs={12} md={3}>
               {user.firstName + " " + (user.lastName ? user.lastName : "") }
             </Grid>
-            <Grid item xs={12} sm={4} lg={2}>
+            <Grid item xs={12} md={2}>
               {user.email }
             </Grid>
-            <Grid item xs={12} sm={3} lg={2}>
+            <Grid item xs={12} md={2}>
               {user.phone }
             </Grid>                     
-            <Grid item xs={12} sm={1} lg={1}>
-              {user.isStaff ? "staff" : "" }
-            </Grid>
-            <Grid item xs={12} sm={4} lg={2}>
+            <Grid item xs={12} md={2}>
               {user.unit ? user.unit.location.name : "" }
             </Grid>            
-            <Grid item xs={12} sm={4} lg={1}>
+            <Grid item xs={12} md={1}>
               {user.unit ? "unit " + user.unit.number : ""}
             </Grid>
-            <Grid item xs={12} sm={4} lg={1}>
+            <Grid item xs={12} md={1}>
+              {user.isStaff ? "staff" : "" }
+            </Grid>
+            <Grid item xs={12} md={1}>
               <IconButton onClick={onEdit} aria-label="Edit" title="Edit">
                 <EditIcon />
               </IconButton>

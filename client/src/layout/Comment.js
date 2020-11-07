@@ -10,15 +10,18 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { setAppEditing } from "../utils/EditingHandler";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   textarea: {
     width: "100%",
+    border: "solid 1px rgba(0, 0, 0, .23)", // Make look like other inputs.
+    borderRadius: "4px",
+    padding: "4px",
   },
   commentBackground: {
     backgroundColor: "#dddddd",
     borderTop: "1px solid #999999"
   },
-});
+}));
 
 export default function Comment({ comment, isNew, post, setPosts, authUser, setScrollRef }) {
   const classes = useStyles();
@@ -122,31 +125,33 @@ export default function Comment({ comment, isNew, post, setPosts, authUser, setS
   if (isEditing) {
     // What to show if editing a new or existing comment.
     return (
-      <form onSubmit={onSubmit} ref={formRef}>
-        <CardContent>
-          <p><strong>{comment.name}</strong></p>
-          <TextareaAutosize
-            autoFocus
-            className={classes.textarea}
-            defaultValue={comment.text}
-            id="text"
-            label="Reply text"
-            name="text"
-            placeholder="Type reply here"
-            onFocus={() => setScrollRef(formRef)}
-          />
-        </CardContent>
-        <CardActions>
-          <Button
-            type="submit"
-          >
-            Save Reply
-          </Button>
-          <Button onClick={onCancel}>
-            Cancel
-          </Button>
-        </CardActions>
-      </form>
+      <div className={classes.commentBackground}>
+        <form onSubmit={onSubmit} ref={formRef}>
+          <CardContent>
+            <p><strong>{comment.name}</strong></p>
+            <TextareaAutosize
+              autoFocus
+              className={classes.textarea}
+              defaultValue={comment.text}
+              id="text"
+              label="Reply text"
+              name="text"
+              placeholder="Type reply here"
+              onFocus={() => setScrollRef(formRef)}
+            />
+          </CardContent>
+          <CardActions>
+            <Button
+              type="submit"
+            >
+              Save Reply
+            </Button>
+            <Button onClick={onCancel}>
+              Cancel
+            </Button>
+          </CardActions>
+        </form>
+      </div>
     );
   } else {
     // What to show if viewing an existing comment.
@@ -155,13 +160,17 @@ export default function Comment({ comment, isNew, post, setPosts, authUser, setS
         <CardContent>
           <Grid container>
             <Grid item xs={6}>
-              <p><strong>{comment.name}</strong></p>
+              <strong>{comment.name}</strong>
             </Grid> 
             <Grid item xs={6}>
-              <p>{(new Date(comment.date)).toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" })}</p>
+              {(new Date(comment.date)).toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" })}
             </Grid>
             <Grid item xs={12}>
-              <p>{comment.text}</p>
+              {
+                comment.text.split("\n").map(para =>
+                  <p>{para}</p>
+                )
+              }
             </Grid>
           </Grid>
         </CardContent>
@@ -170,12 +179,12 @@ export default function Comment({ comment, isNew, post, setPosts, authUser, setS
           <CardActions>
             <Grid container>
               <Grid item xs={12}>
-                  <Button onClick={onEdit}>
-                    Edit reply
-                  </Button>
-                  <Button onClick={onDelete}>
-                    Delete reply
-                  </Button>
+                <Button onClick={onEdit}>
+                  Edit reply
+                </Button>
+                <Button onClick={onDelete}>
+                  Delete reply
+                </Button>
               </Grid>
             </Grid>
           </CardActions>
