@@ -27,6 +27,7 @@ export default function Maintenance({ authUser }) {
 
   const [requests, setRequests] = useState([]);
   const [units, setUnits] = useState([]);
+  const [users, setUsers] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All"); // by default.
     
   const onStatusFilterChange = (e) => {
@@ -49,6 +50,30 @@ export default function Maintenance({ authUser }) {
       }
     };
     getUnits();
+
+    // Get users for displaying user name.
+    const getUsers = async () => {
+      try {
+        if (authUser) {
+          // Only get the users you have a right to see
+          // (everyone if staff, you and your roommates if not).
+          let queryString = "";
+          if (!authUser.isStaff) {
+            queryString = "?unit=" + authUser.unit;
+          }
+          
+          // Get list of users from database.
+          const response = await axios.get(
+            "/api/users" + queryString,
+            { headers: { "x-auth-token" : authUser.token }}            
+          )
+          setUsers(response.data);
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    getUsers();
   }, [authUser]);
 
   useEffect(() => {
@@ -116,6 +141,7 @@ export default function Maintenance({ authUser }) {
               request={request}
               setRequests={setRequests}
               units={units}
+              users={users}
               authUser={authUser}
             />
           )
