@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -7,6 +7,15 @@ import {
 import Comment from "./Comment";
 
 export default function Request({ request, setRequests, units, authUser }) {
+  const [scrollRef, setScrollRef] = useState(null);
+
+  useEffect(() => {
+    // Scroll form into view if editing an existing or new reply.
+    if (scrollRef && scrollRef.current) {
+      scrollRef.current.scrollIntoView();
+    }
+  }, [scrollRef]);
+
   return (
     <Card>
       <CardContent>
@@ -39,10 +48,11 @@ export default function Request({ request, setRequests, units, authUser }) {
                   key={comment._id}
                   comment={comment}
                   isNew={false}
+                  apiRoute="requests"
                   parent={request}
                   setParents={setRequests}
                   authUser={authUser}
-                  setScrollRef={null}
+                  setScrollRef={setScrollRef}
                 />
               )
             }
