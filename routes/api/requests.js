@@ -14,6 +14,7 @@ router.post(
   auth,
   [
     check('unit', 'Unit is required').not().isEmpty(),
+    check('user', 'User is required').not().isEmpty(),
     check('type', 'Type is required').not().isEmpty(),
     check('summary', 'Summary is required').not().isEmpty(),
     check('status', 'Status is required').not().isEmpty(),
@@ -131,6 +132,7 @@ router.patch(
       }
 
       request.unit = 'unit' in req.body ? req.body.unit : request.unit;
+      request.user = 'user' in req.body ? req.body.user : request.user;
       request.type = 'type' in req.body ? req.body.type : request.type;
       request.summary = 'summary' in req.body ? req.body.summary : request.summary;
       request.details = 'details' in req.body ? req.body.details : request.details;

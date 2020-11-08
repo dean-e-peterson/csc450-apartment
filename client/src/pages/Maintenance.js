@@ -47,7 +47,7 @@ export default function Maintenance({ authUser }) {
       } catch (err) {
         console.error(err.message);
       }
-    }
+    };
     getUnits();
   }, [authUser]);
 

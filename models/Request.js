@@ -7,6 +7,11 @@ const RequestSchema = new Schema({
     ref: 'units',
     required: true
   },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'users',
+    required: true
+  },
   type: {
     type: String,
     required: true,
