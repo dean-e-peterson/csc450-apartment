@@ -1,12 +1,14 @@
 import React, { useState, Fragment, useEffect } from "react";
 import axios from "axios";
 import {
+  Button,
   InputLabel,
   MenuItem,
   Select,
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { setAppEditing } from "../utils/EditingHandler";
 import Request from "../layout/Request";
 
 const useStyles = makeStyles(theme => ({
@@ -19,7 +21,11 @@ const useStyles = makeStyles(theme => ({
   statusFilter: {
     marginLeft: theme.spacing(2),
     marginBottom: theme.spacing(2),
-  },  
+  },
+  newRequestButton: {
+    marginLeft: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+  }
 }));
 
 export default function Maintenance({ authUser }) {
@@ -33,6 +39,32 @@ export default function Maintenance({ authUser }) {
   const onStatusFilterChange = (e) => {
     setStatusFilter(e.target.value);
   }
+
+  const emptyRequest = {
+    unit: authUser.unit,
+    user: authUser._id,
+    type: "Other",
+    summary: "",
+    details: "",
+    comments: [],
+    status: "New",
+  }
+  
+  const onNewRequest = () => {
+    setRequests(prevRequests => {
+      // Add placeholder new post.  We use Date.now() so time in milliseconds
+      // acts as a pseudo-unique temporary key.
+      prevRequests.unshift({
+        ...emptyRequest,
+        _id: "new" + Date.now(),
+        date: new Date()
+      });
+      // Return a new array object, not just the changed array, to force render.
+      return [ ...prevRequests ];
+    });
+    // Prevent leaving page with warning that user may have unsaved changes.
+    setAppEditing(true);
+  };
 
   useEffect(() => {
     // Get units for displaying location and unit name.
@@ -113,6 +145,9 @@ export default function Maintenance({ authUser }) {
       <Typography variant="h5" component="h2" className={classes.heading}>
         Maintenance
       </Typography>
+      <Button onClick={onNewRequest} variant="outlined" className={classes.newRequestButton}>
+        New Maintenance Request
+      </Button>
 
       {authUser && authUser.isStaff &&
         <Fragment>

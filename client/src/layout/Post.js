@@ -16,7 +16,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { setAppEditing } from "../utils/EditingHandler";
 import Comment from "./Comment";
 
-
 const useStyles = makeStyles(theme => ({
   textarea: {
     border: "solid 1px rgba(0, 0, 0, .23)", // Make look like other inputs.
@@ -133,7 +132,7 @@ export default function Post({ post, isNew, setPosts, authUser }) {
   }, [scrollRef]);
 
   if (isEditing) {
-    // What to show if editing a new or existing comment.
+    // What to show if editing a new or existing post.
     return (
       <Card>
         <form onSubmit={onSubmit}>
