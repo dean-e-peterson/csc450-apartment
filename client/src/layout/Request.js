@@ -30,6 +30,7 @@ const useStyles = makeStyles(theme => ({
 export default function Request({ request, setRequests, units, users, authUser }) {
   const classes = useStyles();
 
+  const [formData, setFormData] = useState(request);
   const [isEditing, setIsEditing] = useState(request._id.substr(0, 3) === "new");
   const [scrollRef, setScrollRef] = useState(null);
   const [expanded, setExpanded] = useState(false);
@@ -38,6 +39,11 @@ export default function Request({ request, setRequests, units, users, authUser }
     setExpanded(!expanded);
   };
 
+  const onChange = (e) => {
+    e.persist();
+    setFormData(prevFormData => ({ ...prevFormData, [e.target.name]: e.target.value }));
+  }
+
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -45,9 +51,9 @@ export default function Request({ request, setRequests, units, users, authUser }
         status: request.status,
         unit: request.unit,
         user: request.user,
-        type: e.target.type.value,
-        summary: e.target.summary.value,
-        details: e.target.details.value,
+        type: formData.type,
+        summary: formData.summary,
+        details: formData.details,
       }
 
       // Save new or edited post to server.
@@ -150,6 +156,7 @@ export default function Request({ request, setRequests, units, users, authUser }
                   defaultValue={request.type}
                   id="type"
                   labelId="typeLabel"
+                  onChange={onChange}
                   name="type"
                 >
                   <MenuItem value="Exterior">Exterior</MenuItem>
@@ -161,21 +168,23 @@ export default function Request({ request, setRequests, units, users, authUser }
               <Grid item xs={12}>
                 <TextareaAutosize
                   className={classes.textarea}
-                  defaultValue={request.summary}
                   id="summary"
                   label="Summary text"
                   name="summary"
+                  onChange={onChange}
                   placeholder="Type summary here"
+                  value={formData.summary}
                 />              
               </Grid>
               <Grid item xs={12}>
                 <TextareaAutosize
                   className={classes.textarea}
-                  defaultValue={request.details}
                   id="details"
                   label="Details text"
                   name="details"
+                  onChange={onChange}
                   placeholder="Type details here"
+                  value={formData.details}
                 />                
               </Grid>                        
             </Grid>
