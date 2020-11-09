@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   Button,
   Card,
@@ -37,6 +38,49 @@ export default function Request({ request, setRequests, units, users, authUser }
     setExpanded(!expanded);
   };
 
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const body = { // ### TODO: Flesh out.
+        status: request.status,
+        unit: request.unit,
+        user: request.user,
+        type: e.target.type.value,
+        summary: e.target.summary.value,
+        details: e.target.details.value,
+      }
+
+      // Save new or edited post to server.
+      let response;
+      if (request._id.substr(0, 3) === "new") {      
+        response = await axios.post(
+          "/api/requests",
+          body,
+          { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
+        );
+      } else {
+        response = await axios.patch(
+          "/api/requests/" + request._id,
+          body,
+          { headers: { "x-auth-token": authUser.token, "Content-type": "application/json" }}
+        );
+      }
+
+      // Replace placeholder new post with actual one returned by server with real id.
+      setRequests(prevRequests => prevRequests.map(prevRequest =>
+        prevRequest._id === request._id ? response.data : prevRequest
+      ));
+
+      if (!(request._id.substr(0, 3) === "new")) {
+        // Return to viewing mode (new post gets different id on save, so not needed).
+        setIsEditing(false);
+      }
+      setAppEditing(false);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+
   const onCancel = () => {
     if (request._id.substr(0, 3) === "new") {
       // Remove placeholder post.
@@ -73,7 +117,7 @@ export default function Request({ request, setRequests, units, users, authUser }
   if (isEditing) {
     return (
       <Card>
-        <form>
+        <form onSubmit={onSubmit}>
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12} md={3}>
@@ -92,10 +136,10 @@ export default function Request({ request, setRequests, units, users, authUser }
                   units.find(unit => unit._id === request.unit).number
                 }
               </Grid>
-              <Grid item xs={12} md={3}>
+              <Grid item xs={12} md={5}>
                 {(new Date(request.date)).toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" })}
               </Grid>
-              <Grid item xs={12} md={3}>
+              <Grid item xs={12} md={1}>
                 <strong>{"Status: " + request.status}</strong>
               </Grid>                      
               <Grid item xs={12}>
@@ -183,7 +227,11 @@ export default function Request({ request, setRequests, units, users, authUser }
               <strong>{request.summary}</strong>
             </Grid>
             <Grid item xs={12}>
-              {request.details}
+              {
+                request.details.split("\n").map(para =>
+                  <p>{para}</p>
+                )
+              }
             </Grid>
           </Grid>
         </CardContent>
