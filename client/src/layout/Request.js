@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import {
   Button,
@@ -47,10 +47,10 @@ export default function Request({ request, setRequests, units, users, authUser }
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const body = { // ### TODO: Flesh out.
-        status: request.status,
-        unit: request.unit,
-        user: request.user,
+      const body = {
+        status: formData.status,
+        unit: formData.unit,
+        user: formData.user,
         type: formData.type,
         summary: formData.summary,
         details: formData.details,
@@ -126,31 +126,85 @@ export default function Request({ request, setRequests, units, users, authUser }
         <form onSubmit={onSubmit}>
           <CardContent>
             <Grid container spacing={2}>
-              <Grid item xs={12} md={3}>
-                <strong>
-                  {
-                    users.find(user => user._id === request.user) &&
-                    users.find(user => user._id === request.user).firstName + " " +
-                    users.find(user => user._id === request.user).lastName
-                  }
-                </strong>
-              </Grid>
-              <Grid item xs={12} md={3}>
-                {
-                  units.find(unit => unit._id === request.unit) &&
-                  units.find(unit => unit._id === request.unit).location.name + " unit " +
-                  units.find(unit => unit._id === request.unit).number
-                }
-              </Grid>
-              <Grid item xs={12} md={5}>
-                {(new Date(request.date)).toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" })}
-              </Grid>
-              <Grid item xs={12} md={1}>
-                <strong>{"Status: " + request.status}</strong>
-              </Grid>                      
+              {
+                authUser.isStaff ?
+                  <Fragment>
+                    <Grid item xs={12} md={3}>
+                      <InputLabel id="unitLabel">
+                        Unit:
+                      </InputLabel>
+                      <Select
+                        id="unit"
+                        labelId="unitLabel"
+                        onChange={onChange}
+                        name="unit"
+                        value={formData.unit}
+                      >
+                        {
+                          units.map(unit =>
+                            <MenuItem value={unit._id}>
+                              {unit.location.name + " " + unit.number}
+                            </MenuItem>
+                          )
+                        }
+                      </Select>
+                    </Grid>
+                    <Grid item xs={12} md={3}>
+                      <InputLabel id="userLabel">
+                        User:
+                      </InputLabel>
+                      <Select
+                        id="user"
+                        labelId="userLabel"
+                        onChange={onChange}
+                        name="user"
+                        value={formData.user}
+                      >
+                        {
+                          users.map(user =>
+                            <MenuItem value={user._id}>
+                              {user.firstName + " " + user.lastName}
+                            </MenuItem>
+                          )
+                        }
+                      </Select>
+                    </Grid>
+                    <Grid item xs={12} md={5}>
+                      {(new Date(request.date)).toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" })}
+                    </Grid>
+                    <Grid item xs={12} md={1}>
+                      <strong>{"Status: " + request.status}</strong>
+                    </Grid>
+                  </Fragment>
+                :
+                  <Fragment>
+                    <Grid item xs={12} md={3}>
+                      <strong>
+                        {
+                          users.find(user => user._id === request.user) &&
+                          users.find(user => user._id === request.user).firstName + " " +
+                          users.find(user => user._id === request.user).lastName
+                        }
+                      </strong>
+                    </Grid>
+                    <Grid item xs={12} md={3}>
+                      {
+                        units.find(unit => unit._id === request.unit) &&
+                        units.find(unit => unit._id === request.unit).location.name + " unit " +
+                        units.find(unit => unit._id === request.unit).number
+                      }
+                    </Grid>
+                    <Grid item xs={12} md={5}>
+                      {(new Date(request.date)).toLocaleString("en-US", { dateStyle: "full", timeStyle: "short" })}
+                    </Grid>
+                    <Grid item xs={12} md={1}>
+                      <strong>{"Status: " + request.status}</strong>
+                    </Grid>                    
+                  </Fragment>
+              }
               <Grid item xs={12}>
                 <InputLabel id="typeLabel">
-                  Status:
+                  Type:
                 </InputLabel>
                 <Select
                   defaultValue={request.type}
@@ -163,7 +217,7 @@ export default function Request({ request, setRequests, units, users, authUser }
                   <MenuItem value="Heating">Heating</MenuItem>
                   <MenuItem value="Plumbing">Plumbing</MenuItem>
                   <MenuItem value="Other">Other</MenuItem>
-                </Select>              
+                </Select>
               </Grid>
               <Grid item xs={12}>
                 <TextareaAutosize
@@ -185,8 +239,8 @@ export default function Request({ request, setRequests, units, users, authUser }
                   onChange={onChange}
                   placeholder="Type details here"
                   value={formData.details}
-                />                
-              </Grid>                        
+                />
+              </Grid>
             </Grid>
           </CardContent>
           <CardActions>
