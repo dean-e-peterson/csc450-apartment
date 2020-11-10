@@ -304,7 +304,7 @@ export default function Request({ request, setRequests, units, users, authUser }
               <strong>{"Status: " + request.status}</strong>
             </Grid>
             <Grid item xs={12}>
-              <strong>{request.summary}</strong>
+              <p><strong>{request.summary}</strong></p>
             </Grid>
             <Grid item xs={12}>
               {
