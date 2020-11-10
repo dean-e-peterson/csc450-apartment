@@ -276,10 +276,10 @@ router.patch(
         return res.status(404).json({ msg: 'Comment does not exist' });
       }
 
-      // Only allow a user to delete their own comment unless they are staff.
+      // Only allow a user to modify their own comment unless they are staff.
       if (! (req.user.isStaff || comment.user.toString() === req.user.id)) {
         return res.status(401).json({ msg: 'User not authorized' });
-      }      
+      }
       
       // Modify comment.
       comment.text = req.body.text;
