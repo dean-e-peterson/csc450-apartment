@@ -44,17 +44,34 @@ export default function Request({ request, setRequests, units, users, authUser }
     setFormData(prevFormData => ({ ...prevFormData, [e.target.name]: e.target.value }));
   }
 
+  const onCompleted = async () => {
+    setFormData(prevFormData => ({ ...prevFormData, status: "Completed" }));
+    const body = {
+      status: "Completed",
+      unit: formData.unit,
+      user: formData.user,
+      type: formData.type,
+      summary: formData.summary,
+      details: formData.details,
+    }
+    await save(body);
+  }
+
   const onSubmit = async (e) => {
     e.preventDefault();
+    const body = {
+      status: formData.status,
+      unit: formData.unit,
+      user: formData.user,
+      type: formData.type,
+      summary: formData.summary,
+      details: formData.details,
+    }
+    await save(body);
+  }
+
+  const save = async (body) => {
     try {
-      const body = {
-        status: formData.status,
-        unit: formData.unit,
-        user: formData.user,
-        type: formData.type,
-        summary: formData.summary,
-        details: formData.details,
-      }
 
       // Save new or edited post to server.
       let response;
@@ -314,7 +331,13 @@ export default function Request({ request, setRequests, units, users, authUser }
                 <ExpandMoreIcon />
               </Button>
             )
-          }  
+          }
+          {
+            authUser.isStaff && (formData.status !== "Completed") &&
+            <Button onClick={onCompleted}>
+              Mark Completed
+            </Button>
+          }
         </CardActions>
         <Collapse in={expanded} mountOnEnter unmountOnExit>
           <CardContent>
