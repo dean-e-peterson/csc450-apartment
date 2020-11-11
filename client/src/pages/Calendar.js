@@ -47,23 +47,58 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function Calendar({ authUser, setAuthUser }) {
+export default function Calendar({ authUser, setAuthUser, post }) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [events, setEvents] = useState([]);
+  const isNew = true;
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
 
-    const onNewEvent = () => {
-      setEvents(prevEvents => {
-        // Add placeholder new event.
-        prevEvents.unshift({ _id: "new" });
-        // Return a new array object, not just the changed array, to force render.
-        return [...prevEvents];
-      });
-      // Prevent leaving page with warning that user may have unsaved changes.
-      setAppEditing(true);
-    };
+  if (isNew) {
+    // Define template new post that fills form fields with default values.
+    post = { _id: "new", text: "" };
+  }
+
+  const onSubmit = async e => {
+    e.preventDefault();
+    try {
+      const body = {
+        text: e.target.text.value
+      };
+
+      // Save new or edited post to server.
+      let response;
+      if (isNew) {
+        response = await axios.post("/api/calendar", body, {
+          headers: {
+            "x-auth-token": authUser.token,
+            "Content-type": "application/json"
+          }
+        });
+      } else {
+        response = await axios.patch("/api/posts/", body, {
+          headers: {
+            "x-auth-token": authUser.token,
+            "Content-type": "application/json"
+          }
+        });
+      }
+
+      // // Replace placeholder new post with actual one returned by server with real id.
+      // setPosts(prevPosts => prevPosts.map(prevPost =>
+      //   prevPost._id === post._id ? response.data : prevPost
+      // ));
+
+      if (!isNew) {
+        // Return to viewing mode (new post gets different id on save, so not needed).
+        setIsEditing(false);
+      }
+      setAppEditing(false);
+    } catch (err) {
+      console.error(err.message);
+    }
   };
 
   useEffect(() => {
@@ -107,6 +142,12 @@ export default function Calendar({ authUser, setAuthUser }) {
               name='text'
               placeholder='Create event'
             />
+            <form onSubmit={onSubmit}>
+              <CardActions>
+                <Button type='submit'>Save Event</Button>
+                <Button>Cancel</Button>
+              </CardActions>
+            </form>
           </Grid>
         )}
 
