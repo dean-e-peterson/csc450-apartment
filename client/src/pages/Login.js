@@ -80,7 +80,7 @@ export default function Login({ setAuthUser }) {
             label='Email'
             margin='dense'
             name='email'
-            onChange={onEmailChange}            
+            onChange={onEmailChange}       
             required
             type='email'
             variant='outlined'

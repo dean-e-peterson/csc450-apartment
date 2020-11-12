@@ -32,13 +32,11 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function User({ user, setUsers, authUser }) {
+export default function User({ user, setUsers, units, locations, authUser }) {
   const classes = useStyles();
 
   // Only new users should be in editing mode by default.
   const [isEditing, setIsEditing] = useState(user._id.substr(0, 3) === "new");
-  const [units, setUnits] = useState([]); // For filling units dropdown.
-  const [locations, setLocations] = useState([]); // For filling location dropdown.
   // For filtering units dropdown.
   const [location, setLocation] = useState(user.unit ? user.unit.location._id: "");
   // For clearing unit value when changing location dropdown.
@@ -136,36 +134,6 @@ export default function User({ user, setUsers, authUser }) {
       console.error(err.message);
     }
   }
-
-  useEffect(() => {
-    const getLocations = async () => {
-      try {
-        const response = await axios.get("/api/locations");
-        setLocations(response.data);
-      } catch (err) {
-        console.error(err.message);
-      }
-    }
-    getLocations();
-  }, []);
-
-  useEffect(() => {
-    // We get units for the unit dropdown when we edit.
-    const getUnits = async () => {
-      try {
-        if (authUser) { // Wait for user authentication.
-          const response = await axios.get(
-            "/api/units",
-            { headers: { "x-auth-token": authUser.token }}
-          );
-          setUnits(response.data);
-        }
-      } catch (err) {
-        console.error(err.message);
-      }
-    }
-    getUnits();
-  }, [authUser]); // [authUser] means only re-run when authUser changes.
 
   if (isEditing) {
     // What to show if editing a user/tenant.
