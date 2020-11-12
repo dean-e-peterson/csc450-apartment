@@ -12,6 +12,7 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
+import validator from "validator";
 import Reference from "./Reference";
 import { setAppEditing } from "../utils/EditingHandler";
 
@@ -157,6 +158,16 @@ export default function Application({ authUser }) {
     }
   }
 
+  const onChangeEmail = (e) => {
+    if (validator.isEmail(e.target.value)) {
+      e.target.setCustomValidity("");
+    } else {
+      e.target.setCustomValidity("Please enter an email address");
+    }
+    // We still need to set state like the rest of the fields.
+    onChangeUserField(e);
+  }
+
   const onChangeUserField = (e) => {
     e.persist(); // No longer needed as of React v 17?
     setUser(prevUser => ({ ...prevUser, [e.target.name]: e.target.value }));
@@ -213,7 +224,7 @@ export default function Application({ authUser }) {
                 id="email"
                 label="Email"
                 name="email"
-                onChange={onChangeUserField}
+                onChange={onChangeEmail}
                 placeholder="Email"
                 required
                 type="email"
