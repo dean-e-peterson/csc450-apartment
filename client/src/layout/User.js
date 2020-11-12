@@ -16,6 +16,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import EditIcon from '@material-ui/icons/Edit';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
+import validator from "validator";
 import { setAppEditing } from "../utils/EditingHandler";
 
 const useStyles = makeStyles(theme => ({
@@ -69,6 +70,14 @@ export default function User({ user, setUsers, authUser }) {
 
   const onUnitChange = (e) => {
     setUnit(e.target.value);
+  }
+
+  const onEmailChange = (e) => {
+    if (validator.isEmail(e.target.value)) {
+      e.target.setCustomValidity("");
+    } else {
+      e.target.setCustomValidity("Please enter an email address");
+    }
   }
 
   const onSubmit = async (e) => {
@@ -191,6 +200,7 @@ export default function User({ user, setUsers, authUser }) {
                   id="email"
                   label="Email"
                   name="email"
+                  onChange={onEmailChange}                  
                   placeholder="Email"
                   required
                   type="email"
