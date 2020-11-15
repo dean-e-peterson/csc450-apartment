@@ -8,7 +8,7 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-
+import validator from "validator";
 import { checkAuthToken } from "../utils/auth";
 
 const useStyles = makeStyles(theme => ({
@@ -29,6 +29,14 @@ export default function Register({ setAuthUser }) {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
+
+  const onEmailChange = (e) => {
+    if (validator.isEmail(e.target.value)) {
+      e.target.setCustomValidity("");
+    } else {
+      e.target.setCustomValidity("Please enter an email address");
+    }
+  }
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -95,6 +103,7 @@ export default function Register({ setAuthUser }) {
             label='Email'
             margin='dense'
             name='email'
+            onChange={onEmailChange}
             required
             type='email'
             variant='outlined'
