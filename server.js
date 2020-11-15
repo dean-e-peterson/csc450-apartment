@@ -35,6 +35,7 @@ app.use('/api/posts', require('./routes/api/posts'));
 app.use('/api/social', require('./routes/api/social'));
 app.use('/api/locations', require('./routes/api/locations'));
 app.use('/api/applications', require('./routes/api/applications'));
+app.use('/api/alerts', require('./routes/api/alerts'));
 
 const PORT = process.env.PORT || 4000;
 

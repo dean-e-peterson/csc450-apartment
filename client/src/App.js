@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { createMuiTheme, ThemeProvider, makeStyles } from '@material-ui/core/styles';
 import ButtonAppBar from './layout/ButtonAppBar';
+import Alerts from './layout/Alerts';
 import Homepage from './pages/Homepage';
 import Posts from './pages/Posts';
 import Login from './pages/Login';
@@ -57,6 +58,7 @@ const App = () => {
         <EditingHandler />
         <ButtonAppBar authUser={authUser} setAuthUser={setAuthUser} />
         <div className={classes.fixedAppBarSpacing}></div>
+        <Alerts />
         <Switch>
           <Route exact path='/'>
             <Homepage authUser={authUser} />
