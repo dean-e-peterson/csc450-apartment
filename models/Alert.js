@@ -6,13 +6,16 @@ const AlertSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'users',
   },
-  forStaff: {
+  toStaff: {
     type: Boolean,
     default: false,
   },
-  type: { // AppAccepted, AppRejected, MaintComplete, etc.?
+  text: {
     type: String,
     required: true,
+  },
+  link: {
+    type: String,
   },
   date: {
     type: Date,
