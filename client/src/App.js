@@ -58,7 +58,7 @@ const App = () => {
         <EditingHandler />
         <ButtonAppBar authUser={authUser} setAuthUser={setAuthUser} />
         <div className={classes.fixedAppBarSpacing}></div>
-        <Alerts />
+        <Alerts authUser={authUser}/>
         <Switch>
           <Route exact path='/'>
             <Homepage authUser={authUser} />

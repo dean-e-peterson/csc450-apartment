@@ -1,9 +1,42 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import {
+  Typography,
+} from "@material-ui/core";
+import Alert from "../layout/Alert";
 
-const myStr = "Hello, this is in <strong>bold</strong>";
+export default function Alerts({ authUser }) {
+  const [alerts, setAlerts] = useState([]);
 
-export default function Alerts() {
+  useEffect(() => {
+    const getAlerts = async () => {
+      try {
+        if (authUser) {
+          const response = await axios.get(
+            "/api/alerts/?user=" + authUser._id,
+            { headers: { "x-auth-token" : authUser.token }}
+          );
+          setAlerts(response.data);
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    getAlerts();
+  }, [authUser]);
+
   return (
-    <div dangerouslySetInnerHTML={{__html: myStr}}></div>
+    <Typography component="div">
+      {
+        alerts.map(alert =>
+          <Alert
+            key={alert._id}
+            alert={alert}
+            setAlerts={setAlerts}
+            authUser={authUser}
+          />
+        )
+      }
+    </Typography>
   )
 };
