@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import createAlert from "../utils/createAlert";
 
 const useStyles = makeStyles(theme => ({
   referenceBackground: {
@@ -39,6 +40,14 @@ export default function ApplicationView({ application, setApplications, authUser
           return prevApplication;
         }
       }));
+
+      // Create an alert for the user.
+      await createAlert(
+        authUser, 
+        application.user,
+        "Your application to live at Sunshine Apartments has been " + status.toLowerCase() + ".",
+        "/apply",
+      );      
     } catch (err) {
       console.error(err.message);
     }
