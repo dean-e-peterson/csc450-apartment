@@ -23,6 +23,7 @@ router.post(
 
       const newPost = new Post({
         text: req.body.text,
+        name: user.firstName + " " + user.lastName,
         user: req.user.id
       });
 

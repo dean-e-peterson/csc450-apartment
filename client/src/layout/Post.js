@@ -49,7 +49,7 @@ export default function Post({ post, isNew, setPosts, authUser }) {
 
   const onDelete = async () => {
     // Delete post from server.
-    await axios.delete("/api/calendar/" + post._id, {
+    await axios.delete("/api/post/" + post._id, {
       headers: { "x-auth-token": authUser.token }
     });
 
@@ -69,7 +69,7 @@ export default function Post({ post, isNew, setPosts, authUser }) {
       // Save new or edited post to server.
       let response;
       if (isNew) {
-        response = await axios.post("/api/calendar", body, {
+        response = await axios.post("/api/post", body, {
           headers: {
             "x-auth-token": authUser.token,
             "Content-type": "application/json"
@@ -135,7 +135,7 @@ export default function Post({ post, isNew, setPosts, authUser }) {
   }, [scrollRef]);
 
   if (isEditing) {
-    // What to show if editing a new or existing comment.
+    // What to show if editing a new or existing post.
     return (
       <Card>
         <form onSubmit={onSubmit}>
@@ -222,8 +222,9 @@ export default function Post({ post, isNew, setPosts, authUser }) {
                   <Comment
                     isNew={true}
                     key={comment._id}
-                    post={post}
-                    setPosts={setPosts}
+                    apiRoute='posts'
+                    parent={post}
+                    setParents={setPosts}
                     authUser={authUser}
                     setScrollRef={setScrollRef}
                   />
@@ -231,8 +232,9 @@ export default function Post({ post, isNew, setPosts, authUser }) {
                   <Comment
                     key={comment._id}
                     comment={comment}
-                    post={post}
-                    setPosts={setPosts}
+                    apiRoute='posts'
+                    parent={post}
+                    setParents={setPosts}
                     authUser={authUser}
                     setScrollRef={setScrollRef}
                   />

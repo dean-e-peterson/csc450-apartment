@@ -18,7 +18,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import DeleteIcon from "@material-ui/icons/Delete";
 import { setAppEditing } from "../utils/EditingHandler";
-
+import Event from "../layout/Event";
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
 
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function Calendar({ authUser, setAuthUser, post }) {
+export default function Calendar({ authUser, setAuthUser }) {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [events, setEvents] = useState([]);
@@ -56,69 +56,35 @@ export default function Calendar({ authUser, setAuthUser, post }) {
     setExpanded(!expanded);
   };
 
-  if (isNew) {
-    // Define template new post that fills form fields with default values.
-    post = { _id: "new", text: "" };
-  }
-
-  const onSubmit = async e => {
-    e.preventDefault();
-    try {
-      const body = {
-        text: e.target.text.value
-      };
-
-      // Save new or edited post to server.
-      let response;
-      if (isNew) {
-        response = await axios.post("/api/calendar", body, {
-          headers: {
-            "x-auth-token": authUser.token,
-            "Content-type": "application/json"
-          }
-        });
-      } else {
-        response = await axios.patch("/api/posts/", body, {
-          headers: {
-            "x-auth-token": authUser.token,
-            "Content-type": "application/json"
-          }
-        });
-      }
-
-      // // Replace placeholder new post with actual one returned by server with real id.
-      // setPosts(prevPosts => prevPosts.map(prevPost =>
-      //   prevPost._id === post._id ? response.data : prevPost
-      // ));
-
-      if (!isNew) {
-        // Return to viewing mode (new post gets different id on save, so not needed).
-        setIsEditing(false);
-      }
-      setAppEditing(false);
-    } catch (err) {
-      console.error(err.message);
-    }
+  const onNewEvent = () => {
+    setEvents(prevEvents => {
+      // Add placeholder new post.
+      prevEvents.unshift({ _id: "new" });
+      // Return a new array object, not just the changed array, to force render.
+      return [...prevEvents];
+    });
+    // Prevent leaving page with warning that user may have unsaved changes.
+    setAppEditing(true);
   };
 
-  useEffect(() => {
-    const getEvents = async () => {
-      try {
-        if (authUser) {
-          // Wait for user authentication.
-          const response = await axios.get("/api/calendar", {
-            headers: { "x-auth-token": authUser.token }
-          });
-          setEvents(response.data);
-        }
-      } catch (err) {
-        console.error(err.message);
-      }
-    };
-    getEvents();
-  }, [authUser]); // [authUser] means only re-run when authUser changes.
-
   const [isEditing, setIsEditing] = useState(false);
+
+  // useEffect(() => {
+  //   const getPosts = async () => {
+  //     try {
+  //       if (authUser) {
+  //         // Wait for user authentication.
+  //         const response = await axios.get("/api/posts", {
+  //           headers: { "x-auth-token": authUser.token }
+  //         });
+  //         setPosts(response.data);
+  //       }
+  //     } catch (err) {
+  //       console.error(err.message);
+  //     }
+  //   };
+  //   getPosts();
+  // }, [authUser]); // [authUser] means only re-run when authUser changes.
   return (
     <Fragment>
       <Grid container>
@@ -142,7 +108,7 @@ export default function Calendar({ authUser, setAuthUser, post }) {
               name='text'
               placeholder='Create event'
             />
-            <form onSubmit={onSubmit}>
+            <form>
               <CardActions>
                 <Button type='submit'>Save Event</Button>
                 <Button>Cancel</Button>
@@ -187,141 +153,26 @@ export default function Calendar({ authUser, setAuthUser, post }) {
             </CardActions>
             <Collapse in={expanded} timeout='auto' unmountOnExit>
               <CardContent>
-                <Typography paragraph>Date: October 29th, 2020 </Typography>
-                <Typography paragraph>Location: Apartment 1 </Typography>
-                <Typography paragraph>Time: 4pm-7m </Typography>
                 <Typography paragraph>
-                  We're having a potluck for everyone! Our main dish will be
-                  CHILLI, the cold weather is comming! Burrr
+                  {events.map(event =>
+                    event._id === "new" ? (
+                      <Event
+                        isNew={true}
+                        key={event._id}
+                        apiRoute='calendar'
+                        setEvents={setEvents}
+                        authUser={authUser}
+                      />
+                    ) : (
+                      <Event
+                        key={event._id}
+                        post={event}
+                        setPosts={setEvents}
+                        authUser={authUser}
+                      />
+                    )
+                  )}
                 </Typography>
-                <Typography paragraph>
-                  Feel free to bring your favorite dishes :)
-                </Typography>
-              </CardContent>
-              <CardContent>
-                <Typography paragraph>Date: October 31th, 2020 </Typography>
-                <Typography paragraph>Location: Apartment 2 </Typography>
-                <Typography paragraph>Time: 5pm-8pm </Typography>
-                <Typography paragraph>Spooky Festivities</Typography>
-                <Typography paragraph>
-                  We're having a gathering to handout candy to the children &
-                  costume contest!
-                </Typography>
-                <Typography paragraph>Bring the your best costumes!</Typography>
-              </CardContent>
-            </Collapse>
-          </Card>
-        </Grid>
-        <Grid item xs={12}>
-          <Card className={classes.root} xs={12}>
-            <CardHeader
-              action={
-                <IconButton>
-                  {authUser && authUser.isStaff && <DeleteIcon />}
-                </IconButton>
-              }
-              title='Event 2'
-              subheader=''
-            />
-
-            <CardContent>
-              <Typography variant='body2' color='textPrimary' component='p'>
-                Click drop down arrow for details
-              </Typography>
-            </CardContent>
-            <CardActions disableSpacing>
-              <IconButton
-                className={clsx(classes.expand, {
-                  [classes.expandOpen]: expanded
-                })}
-                onClick={handleExpandClick}
-                aria-expanded={expanded}
-                aria-label='show more'
-              >
-                <ExpandMoreIcon />
-              </IconButton>
-            </CardActions>
-            <Collapse in={expanded} timeout='auto' unmountOnExit>
-              <CardContent>
-                <Typography paragraph>Date: October 29th, 2020 </Typography>
-                <Typography paragraph>Location: Apartment 1 </Typography>
-                <Typography paragraph>Time: 4pm-7m </Typography>
-
-                <Typography paragraph>
-                  We're having a potluck for everyone! Our main dish will be
-                  CHILLI, the cold weather is comming! Burrr
-                </Typography>
-                <Typography paragraph>
-                  Feel free to bring your favorite dishes :)
-                </Typography>
-              </CardContent>
-              <CardContent>
-                <Typography paragraph>Date: October 31th, 2020 </Typography>
-                <Typography paragraph>Location: Apartment 2 </Typography>
-                <Typography paragraph>Time: 5pm-8pm </Typography>
-                <Typography paragraph>Spooky Festivities</Typography>
-                <Typography paragraph>
-                  We're having a gathering to handout candy to the children &
-                  costume contest!
-                </Typography>
-                <Typography paragraph>Bring the your best costumes!</Typography>
-              </CardContent>
-            </Collapse>
-          </Card>
-        </Grid>
-        <Grid item xs={12}>
-          <Card className={classes.root} xs={12}>
-            <CardHeader
-              action={
-                <IconButton>
-                  <DeleteIcon />
-                </IconButton>
-              }
-              title='Event 3'
-              subheader=''
-            />
-
-            <CardContent>
-              <Typography variant='body2' color='textPrimary' component='p'>
-                Click drop down arrow for details
-              </Typography>
-            </CardContent>
-            <CardActions disableSpacing>
-              <IconButton
-                className={clsx(classes.expand, {
-                  [classes.expandOpen]: expanded
-                })}
-                onClick={handleExpandClick}
-                aria-expanded={expanded}
-                aria-label='show more'
-              >
-                <ExpandMoreIcon />
-              </IconButton>
-            </CardActions>
-            <Collapse in={expanded} timeout='auto' unmountOnExit>
-              <CardContent>
-                <Typography paragraph>Date: October 29th, 2020 </Typography>
-                <Typography paragraph>Location: Apartment 1 </Typography>
-                <Typography paragraph>Time: 4pm-7m </Typography>
-
-                <Typography paragraph>
-                  We're having a potluck for everyone! Our main dish will be
-                  CHILLI, the cold weather is comming! Burrr
-                </Typography>
-                <Typography paragraph>
-                  Feel free to bring your favorite dishes :)
-                </Typography>
-              </CardContent>
-              <CardContent>
-                <Typography paragraph>Date: October 31th, 2020 </Typography>
-                <Typography paragraph>Location: Apartment 2 </Typography>
-                <Typography paragraph>Time: 5pm-8pm </Typography>
-                <Typography paragraph>Spooky Festivities</Typography>
-                <Typography paragraph>
-                  We're having a gathering to handout candy to the children &
-                  costume contest!
-                </Typography>
-                <Typography paragraph>Bring the your best costumes!</Typography>
               </CardContent>
             </Collapse>
           </Card>

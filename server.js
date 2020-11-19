@@ -30,7 +30,7 @@ app.get("/", (req, res) => res.send("API Running"));
 app.use("/api/users", require("./routes/api/users"));
 app.use("/api/auth", require("./routes/api/auth"));
 app.use("/api/units", require("./routes/api/units"));
-app.use("/api/maintenance", require("./routes/api/maintenance"));
+app.use("/api/requests", require("./routes/api/requests"));
 app.use("/api/posts", require("./routes/api/posts"));
 app.use("/api/social", require("./routes/api/social"));
 app.use("/api/locations", require("./routes/api/locations"));

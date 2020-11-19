@@ -84,6 +84,9 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
         <Button color='inherit' component={Link} to='/posts'>
           Bulletin Board
         </Button>
+        <Button color='inherit' component={Link} to='/maintenance'>
+          Maintenance
+        </Button>
         <Button color='inherit' component={Link} to='/applications'>
           Applications
         </Button>
@@ -107,6 +110,9 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
         </Button>
         <Button color='inherit' component={Link} to='/posts'>
           Bulletin Board
+        </Button>
+        <Button color='inherit' component={Link} to='/maintenance'>
+          Maintenance
         </Button>
         <Button color='inherit' component={Link} to='/chat'>
           Chat

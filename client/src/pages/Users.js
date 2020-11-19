@@ -48,7 +48,7 @@ export default function Users({ authUser }) {
       return [ ...prevUsers ];
     });
     // Prevent leaving page with warning that user may have unsaved changes.
-    setAppEditing(true);      
+    setAppEditing(true);
   };
 
   const onTenantsOnlyChange = () => {
