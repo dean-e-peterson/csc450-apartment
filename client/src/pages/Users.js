@@ -38,6 +38,8 @@ export default function Users({ authUser }) {
 
   const [users, setUsers] = useState([]);
   const [tenantsOnly, setTenantsOnly] = useState(false);
+  const [units, setUnits] = useState([]); // For filling units dropdown.
+  const [locations, setLocations] = useState([]); // For filling location dropdown.  
 
   const onNewUser = () => {
     setUsers(prevUsers => {
@@ -54,6 +56,36 @@ export default function Users({ authUser }) {
   const onTenantsOnlyChange = () => {
     setTenantsOnly(prevTenantsOnly => !prevTenantsOnly);
   };
+
+  useEffect(() => {
+    const getLocations = async () => {
+      try {
+        const response = await axios.get("/api/locations");
+        setLocations(response.data);
+      } catch (err) {
+        console.error(err.message);
+      }
+    }
+    getLocations();
+  }, []);
+
+  useEffect(() => {
+    // We get units for the unit dropdown when we edit.
+    const getUnits = async () => {
+      try {
+        if (authUser) { // Wait for user authentication.
+          const response = await axios.get(
+            "/api/units",
+            { headers: { "x-auth-token": authUser.token }}
+          );
+          setUnits(response.data);
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    }
+    getUnits();
+  }, [authUser]); // [authUser] means only re-run when authUser changes.
 
   useEffect(() => {
     const getUsers = async () => {
@@ -93,6 +125,8 @@ export default function Users({ authUser }) {
             key={user._id}
             user={user}
             setUsers={setUsers}
+            units={units}
+            locations={locations}
             authUser={authUser}
           />
         )
