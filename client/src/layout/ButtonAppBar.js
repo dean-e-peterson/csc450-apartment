@@ -84,6 +84,9 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
         <Button color='inherit' component={Link} to='/posts'>
           Bulletin Board
         </Button>
+        <Button color='inherit' component={Link} to='/maintenance'>
+          Maintenance
+        </Button>
         <Button color='inherit' component={Link} to='/applications'>
           Applications
         </Button>
@@ -108,7 +111,14 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
         <Button color='inherit' component={Link} to='/posts'>
           Bulletin Board
         </Button>
+<<<<<<< HEAD
         <Button color='inherit' component={Link} to='/join'>
+=======
+        <Button color='inherit' component={Link} to='/maintenance'>
+          Maintenance
+        </Button>
+        <Button color='inherit' component={Link} to='/chat'>
+>>>>>>> 3d7ccf0fa9033aa7faffe00cafb3404cdef727dd
           Chat
         </Button>
       </Fragment>

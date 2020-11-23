@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import {
@@ -12,6 +12,7 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
+import validator from "validator";
 import Reference from "./Reference";
 import { setAppEditing } from "../utils/EditingHandler";
 
@@ -45,6 +46,7 @@ export default function Application({ authUser }) {
   const [application, setApplication] = useState(emptyApplication);
   const [user, setUser] = useState(emptyUser);
   const history = useHistory();
+  const submitRef = useRef();
 
   useEffect(() => {
     if (authUser) {
@@ -87,17 +89,18 @@ export default function Application({ authUser }) {
     });
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmitApplication = async (e) => {
     setApplication(application => {
       application.status = "Submitted";
       return { ...application };
     });
-    await onSaveApplication(e);
+
+    submitRef.current.click();
+    //await onSaveApplication(e);
   }
 
   const onSaveApplication = async (e) => {
-    //e.preventDefault();
+    e.preventDefault();
 
     try {
       // User is already in database by the time they get to this page,
@@ -157,6 +160,16 @@ export default function Application({ authUser }) {
     }
   }
 
+  const onChangeEmail = (e) => {
+    if (validator.isEmail(e.target.value)) {
+      e.target.setCustomValidity("");
+    } else {
+      e.target.setCustomValidity("Please enter an email address");
+    }
+    // We still need to set state like the rest of the fields.
+    onChangeUserField(e);
+  }
+
   const onChangeUserField = (e) => {
     e.persist(); // No longer needed as of React v 17?
     setUser(prevUser => ({ ...prevUser, [e.target.name]: e.target.value }));
@@ -173,7 +186,7 @@ export default function Application({ authUser }) {
 
   return (
     <Card>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSaveApplication}>
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -213,7 +226,7 @@ export default function Application({ authUser }) {
                 id="email"
                 label="Email"
                 name="email"
-                onChange={onChangeUserField}
+                onChange={onChangeEmail}
                 placeholder="Email"
                 required
                 type="email"
@@ -287,10 +300,10 @@ export default function Application({ authUser }) {
           </Grid>
         </CardContent>
         <CardActions>
-          <Button variant="outlined" onClick={onSaveApplication}>
+          <Button type="submit" ref={submitRef} variant="outlined">
             Save Application
           </Button>
-          <Button type="submit" variant="outlined">
+          <Button onClick={onSubmitApplication} variant="outlined">
             Submit Application
           </Button>
         </CardActions>

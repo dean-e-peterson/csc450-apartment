@@ -43,9 +43,9 @@ router.get('/vacancies', async (req, res) => {
 // @access  Private
 router.get('/', auth, async (req, res) => {
   // Staff only.
-  if (!req.user.isStaff) {
-    return res.status(403).json({ errors: [{ msg: 'Not authorized' }] });
-  }
+  // if (!req.user.isStaff) {
+  //   return res.status(403).json({ errors: [{ msg: 'Not authorized' }] });
+  // }
 
   try {
     const units = await Unit

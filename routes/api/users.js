@@ -10,16 +10,27 @@ const User = require('../../models/User');
 // @desc    Get multiple (all) users
 // @access  Private
 router.get('/', auth, async (req, res) => {
-  // Restrict to staff.
-  if (!req.user.isStaff) {
-    return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
-  }
-
   try {
+    // Restrict to staff unless you are querying for just the unit you live in.
+    let isAuthorized = false;
+    if (req.user.isStaff) {
+      isAuthorized = true;
+    }
+    const requestingUser = await User.findById(req.user.id);
+    if (requestingUser.unit && (requestingUser.unit.toString() === req.query.unit)) {
+      isAuthorized = true;
+    }
+    if (!isAuthorized) {
+      return res.status(403).json({ errors: [{ msg: 'Not authorized'}] });
+    }
+
     // Allow filtering for tenants only (those with a unit ref)
+    // or for those living in a particular unit.
     let findParams;
     if (req.query.tenantsOnly && req.query.tenantsOnly==='1') {
       findParams = { unit: { $ne: null} };
+    } else if (req.query.unit) {
+      findParams = { unit: req.query.unit };
     } else {
       findParams = {};
     }
