@@ -68,7 +68,7 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
           color='inherit'
           onClick={onChatInit}
           component={Link}
-          to='/chat'
+          to='/join'
         >
           Chat
         </Button>
@@ -93,8 +93,8 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
         <Button color='inherit' component={Link} to='/units'>
           Units
         </Button>
-        <Button color='inherit' component={Link} to='/chat'>
-          Chat
+        <Button color='inherit' component={Link} to='/join'>
+          Join
         </Button>
       </Fragment>
     );
@@ -108,7 +108,7 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
         <Button color='inherit' component={Link} to='/posts'>
           Bulletin Board
         </Button>
-        <Button color='inherit' component={Link} to='/chat'>
+        <Button color='inherit' component={Link} to='/join'>
           Chat
         </Button>
       </Fragment>
@@ -125,7 +125,7 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
         <Button color='inherit' onClick={onLogout}>
           Logout
         </Button>
-        <Button color='inherit' component={Link} to='/chat'>
+        <Button color='inherit' component={Link} to='/join'>
           Chat
         </Button>
       </Fragment>
