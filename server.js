@@ -13,7 +13,6 @@ handler function. Please pass a http.Server instance.
 const http = require("http").createServer(app);
 const io = require("socket.io")(http);
 
-<<<<<<< HEAD
 // Run this connection when the user connects
 io.on('connect', (socket) => {
   socket.on('join', ({ name, room }, callback) => {
@@ -51,11 +50,6 @@ io.on('connect', (socket) => {
         text: `${user.name} has left.`,
       });
     }
-=======
-io.on("connection", socket => {
-  socket.on("message", ({ name, message }) => {
-    io.emit("message", { name, message });
->>>>>>> 3d7ccf0fa9033aa7faffe00cafb3404cdef727dd
   });
 });
 
@@ -77,6 +71,7 @@ app.use("/api/social", require("./routes/api/social"));
 app.use("/api/locations", require("./routes/api/locations"));
 app.use("/api/applications", require("./routes/api/applications"));
 app.use("/api/calendar", require("./routes/api/calendar"));
+app.use('/api/alerts', require('./routes/api/alerts'));
 
 const PORT = process.env.PORT || 4000;
 

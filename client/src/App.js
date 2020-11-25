@@ -6,6 +6,7 @@ import {
   makeStyles,
 } from '@material-ui/core/styles';
 import ButtonAppBar from './layout/ButtonAppBar';
+import Alerts from './layout/Alerts';
 import Homepage from './pages/Homepage';
 import Posts from './pages/Posts';
 import Login from './pages/Login';
@@ -63,6 +64,7 @@ const App = () => {
         <EditingHandler />
         <ButtonAppBar authUser={authUser} setAuthUser={setAuthUser} />
         <div className={classes.fixedAppBarSpacing}></div>
+        <Alerts authUser={authUser}/>
         <Switch>
           <Route exact path='/'>
             <Homepage authUser={authUser} />

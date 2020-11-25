@@ -8,7 +8,7 @@ const Social = require("../../models/Social");
 
 // @route POST api/social
 // @desc Create or update social links
-// @access Public
+// @access Private
 router.post(
   "/",
   auth,
@@ -62,12 +62,8 @@ router.post(
 
 // @route   GET /api/social/:id
 // @desc    Get social fields
-// @access  Private
-<<<<<<< HEAD
+// @access  Public
 router.get('/:id', async (req, res) => {
-=======
-router.get("/:id", auth, async (req, res) => {
->>>>>>> 3d7ccf0fa9033aa7faffe00cafb3404cdef727dd
   try {
     const social = await Social.findById(req.params.id);
     if (!social) {
