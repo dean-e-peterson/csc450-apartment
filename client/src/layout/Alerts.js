@@ -17,6 +17,9 @@ export default function Alerts({ authUser }) {
             { headers: { "x-auth-token" : authUser.token }}
           );
           setAlerts(response.data);
+        } else {
+          // Important for handling a logout with an alert displaying.
+          setAlerts([]);
         }
       } catch (err) {
         console.error(err.message);
