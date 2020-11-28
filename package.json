@@ -27,6 +27,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.6",
     "prettier": "^2.1.2",
+    "query-string": "^6.13.7",
     "request": "^2.88.2",
     "socket.io": "^2.3.0"
   },

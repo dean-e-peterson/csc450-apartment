@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { createMuiTheme, ThemeProvider, makeStyles } from '@material-ui/core/styles';
+import {
+  createMuiTheme,
+  ThemeProvider,
+  makeStyles,
+} from '@material-ui/core/styles';
 import ButtonAppBar from './layout/ButtonAppBar';
+import Alerts from './layout/Alerts';
 import Homepage from './pages/Homepage';
 import Posts from './pages/Posts';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Chat from './pages/Chat';
+import Join from './pages/Chat/Join';
+import Chat from './pages/Chat/Chat';
 import Users from './pages/Users';
 import Units from './pages/Units';
 import Calendar from './pages/Calendar';
@@ -14,6 +20,7 @@ import Apply from './pages/Apply';
 import Applications from './pages/Applications';
 import Maintenance from './pages/Maintenance';
 import Footer from './layout/Footer';
+import Drawer from './layout/Drawer';
 import { checkAuthToken } from './utils/auth';
 import EditingHandler from './utils/EditingHandler';
 
@@ -23,9 +30,9 @@ const theme = createMuiTheme({
   },
 });
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   fixedAppBarSpacing: {
-    height: "3.5rem", // Otherwise fixed app bar covers part of content.
+    height: '3.5rem', // Otherwise fixed app bar covers part of content.
   },
 }));
 
@@ -57,6 +64,7 @@ const App = () => {
         <EditingHandler />
         <ButtonAppBar authUser={authUser} setAuthUser={setAuthUser} />
         <div className={classes.fixedAppBarSpacing}></div>
+        <Alerts authUser={authUser}/>
         <Switch>
           <Route exact path='/'>
             <Homepage authUser={authUser} />
@@ -67,8 +75,14 @@ const App = () => {
           <Route exact path='/register'>
             <Register setAuthUser={setAuthUser} />
           </Route>
+          <Route exact path='/join'>
+            <Join />
+          </Route>
           <Route exact path='/chat'>
             <Chat />
+          </Route>
+          <Route exact path='/drawer'>
+            <Drawer />
           </Route>
           {authUser &&
             (authUser.unit || authUser.isStaff) && ( // Must be tenant or staff for this route.

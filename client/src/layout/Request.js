@@ -16,6 +16,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { makeStyles } from "@material-ui/core/styles";
 import { setAppEditing } from "../utils/EditingHandler";
+import createAlert from "../utils/createAlert";
 import Comment from "./Comment";
 
 const useStyles = makeStyles(theme => ({
@@ -55,6 +56,12 @@ export default function Request({ request, setRequests, units, users, authUser }
       details: formData.details,
     }
     await save(body);
+    await createAlert(
+      authUser, 
+      formData.user,
+      "The following maintenance request has been completed: " + formData.summary,
+      "/maintenance",
+    );
   }
 
   const onSubmit = async (e) => {
@@ -72,8 +79,7 @@ export default function Request({ request, setRequests, units, users, authUser }
 
   const save = async (body) => {
     try {
-
-      // Save new or edited post to server.
+      // Save new or edited request to server.
       let response;
       if (request._id.substr(0, 3) === "new") {      
         response = await axios.post(
@@ -89,13 +95,13 @@ export default function Request({ request, setRequests, units, users, authUser }
         );
       }
 
-      // Replace placeholder new post with actual one returned by server with real id.
+      // Replace placeholder new request with actual one returned by server with real id.
       setRequests(prevRequests => prevRequests.map(prevRequest =>
         prevRequest._id === request._id ? response.data : prevRequest
       ));
 
       if (!(request._id.substr(0, 3) === "new")) {
-        // Return to viewing mode (new post gets different id on save, so not needed).
+        // Return to viewing mode (new request gets different id on save, so not needed).
         setIsEditing(false);
       }
       setAppEditing(false);

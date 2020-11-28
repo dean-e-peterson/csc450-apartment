@@ -8,7 +8,7 @@ const Social = require("../../models/Social");
 
 // @route POST api/social
 // @desc Create or update social links
-// @access Public
+// @access Private
 router.post(
   "/",
   auth,
@@ -62,18 +62,18 @@ router.post(
 
 // @route   GET /api/social/:id
 // @desc    Get social fields
-// @access  Private
-router.get("/:id", auth, async (req, res) => {
+// @access  Public
+router.get('/:id', async (req, res) => {
   try {
     const social = await Social.findById(req.params.id);
-    if (!unit) {
+    if (!social) {
       return res
         .status(400)
         .json({ errors: [{ msg: "Social fields not found" }] });
     }
 
     // Return social fields.
-    res.json(unit);
+    res.json(social);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");

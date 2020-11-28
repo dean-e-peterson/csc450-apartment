@@ -50,16 +50,20 @@ export default function Social({ authUser }) {
   useEffect(() => {
     const getSocial = async () => {
       try {
-        const response = await axios.get('/api/social', {
-          headers: { 'Content-type': 'application/json' },
-        });
+        const response = await axios.get(
+          '/api/social/5f9f515982a6331b2400d53f',
+          {
+            headers: { 'Content-type': 'application/json' },
+          }
+        );
         setSocial(response.data);
+        console.log(response.data);
       } catch (err) {
         console.error(err.message);
       }
     };
     getSocial();
-  }, [social]);
+  }, []);
 
   if (isEditing) {
     // Logged in as staff.
@@ -119,7 +123,9 @@ export default function Social({ authUser }) {
         </IconButton>
 
         <IconButton color='inherit'>
-          <TwitterIcon />
+          <a href={social.social && social.social.twitter}>
+            <TwitterIcon />
+          </a>
         </IconButton>
 
         <IconButton color='inherit'>
@@ -139,16 +145,14 @@ export default function Social({ authUser }) {
         </IconButton>
 
         <IconButton color='inherit'>
-          <TwitterIcon />
+          <a href={social.social && social.social.twitter}>
+            <TwitterIcon />
+          </a>
         </IconButton>
 
         <IconButton color='inherit'>
           <FacebookIcon />
         </IconButton>
-
-        <Button onClick={onEdit} color='inherit'>
-          <EditIcon />
-        </Button>
       </Fragment>
     );
   }
