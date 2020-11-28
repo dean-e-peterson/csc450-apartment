@@ -5,15 +5,19 @@ import {
   Card,
   CardActions,
   CardContent,
+  CardHeader,
   Collapse,
   Grid,
   TextareaAutosize,
-  Typography
+  Typography,
+  IconButton
 } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import { makeStyles } from "@material-ui/core/styles";
 import { setAppEditing } from "../utils/EditingHandler";
+// import Calendar from "../../models/Calendar";
 
 const useStyles = makeStyles(theme => ({
   textarea: {
@@ -24,19 +28,16 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Event({
-  event,
-  setEvents,
-  isNew,
-  authUser,
-  setAuthUser
-}) {
+export default function Event({ event, setEvents, isNew, authUser }) {
+  if (isNew) {
+    // Define template new event that fills form fields with default values.
+    event = { _id: "new", text: "" };
+  }
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   //const [events, setEvents] = useState([]);
   const [isEditing, setIsEditing] = useState(isNew);
 
-  //const isNew = true;
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -45,11 +46,6 @@ export default function Event({
     setIsEditing(true);
     setAppEditing(true);
   };
-
-  if (isNew) {
-    // Define template new post that fills form fields with default values.
-    event = { _id: "new", text: "" };
-  }
 
   const onDelete = async () => {
     // Delete event from server.
@@ -107,7 +103,7 @@ export default function Event({
 
   const onCancel = () => {
     if (isNew) {
-      // Remove placeholder post.
+      // Remove placeholder event.
       setEvents(prevEvents =>
         prevEvents.filter(prevEvent => prevEvent._id !== "new")
       );
@@ -118,7 +114,7 @@ export default function Event({
   };
 
   if (isEditing) {
-    // What to show if editing a new or existing post.
+    // What to show if creating a new eventt.
     return (
       <Card>
         <form onSubmit={onSubmit}>
@@ -146,6 +142,31 @@ export default function Event({
       </Card>
     );
   } else {
-    return <div>hi</div>;
+    return (
+      <Card>
+        <CardContent>
+          <CardHeader
+            action={
+              <IconButton onClick={onDelete}>
+                <DeleteIcon />
+              </IconButton>
+            }
+            title='Event 1'
+            subheader=''
+          />
+          <Grid container>
+            <Grid item xs={6}>
+              <strong>{event.title}</strong>
+            </Grid>
+            {event.description.split("\n").map(content => (
+              <p>{content}</p>
+            ))}{" "}
+          </Grid>
+          <div>{event.time}</div>
+          <div>{event.address}</div>
+          <div>{event.eventDate}</div>
+        </CardContent>
+      </Card>
+    );
   }
 }

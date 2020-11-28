@@ -67,24 +67,32 @@ export default function Calendar({ authUser, setAuthUser }) {
     setAppEditing(true);
   };
 
+  const onCancel = () => {
+    if (isNew) {
+      // Remove placeholder event.
+      setEvents(prevEvents =>
+        prevEvents.filter(prevEvent => prevEvent._id !== "new")
+      );
+    }
+  };
   const [isEditing, setIsEditing] = useState(false);
 
-  // useEffect(() => {
-  //   const getPosts = async () => {
-  //     try {
-  //       if (authUser) {
-  //         // Wait for user authentication.
-  //         const response = await axios.get("/api/posts", {
-  //           headers: { "x-auth-token": authUser.token }
-  //         });
-  //         setPosts(response.data);
-  //       }
-  //     } catch (err) {
-  //       console.error(err.message);
-  //     }
-  //   };
-  //   getPosts();
-  // }, [authUser]); // [authUser] means only re-run when authUser changes.
+  useEffect(() => {
+    const getEvents = async () => {
+      try {
+        if (authUser) {
+          // Wait for user authentication.
+          const response = await axios.get("/api/calendar", {
+            headers: { "x-auth-token": authUser.token }
+          });
+          setEvents(response.data);
+        }
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    getEvents();
+  }, [authUser]); // [authUser] means only re-run when authUser changes.
   return (
     <Fragment>
       <Grid container>
@@ -99,7 +107,7 @@ export default function Calendar({ authUser, setAuthUser }) {
           )}
         </Grid>
         {isEditing && (
-          <Grid item>
+          <Grid item xs={12}>
             <TextareaAutosize
               autoFocus
               className={classes.textarea}
@@ -111,7 +119,7 @@ export default function Calendar({ authUser, setAuthUser }) {
             <form>
               <CardActions>
                 <Button type='submit'>Save Event</Button>
-                <Button>Cancel</Button>
+                <Button onClick={onCancel}>Cancel</Button>
               </CardActions>
             </form>
           </Grid>
@@ -125,56 +133,29 @@ export default function Calendar({ authUser, setAuthUser }) {
 
         <Grid item xs={12}>
           <Card className={classes.root} xs={12}>
-            <CardHeader
-              action={
-                <IconButton>
-                  <DeleteIcon />
-                </IconButton>
-              }
-              title='Event 1'
-              subheader=''
-            />
-
             <CardContent>
-              <Typography variant='body2' color='textPrimary' component='p'>
-                Click drop down arrow for details
+              <Typography paragraph>
+                {events.map(event =>
+                  event._id === "new" ? (
+                    <Event
+                      isNew={true}
+                      key={event._id}
+                      apiRoute='calendar'
+                      setEvents={setEvents}
+                      authUser={authUser}
+                    />
+                  ) : (
+                    <Event
+                      key={event._id}
+                      event={event}
+                      setEvents={setEvents}
+                      authUser={authUser}
+                    />
+                  )
+                )}
               </Typography>
             </CardContent>
-            <CardActions disableSpacing>
-              <IconButton
-                className={clsx(classes.expand, {
-                  [classes.expandOpen]: expanded
-                })}
-                onClick={handleExpandClick}
-                aria-expanded={expanded}
-              >
-                <ExpandMoreIcon />
-              </IconButton>
-            </CardActions>
-            <Collapse in={expanded} timeout='auto' unmountOnExit>
-              <CardContent>
-                <Typography paragraph>
-                  {events.map(event =>
-                    event._id === "new" ? (
-                      <Event
-                        isNew={true}
-                        key={event._id}
-                        apiRoute='calendar'
-                        setEvents={setEvents}
-                        authUser={authUser}
-                      />
-                    ) : (
-                      <Event
-                        key={event._id}
-                        post={event}
-                        setPosts={setEvents}
-                        authUser={authUser}
-                      />
-                    )
-                  )}
-                </Typography>
-              </CardContent>
-            </Collapse>
+            {/* </Collapse> */}
           </Card>
         </Grid>
       </Grid>

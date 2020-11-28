@@ -1,30 +1,30 @@
-import React, { Fragment, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { getAppEditing, setAppEditing } from '../utils/EditingHandler';
-import Notification from '../layout/Notification';
+import React, { Fragment, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { AppBar, Button, Toolbar, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { getAppEditing, setAppEditing } from "../utils/EditingHandler";
+import Notification from "../layout/Notification";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   title: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   titleLink: {
-    color: 'white',
-    textDecoration: 'none',
-  },
+    color: "white",
+    textDecoration: "none"
+  }
 }));
 
 const confirmLogoutMessage =
-  'You are about to log out, but the page you are editing may contain changes.  Do you wish to log out?';
+  "You are about to log out, but the page you are editing may contain changes.  Do you wish to log out?";
 
 const ButtonAppBar = ({ authUser, setAuthUser }) => {
   const classes = useStyles();
   const history = useHistory();
   const [notify, setNotify] = useState({
     isOpen: false,
-    message: '',
-    type: '',
+    message: "",
+    type: ""
   });
 
   const onLogout = () => {
@@ -35,20 +35,20 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
       }
     }
     setAuthUser(null);
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
 
     // Don't prompt for confirmation again just because we are leaving the page.
     setAppEditing(0);
 
     // Back to homepage in case user no longer has rights to where they were.
-    history.push('/');
+    history.push("/");
   };
 
   const onChatInit = () => {
     setNotify({
       isOpen: true,
-      message: 'Chat has been initiated',
-      type: 'info',
+      message: "Chat has been initiated",
+      type: "info"
     });
   };
 
@@ -87,6 +87,9 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
         <Button color='inherit' component={Link} to='/maintenance'>
           Maintenance
         </Button>
+        <Button color='inherit' component={Link} to='/calendar'>
+          Calendar
+        </Button>
         <Button color='inherit' component={Link} to='/applications'>
           Applications
         </Button>
@@ -113,6 +116,9 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
         </Button>
         <Button color='inherit' component={Link} to='/maintenance'>
           Maintenance
+        </Button>
+        <Button color='inherit' component={Link} to='/calendar'>
+          Calendar
         </Button>
         <Button color='inherit' component={Link} to='/chat'>
           Chat
@@ -145,7 +151,7 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
           <img src='images/logo.svg' alt='Home' height='50' width='50' />
         </Link>
         <Typography
-          style={{ textAlign: 'Center' }}
+          style={{ textAlign: "Center" }}
           variant='h4'
           component='h1'
           className={classes.title}

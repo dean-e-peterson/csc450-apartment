@@ -6,6 +6,16 @@ const CalendarSchema = new mongoose.Schema({
     ref: "user"
   },
 
+  title: {
+    type: String,
+    required: true
+  },
+
+  description: {
+    type: String,
+    required: true
+  },
+
   address: {
     type: String,
     required: true
@@ -17,11 +27,6 @@ const CalendarSchema = new mongoose.Schema({
   },
 
   eventDate: {
-    type: String,
-    required: true
-  },
-
-  description: {
     type: String,
     required: true
   },

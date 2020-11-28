@@ -27,10 +27,11 @@ router.post(
 
       let calEvent = new Calendar({
         user: req.body.user,
+        title: req.body.title,
+        description: req.body.description,
         address: req.body.address,
         time: req.body.time,
-        eventDate: req.body.eventDate,
-        description: req.body.description
+        eventDate: req.body.eventDate
       });
 
       calEvent = await calEvent.save();
@@ -43,4 +44,33 @@ router.post(
   }
 );
 
+// @route   GET api/calendar
+// @desc    GET all events
+// @access  Private
+
+router.get(
+  "/",
+  auth,
+
+  async (req, res) => {
+    // Staff only.
+    if (!req.user.isStaff) {
+      return res.status(403).json({ errors: [{ msg: "Not authorized" }] });
+    }
+    const calEvents = await Post.find().sort({ date: -1 }); // Date reverse sort.
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const events = await Calendar.find().sort({ date: -1 });
+      res.json(events);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server error");
+    }
+  }
+);
 module.exports = router;
