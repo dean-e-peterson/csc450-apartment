@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { TextField, Grid, Button, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import uuidv4 from 'uuid/v4';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,15 +37,11 @@ export default function Join() {
 
   const onChangeHandler = (e) => {
     setName(e.target.value);
-  };
-
-  //This is a temporary function for now
-  const onChangeRoomHandler = (e) => {
-    setRoom(e.target.value);
+    setRoom(uuidv4());
   };
 
   const onClickHandler = (e) => {
-    if (!name || !room ? e.preventDefault() : null);
+    if (!name ? e.preventDefault() : null);
   };
 
   return (
@@ -68,15 +65,7 @@ export default function Join() {
         variant='outlined'
         label='Name'
       />
-      <TextField
-        onChange={onChangeRoomHandler}
-        edge='start'
-        name='room'
-        color='primary'
-        id='outlined-multiline-static'
-        variant='outlined'
-        label='Room'
-      />
+
       <Link onClick={onClickHandler} to={`/chat?name=${name}&room=${room}`}>
         <Button variant='contained' color='primary'>
           Enter Room

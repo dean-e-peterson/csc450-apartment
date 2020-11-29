@@ -1,22 +1,22 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const { check, validationResult } = require("express-validator");
-const auth = require("../../middleware/auth");
+const { check, validationResult } = require('express-validator');
+const auth = require('../../middleware/auth');
 
-const User = require("../../models/User");
-const Social = require("../../models/Social");
+const User = require('../../models/User');
+const Social = require('../../models/Social');
 
 // @route POST api/social
 // @desc Create or update social links
-// @access Private
+// @access Public
 router.post(
-  "/",
+  '/',
   auth,
 
   async (req, res) => {
     // Staff only.
     if (!req.user.isStaff) {
-      return res.status(403).json({ errors: [{ msg: "Not authorized" }] });
+      return res.status(403).json({ errors: [{ msg: 'Not authorized' }] });
     }
 
     const errors = validationResult(req);
@@ -55,28 +55,28 @@ router.post(
       res.json(social);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("Server Error");
+      res.status(500).send('Server Error');
     }
   }
 );
 
 // @route   GET /api/social/:id
 // @desc    Get social fields
-// @access  Public
+// @access  Private
 router.get('/:id', async (req, res) => {
   try {
     const social = await Social.findById(req.params.id);
     if (!social) {
       return res
         .status(400)
-        .json({ errors: [{ msg: "Social fields not found" }] });
+        .json({ errors: [{ msg: 'Social fields not found' }] });
     }
 
     // Return social fields.
     res.json(social);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    res.status(500).send('Server error');
   }
 });
 

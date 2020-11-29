@@ -2,9 +2,8 @@ const users = [];
 
 const addUser = ({ id, name, room }) => {
   name = name.trim().toLowerCase();
-  room = room.trim().toLowerCase();
 
-  if (!name || !room) return { error: 'Name and room are required.' };
+  if (!name) return { error: 'Name is required.' };
 
   const user = { id, name, room };
 

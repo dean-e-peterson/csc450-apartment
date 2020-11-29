@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Chat({ location }) {
+export default function Chat() {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
   const [message, setMessage] = useState('');
@@ -31,6 +31,7 @@ export default function Chat({ location }) {
   const classes = useStyles();
 
   useEffect(() => {
+    // Get the name and room from the URL string
     const { name, room } = queryString.parse(window.location.search);
 
     setRoom(room);
@@ -52,6 +53,7 @@ export default function Chat({ location }) {
   const onMessageSubmit = (e) => {
     e.preventDefault();
 
+    // Emit message to the server
     if (message) {
       socket.emit('sendMessage', message, () => setMessage(''));
     }
@@ -61,6 +63,7 @@ export default function Chat({ location }) {
     setMessage(e.target.value);
   };
 
+  // Map throught the messages using index i
   const Messages = ({ messages, name }) => {
     return messages.map((message, i) => (
       <div key={i}>

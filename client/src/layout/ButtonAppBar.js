@@ -1,9 +1,8 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { getAppEditing, setAppEditing } from '../utils/EditingHandler';
-import Notification from '../layout/Notification';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -21,11 +20,6 @@ const confirmLogoutMessage =
 const ButtonAppBar = ({ authUser, setAuthUser }) => {
   const classes = useStyles();
   const history = useHistory();
-  const [notify, setNotify] = useState({
-    isOpen: false,
-    message: '',
-    type: '',
-  });
 
   const onLogout = () => {
     // If user is editing, prompt to confirm first.
@@ -44,14 +38,6 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
     history.push('/');
   };
 
-  const onChatInit = () => {
-    setNotify({
-      isOpen: true,
-      message: 'Chat has been initiated',
-      type: 'info',
-    });
-  };
-
   // Choose buttons to display based on permissions of logged on user.
   let buttons;
   if (!authUser) {
@@ -64,12 +50,7 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
         <Button color='inherit' component={Link} to='/register'>
           Register
         </Button>
-        <Button
-          color='inherit'
-          onClick={onChatInit}
-          component={Link}
-          to='/join'
-        >
+        <Button color='inherit' component={Link} to='/join'>
           Chat
         </Button>
       </Fragment>
@@ -156,7 +137,6 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
         </Typography>
         {buttons}
       </Toolbar>
-      <Notification notify={notify} setNotify={setNotify} authUser={authUser} />
     </AppBar>
   );
 };
