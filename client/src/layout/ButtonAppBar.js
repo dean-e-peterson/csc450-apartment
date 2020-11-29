@@ -117,14 +117,10 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
         <Button color='inherit' component={Link} to='/maintenance'>
           Maintenance
         </Button>
-<<<<<<< HEAD
         <Button color='inherit' component={Link} to='/calendar'>
           Calendar
         </Button>
-        <Button color='inherit' component={Link} to='/chat'>
-=======
         <Button color='inherit' component={Link} to='/join'>
->>>>>>> 1e2dcd101634ab9897a5f2d10ed8e2e20760af9a
           Chat
         </Button>
       </Fragment>
