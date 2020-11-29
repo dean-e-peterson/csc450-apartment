@@ -1,25 +1,42 @@
+<<<<<<< HEAD
 import React, { Fragment } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { getAppEditing, setAppEditing } from '../utils/EditingHandler';
+=======
+import React, { Fragment, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { AppBar, Button, Toolbar, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { getAppEditing, setAppEditing } from "../utils/EditingHandler";
+import Notification from "../layout/Notification";
+>>>>>>> 807191ab07d2f3391c82743c915a4a67e3ceaff5
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   title: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   titleLink: {
-    color: 'white',
-    textDecoration: 'none',
-  },
+    color: "white",
+    textDecoration: "none"
+  }
 }));
 
 const confirmLogoutMessage =
-  'You are about to log out, but the page you are editing may contain changes.  Do you wish to log out?';
+  "You are about to log out, but the page you are editing may contain changes.  Do you wish to log out?";
 
 const ButtonAppBar = ({ authUser, setAuthUser }) => {
   const classes = useStyles();
   const history = useHistory();
+<<<<<<< HEAD
+=======
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: "",
+    type: ""
+  });
+>>>>>>> 807191ab07d2f3391c82743c915a4a67e3ceaff5
 
   const onLogout = () => {
     // If user is editing, prompt to confirm first.
@@ -29,15 +46,26 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
       }
     }
     setAuthUser(null);
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
 
     // Don't prompt for confirmation again just because we are leaving the page.
     setAppEditing(0);
 
     // Back to homepage in case user no longer has rights to where they were.
-    history.push('/');
+    history.push("/");
   };
 
+<<<<<<< HEAD
+=======
+  const onChatInit = () => {
+    setNotify({
+      isOpen: true,
+      message: "Chat has been initiated",
+      type: "info"
+    });
+  };
+
+>>>>>>> 807191ab07d2f3391c82743c915a4a67e3ceaff5
   // Choose buttons to display based on permissions of logged on user.
   let buttons;
   if (!authUser) {
@@ -68,6 +96,9 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
         <Button color='inherit' component={Link} to='/maintenance'>
           Maintenance
         </Button>
+        <Button color='inherit' component={Link} to='/calendar'>
+          Calendar
+        </Button>
         <Button color='inherit' component={Link} to='/applications'>
           Applications
         </Button>
@@ -94,6 +125,9 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
         </Button>
         <Button color='inherit' component={Link} to='/maintenance'>
           Maintenance
+        </Button>
+        <Button color='inherit' component={Link} to='/calendar'>
+          Calendar
         </Button>
         <Button color='inherit' component={Link} to='/join'>
           Chat
@@ -126,7 +160,7 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
           <img src='images/logo.svg' alt='Home' height='50' width='50' />
         </Link>
         <Typography
-          style={{ textAlign: 'Center' }}
+          style={{ textAlign: "Center" }}
           variant='h4'
           component='h1'
           className={classes.title}
