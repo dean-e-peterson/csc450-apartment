@@ -1,5 +1,6 @@
 const express = require('express');
 const connectDB = require('./config/db');
+const path = require('path');
 
 const app = express();
 const { addUser, removeUser, getUser } = require('./users');
@@ -66,8 +67,6 @@ connectDB();
 //Init Middleware
 app.use(express.json({ extended: false }));
 
-app.get('/', (req, res) => res.send('API Running'));
-
 // Define Routes
 app.use('/api/users', require('./routes/api/users'));
 app.use('/api/auth', require('./routes/api/auth'));
@@ -78,6 +77,16 @@ app.use('/api/social', require('./routes/api/social'));
 app.use('/api/locations', require('./routes/api/locations'));
 app.use('/api/applications', require('./routes/api/applications'));
 app.use('/api/calendar', require('./routes/api/calendar'));
+
+// Serve static assets in production
+if ((process.env.NODE_ENV = 'production')) {
+  // Set our static public folder with express
+  app.use(express.static('client/build'));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 const PORT = process.env.PORT || 4000;
 
