@@ -77,6 +77,7 @@ app.use('/api/social', require('./routes/api/social'));
 app.use('/api/locations', require('./routes/api/locations'));
 app.use('/api/applications', require('./routes/api/applications'));
 app.use('/api/calendar', require('./routes/api/calendar'));
+app.use('/api/alerts', require('./routes/api/alerts'));
 
 // Serve static assets in production
 if ((process.env.NODE_ENV = 'production')) {
