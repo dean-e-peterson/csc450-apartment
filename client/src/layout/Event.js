@@ -12,6 +12,7 @@ import {
   Typography,
   IconButton
 } from "@material-ui/core";
+import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
@@ -114,19 +115,19 @@ export default function Event({ event, setEvents, isNew, authUser }) {
   };
 
   if (isEditing) {
-    // What to show if creating a new eventt.
+    // What to show if creating a new event.
     return (
       <Card>
         <form onSubmit={onSubmit}>
           <CardContent>
             <Typography component='div'>
               <p>
-                <strong>{event.name}</strong>
+                <strong>{event.title}</strong>
               </p>
               <TextareaAutosize
                 autoFocus
                 className={classes.textarea}
-                defaultValue={event.text}
+                defaultValue={event.description}
                 id='text'
                 label='Event text'
                 name='text'
@@ -145,20 +146,11 @@ export default function Event({ event, setEvents, isNew, authUser }) {
     return (
       <Card>
         <CardContent>
-          <CardHeader
-            action={
-              <IconButton onClick={onDelete}>
-                <DeleteIcon />
-              </IconButton>
-            }
-            title='Event 1'
-            subheader=''
-          />
           <Grid container>
             <Grid item xs={6}>
               <strong>{event.title}</strong>
             </Grid>
-            {event.description.split("\n").map(content => (
+            {event.description.split().map(content => (
               <p>{content}</p>
             ))}{" "}
           </Grid>
@@ -166,6 +158,24 @@ export default function Event({ event, setEvents, isNew, authUser }) {
           <div>{event.address}</div>
           <div>{event.eventDate}</div>
         </CardContent>
+        <CardActions>
+          {
+            // Only user who created post or staff can edit.
+            (authUser.isStaff || authUser._id === event.user) && (
+              <IconButton onClick={onEdit} aria-label='Edit' title='Edit'>
+                <EditIcon />
+              </IconButton>
+            )
+          }
+          {
+            // Only user who created post or staff can edit.
+            (authUser.isStaff || authUser._id === event.user) && (
+              <IconButton onClick={onDelete} aria-label='Delete' title='Delete'>
+                <DeleteIcon />
+              </IconButton>
+            )
+          }
+        </CardActions>
       </Card>
     );
   }

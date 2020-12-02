@@ -1,17 +1,9 @@
-<<<<<<< HEAD
-import React, { Fragment } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { getAppEditing, setAppEditing } from '../utils/EditingHandler';
-=======
 import React, { Fragment, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { AppBar, Button, Toolbar, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { getAppEditing, setAppEditing } from "../utils/EditingHandler";
 import Notification from "../layout/Notification";
->>>>>>> 807191ab07d2f3391c82743c915a4a67e3ceaff5
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -29,14 +21,11 @@ const confirmLogoutMessage =
 const ButtonAppBar = ({ authUser, setAuthUser }) => {
   const classes = useStyles();
   const history = useHistory();
-<<<<<<< HEAD
-=======
   const [notify, setNotify] = useState({
     isOpen: false,
     message: "",
     type: ""
   });
->>>>>>> 807191ab07d2f3391c82743c915a4a67e3ceaff5
 
   const onLogout = () => {
     // If user is editing, prompt to confirm first.
@@ -55,8 +44,6 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
     history.push("/");
   };
 
-<<<<<<< HEAD
-=======
   const onChatInit = () => {
     setNotify({
       isOpen: true,
@@ -65,7 +52,6 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
     });
   };
 
->>>>>>> 807191ab07d2f3391c82743c915a4a67e3ceaff5
   // Choose buttons to display based on permissions of logged on user.
   let buttons;
   if (!authUser) {
