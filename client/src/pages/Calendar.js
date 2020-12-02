@@ -155,7 +155,6 @@ export default function Calendar({ authUser, setAuthUser }) {
                 )}
               </Typography>
             </CardContent>
-            {/* </Collapse> */}
           </Card>
         </Grid>
       </Grid>

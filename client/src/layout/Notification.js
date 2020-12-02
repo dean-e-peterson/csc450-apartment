@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Snackbar, makeStyles } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+//import { Alert } from '@material-ui/lab';
+import addNotification from 'react-push-notification';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -8,18 +9,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Notification({ notify, setNotify, authUser }) {
+export default function Notification({ authUser }) {
+  const [notify, setNotify] = useState(false);
   const classes = useStyles();
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setNotify({
-      ...notify,
-      isOpen: false,
-    });
-  };
 
   if (authUser && authUser.isStaff) {
     return (
@@ -28,12 +20,7 @@ export default function Notification({ notify, setNotify, authUser }) {
         open={notify.isOpen}
         autoHideDuration={3000}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        onClose={handleClose}
-      >
-        <Alert severity={notify.type} onClose={handleClose}>
-          {notify.message}
-        </Alert>
-      </Snackbar>
+      ></Snackbar>
     );
   } else {
     return <div></div>;
