@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { TextField, Grid, Button, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import uuidv4 from 'uuid/v4';
+import addNotification from 'react-push-notification';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,6 +43,13 @@ export default function Join() {
 
   const onClickHandler = (e) => {
     if (!name ? e.preventDefault() : null);
+    addNotification({
+      title: 'Chat alert',
+      subtitle: 'User',
+      message: 'A user has entered the chat',
+      theme: 'darkblue',
+      native: true,
+    });
   };
 
   return (

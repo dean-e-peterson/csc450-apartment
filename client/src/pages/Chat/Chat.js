@@ -5,9 +5,8 @@ import { TextField, Grid, Typography, Paper, AppBar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SendIcon from '@material-ui/icons/Send';
 
-const socket = io.connect('http://localhost:4000');
-//const ENDPOINT = 'http://localhost:4000';
-//let socket;
+//const socket = io.connect('http://localhost:4000');
+const socket = io.connect('https://safe-wildwood-18697.herokuapp.com/');
 
 const useStyles = makeStyles((theme) => ({
   root: {
