@@ -10,6 +10,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import validator from "validator";
 import { checkAuthToken } from "../utils/auth";
+import { red } from "@material-ui/core/colors";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,6 +24,9 @@ const useStyles = makeStyles(theme => ({
   button: {
     marginTop: theme.spacing(1),
   },
+  failure: {
+    color: "red",
+  }
 }));
 
 export default function Login({ setAuthUser }) {
@@ -109,7 +113,7 @@ export default function Login({ setAuthUser }) {
         </form>
         {
           loginFailed &&
-          <Typography component="div">
+          <Typography component="div" className={classes.failure}>
             <p><strong>Login failed.</strong> Try again.</p>
           </Typography>
         }
