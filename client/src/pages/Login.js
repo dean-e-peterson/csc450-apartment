@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import Axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
@@ -28,6 +28,7 @@ const useStyles = makeStyles(theme => ({
 export default function Login({ setAuthUser }) {
   const classes = useStyles();
   const history = useHistory();
+  const [loginFailed, setLoginFailed] = useState(false);
 
   const onEmailChange = (e) => {
     if (validator.isEmail(e.target.value)) {
@@ -55,16 +56,19 @@ export default function Login({ setAuthUser }) {
       if (user) {
         localStorage.setItem("token", response.data.token);
         setAuthUser(user);
+        setLoginFailed(false);
 
         // Back to homepage.
         history.push("/");
       } else {
         localStorage.removeItem("token");
-        setAuthUser(null);        
+        setAuthUser(null);
+        setLoginFailed(true);        
       }
     } catch (err) {
       localStorage.removeItem("token");
       setAuthUser(null);
+      setLoginFailed(true);
     }
   }
 
@@ -103,6 +107,12 @@ export default function Login({ setAuthUser }) {
             Login
           </Button>
         </form>
+        {
+          loginFailed &&
+          <Typography component="div">
+            <p><strong>Login failed.</strong> Try again.</p>
+          </Typography>
+        }
         <Typography>
           Don't have an account with us yet?
           <Link to="/register">Register</Link>
