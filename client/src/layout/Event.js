@@ -77,7 +77,7 @@ export default function Event({ event, setEvents, isNew, authUser }) {
           }
         });
       } else {
-        response = await axios.patch("/api/calendar/", body, {
+        response = await axios.patch("/api/calendar/", event._id, body, {
           headers: {
             "x-auth-token": authUser.token,
             "Content-type": "application/json"
@@ -113,7 +113,8 @@ export default function Event({ event, setEvents, isNew, authUser }) {
     setIsEditing(false);
     setAppEditing(false);
   };
-
+  //  authUser &&
+  //             (authUser.unit || authUser.isStaff) && (
   if (isEditing) {
     // What to show if creating a new event.
     return (
@@ -127,7 +128,43 @@ export default function Event({ event, setEvents, isNew, authUser }) {
               <TextareaAutosize
                 autoFocus
                 className={classes.textarea}
+                defaultValue={event.title}
+                id='text'
+                label='Event text'
+                name='text'
+                placeholder='Type Event here'
+              />
+              <TextareaAutosize
+                autoFocus
+                className={classes.textarea}
                 defaultValue={event.description}
+                id='text'
+                label='Event text'
+                name='text'
+                placeholder='Type Event here'
+              />
+              <TextareaAutosize
+                autoFocus
+                className={classes.textarea}
+                defaultValue={event.time}
+                id='text'
+                label='Event text'
+                name='text'
+                placeholder='Type Event here'
+              />
+              <TextareaAutosize
+                autoFocus
+                className={classes.textarea}
+                defaultValue={event.address}
+                id='text'
+                label='Event text'
+                name='text'
+                placeholder='Type Event here'
+              />
+              <TextareaAutosize
+                autoFocus
+                className={classes.textarea}
+                defaultValue={event.eventDate}
                 id='text'
                 label='Event text'
                 name='text'
@@ -142,7 +179,7 @@ export default function Event({ event, setEvents, isNew, authUser }) {
         </form>
       </Card>
     );
-  } else {
+  } else if (authUser.isStaff || authUser.unit) {
     return (
       <Card>
         <CardContent>
