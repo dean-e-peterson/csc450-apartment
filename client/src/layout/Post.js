@@ -76,7 +76,7 @@ export default function Post({ post, isNew, setPosts, authUser }) {
           }
         });
       } else {
-        response = await axios.patch("/api/calendar/" + post._id, body, {
+        response = await axios.patch("/api/post/" + post._id, body, {
           headers: {
             "x-auth-token": authUser.token,
             "Content-type": "application/json"

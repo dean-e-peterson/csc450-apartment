@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import Axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
@@ -10,6 +10,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import validator from "validator";
 import { checkAuthToken } from "../utils/auth";
+import { red } from "@material-ui/core/colors";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,11 +24,15 @@ const useStyles = makeStyles(theme => ({
   button: {
     marginTop: theme.spacing(1),
   },
+  failure: {
+    color: "red",
+  }
 }));
 
 export default function Login({ setAuthUser }) {
   const classes = useStyles();
   const history = useHistory();
+  const [loginFailed, setLoginFailed] = useState(false);
 
   const onEmailChange = (e) => {
     if (validator.isEmail(e.target.value)) {
@@ -55,16 +60,19 @@ export default function Login({ setAuthUser }) {
       if (user) {
         localStorage.setItem("token", response.data.token);
         setAuthUser(user);
+        setLoginFailed(false);
 
         // Back to homepage.
         history.push("/");
       } else {
         localStorage.removeItem("token");
-        setAuthUser(null);        
+        setAuthUser(null);
+        setLoginFailed(true);        
       }
     } catch (err) {
       localStorage.removeItem("token");
       setAuthUser(null);
+      setLoginFailed(true);
     }
   }
 
@@ -103,6 +111,12 @@ export default function Login({ setAuthUser }) {
             Login
           </Button>
         </form>
+        {
+          loginFailed &&
+          <Typography component="div" className={classes.failure}>
+            <p><strong>Login failed.</strong> Try again.</p>
+          </Typography>
+        }
         <Typography>
           Don't have an account with us yet?
           <Link to="/register">Register</Link>

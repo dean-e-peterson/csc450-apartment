@@ -1,21 +1,21 @@
-import React, { Fragment } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { AppBar, Button, Toolbar, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { getAppEditing, setAppEditing } from '../utils/EditingHandler';
+import React, { Fragment } from "react";
+import { Link, useHistory } from "react-router-dom";
+import { AppBar, Button, Toolbar, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { getAppEditing, setAppEditing } from "../utils/EditingHandler";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   title: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   titleLink: {
-    color: 'white',
-    textDecoration: 'none',
-  },
+    color: "white",
+    textDecoration: "none"
+  }
 }));
 
 const confirmLogoutMessage =
-  'You are about to log out, but the page you are editing may contain changes.  Do you wish to log out?';
+  "You are about to log out, but the page you are editing may contain changes.  Do you wish to log out?";
 
 const ButtonAppBar = ({ authUser, setAuthUser }) => {
   const classes = useStyles();
@@ -29,7 +29,7 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
       }
     }
     setAuthUser(null);
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
 
     // Don't prompt for confirmation again just because we are leaving the page.
     setAppEditing(0);
@@ -132,7 +132,7 @@ const ButtonAppBar = ({ authUser, setAuthUser }) => {
           <img src='images/logo.svg' alt='Home' height='50' width='50' />
         </Link>
         <Typography
-          style={{ textAlign: 'Center' }}
+          style={{ textAlign: "Center" }}
           variant='h4'
           component='h1'
           className={classes.title}
