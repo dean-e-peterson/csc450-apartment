@@ -29,6 +29,12 @@ io.on('connect', (socket) => {
       text: `${user.name}, welcome to the chat.`,
     });
 
+    // Notify staff member that someone has entered the chat
+    io.emit('notification', {
+      user: 'Chatbot',
+      text: `${user.name} has entered a chat room with the id: ${user.room}`,
+    });
+
     // Broadcast this message to the room
     socket.broadcast
       .to(user.room)

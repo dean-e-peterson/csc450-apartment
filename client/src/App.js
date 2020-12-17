@@ -40,6 +40,7 @@ const App = () => {
   const classes = useStyles();
 
   const [authUser, setAuthUser] = useState(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const handleAuth = async () => {
@@ -64,7 +65,7 @@ const App = () => {
         <EditingHandler />
         <ButtonAppBar authUser={authUser} setAuthUser={setAuthUser} />
         <div className={classes.fixedAppBarSpacing}></div>
-        <Alerts authUser={authUser}/>
+        <Alerts authUser={authUser} />
         <Switch>
           <Route exact path='/'>
             <Homepage authUser={authUser} />
@@ -76,10 +77,10 @@ const App = () => {
             <Register setAuthUser={setAuthUser} />
           </Route>
           <Route exact path='/join'>
-            <Join />
+            <Join setOpen={setOpen} />
           </Route>
           <Route exact path='/chat'>
-            <Chat />
+            <Chat open={open} setOpen={setOpen} />
           </Route>
           <Route exact path='/drawer'>
             <Drawer />

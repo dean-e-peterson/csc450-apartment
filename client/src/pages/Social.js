@@ -1,6 +1,5 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { makeStyles } from '@material-ui/core/styles';
 import { Button, Card, CardContent, Grid, TextField } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
@@ -10,10 +9,7 @@ import TwitterIcon from '@material-ui/icons/Twitter';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import FacebookIcon from '@material-ui/icons/Facebook';
 
-const useStyles = makeStyles((theme) => ({}));
-
 export default function Social({ authUser }) {
-  const classes = useStyles();
   const [isEditing, setIsEditing] = useState(false);
   const [social, setSocial] = useState([]);
 
@@ -57,7 +53,7 @@ export default function Social({ authUser }) {
           }
         );
         setSocial(response.data);
-        console.log(response.data);
+        //console.log(response.data);
       } catch (err) {
         console.error(err.message);
       }
@@ -117,7 +113,7 @@ export default function Social({ authUser }) {
     );
   } else if (authUser && authUser.isStaff) {
     return (
-      <Fragment>
+      <Grid container direction='row' justify='flex-end' alignItems='center'>
         <IconButton color='inherit'>
           <YouTubeIcon />
         </IconButton>
@@ -135,25 +131,25 @@ export default function Social({ authUser }) {
         <Button onClick={onEdit} color='inherit'>
           <EditIcon />
         </Button>
-      </Fragment>
+      </Grid>
     );
   } else {
     return (
-      <Fragment>
+      <Grid container direction='row' justify='flex-end' alignItems='center'>
         <IconButton color='inherit'>
           <YouTubeIcon />
         </IconButton>
 
         <IconButton color='inherit'>
           <a href={social.social && social.social.twitter}>
-            <TwitterIcon />
+            <TwitterIcon color='inherit' />
           </a>
         </IconButton>
 
         <IconButton color='inherit'>
           <FacebookIcon />
         </IconButton>
-      </Fragment>
+      </Grid>
     );
   }
 }

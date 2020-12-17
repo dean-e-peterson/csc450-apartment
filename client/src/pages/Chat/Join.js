@@ -1,28 +1,18 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { TextField, Grid, Button, Typography } from '@material-ui/core';
+import { TextField, Grid, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import uuidv4 from 'uuid/v4';
-import addNotification from 'react-push-notification';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: 15,
   },
   text: {
-    padding: theme.spacing(2, 2, 0),
+    text: 'strong',
   },
-  paper: {
-    paddingBottom: 50,
-  },
-  list: {
-    marginBottom: theme.spacing(2),
-  },
-  appBar: {
-    top: 'auto',
-    bottom: 0,
-    flexgrow: 1,
-    color: '#90caf9',
+  spacing: {
+    padding: theme.spacing(2),
   },
   send: {
     edge: 'end',
@@ -30,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Join() {
+export default function Join({ setOpen }) {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
 
@@ -43,42 +33,41 @@ export default function Join() {
 
   const onClickHandler = (e) => {
     if (!name ? e.preventDefault() : null);
-    addNotification({
-      title: 'Chat alert',
-      subtitle: 'User',
-      message: 'A user has entered the chat',
-      theme: 'darkblue',
-      native: true,
-    });
+    setOpen(true);
   };
 
   return (
     <Grid
       container
-      direction='row'
+      direction='column'
       justify='center'
-      alignItems='stretch'
+      alignItems='center'
+      spacing={3}
       className={classes.root}
     >
-      <Typography className={classes.text} variant='h5' gutterBottom>
-        Enter Name:
-      </Typography>
-
-      <TextField
-        onChange={onChangeHandler}
-        edge='start'
-        name='name'
-        color='primary'
-        id='outlined-multiline-static'
-        variant='outlined'
-        label='Name'
-      />
-
-      <Link onClick={onClickHandler} to={`/chat?name=${name}&room=${room}`}>
-        <Button variant='contained' color='primary'>
-          Enter Room
-        </Button>
-      </Link>
+      <Grid item xs={3} className={classes.spacing}>
+        <Typography className={classes.text} variant='h5' gutterBottom>
+          Enter Name:
+        </Typography>
+      </Grid>
+      <Grid item xs={3} className={classes.spacing}>
+        <TextField
+          onChange={onChangeHandler}
+          edge='start'
+          name='name'
+          color='primary'
+          id='outlined-multiline-static'
+          variant='outlined'
+          label='Name'
+        />
+      </Grid>
+      <Grid item xs={3} className={classes.spacing}>
+        <Link onClick={onClickHandler} to={`/chat?name=${name}&room=${room}`}>
+          <Button variant='contained' color='primary'>
+            Enter Room
+          </Button>
+        </Link>
+      </Grid>
     </Grid>
   );
 }

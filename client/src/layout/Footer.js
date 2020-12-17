@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Toolbar } from '@material-ui/core';
+import { AppBar, Grid, Toolbar, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Social from '../pages/Social';
 
@@ -11,15 +11,27 @@ const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
   },
+  copyright: {
+    paddingRight: '15px',
+  },
 }));
 
-export default function Footer(props) {
+export default function Footer({ authUser }) {
   const classes = useStyles();
   return (
     <AppBar position='static' color='primary' className={classes.appBar}>
       <Toolbar position='static'>
-        <div className={classes.grow} />
-        <Social authUser={props.authUser} />
+        <Grid container direction='row' alignItems='center'>
+          <Grid item xs={8}>
+            <Typography className={classes.copyright}>
+              &copy; {1900 + new Date().getYear()} CSC450 Group 5: Dean
+              Peterson, Adrian Jackson, Andrew Nielsen
+            </Typography>
+          </Grid>
+          <Grid item xs={4}>
+            <Social authUser={authUser} />
+          </Grid>
+        </Grid>
       </Toolbar>
     </AppBar>
   );
