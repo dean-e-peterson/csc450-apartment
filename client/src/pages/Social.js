@@ -115,7 +115,9 @@ export default function Social({ authUser }) {
     return (
       <Grid container direction='row' justify='flex-end' alignItems='center'>
         <IconButton color='inherit'>
-          <YouTubeIcon />
+          <a href={social.social && social.social.youtube}>
+            <YouTubeIcon />
+          </a>
         </IconButton>
 
         <IconButton color='inherit'>
@@ -125,7 +127,9 @@ export default function Social({ authUser }) {
         </IconButton>
 
         <IconButton color='inherit'>
-          <FacebookIcon />
+          <a href={social.social && social.social.facebook}>
+            <FacebookIcon />
+          </a>
         </IconButton>
 
         <Button onClick={onEdit} color='inherit'>
@@ -137,7 +141,9 @@ export default function Social({ authUser }) {
     return (
       <Grid container direction='row' justify='flex-end' alignItems='center'>
         <IconButton color='inherit'>
-          <YouTubeIcon />
+          <a href={social.social && social.social.youtube}>
+            <YouTubeIcon />
+          </a>
         </IconButton>
 
         <IconButton color='inherit'>
@@ -147,7 +153,9 @@ export default function Social({ authUser }) {
         </IconButton>
 
         <IconButton color='inherit'>
-          <FacebookIcon />
+          <a href={social.social && social.social.facebook}>
+            <FacebookIcon />
+          </a>
         </IconButton>
       </Grid>
     );
